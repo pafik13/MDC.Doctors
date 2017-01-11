@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="hello">Hello World, Click Me!</string>
+	<string name="app_name">ОФ:Врачи</string>
+
+	<string name="DoctorUUID">DoctorUUID</string>
+	
+	<string name="error_caption">Ошибка!</string>
+	<string name="warning_caption">Внимание!</string>
+	<string name="delete_caption">Удаление!</string>
+	
+	<string name="cancel_button">Отмена</string>
+	<string name="check_button">Проверить</string>
+	<string name="on_button">Включить</string>
+	<string name="ok_button">OK</string>
+</resources>

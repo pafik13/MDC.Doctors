@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@android:color/white"
+    android:weightSum="100">
+    <TextView
+        android:text="No"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dtiNoTV"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <TextView
+        android:text="State"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dtiStateTV"
+        android:layout_weight="6"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <TextView
+        android:text="HospitalArea"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dtiHospitalAreaTV"
+        android:layout_weight="5"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <TextView
+        android:text="HospitalName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dtiHospitalNameTV"
+        android:layout_weight="10"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <TextView
+        android:text="HospitalAddress"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dtiHospitalAddressTV"
+        android:layout_weight="20"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <TextView
+        android:text="Speciality"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dtiSpecialityTV"
+        android:layout_weight="10"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <TextView
+        android:text="Name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dtiNameTV"
+        android:layout_weight="10"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <TextView
+        android:text="WorkPlaceCabinet"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dtiWorkPlaceCabinetTV"
+        android:layout_weight="5"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <TextView
+        android:text="WorkPlaceTimetable"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dtiPlaceTimetableTV"
+        android:layout_weight="14"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <TextView
+        android:text="LastAttendanceDate"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dtiLastAttendanceDateTV"
+        android:layout_weight="9"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <Button
+        android:text="Text"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dtiNextAttendanceB"
+        android:layout_weight="9"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+</LinearLayout>

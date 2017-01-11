@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@android:color/transparent"
+    android:weightSum="6">
+    <TextView
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        android:id="@+id/idtiBrandTV"
+        android:text="Бренд"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy" />
+    <TextView
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        android:text="Выберите"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textAppearance="@style/rowTextForPharmacy" />
+    <RelativeLayout
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+        <EditText
+            android:textCursorDrawable="@null"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:id="@+id/idtiCallbackET"
+            android:background="@drawable/bottomline"
+            android:textColorHint="@color/Grey_300"
+            android:textColor="@android:color/black"
+            android:hint="Обратная связь"
+            android:inputType="textCapSentences" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+        <EditText
+            android:textCursorDrawable="@null"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:id="@+id/idtiResumeET"
+            android:background="@drawable/bottomline"
+            android:textColorHint="@color/Grey_300"
+            android:textColor="@android:color/black"
+            android:hint="Резюме"
+            android:inputType="textCapSentences" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+        <EditText
+            android:textCursorDrawable="@null"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:id="@+id/idtiGoalET"
+            android:background="@drawable/bottomline"
+            android:textColorHint="@color/Grey_300"
+            android:textColor="@android:color/black"
+            android:hint="Цель на след визит"
+            android:inputType="textCapSentences" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+        <EditText
+            android:textCursorDrawable="@null"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:id="@+id/idtiCommentET"
+            android:background="@drawable/bottomline"
+            android:textColorHint="@color/Grey_300"
+            android:textColor="@android:color/black"
+            android:hint="Комментарий"
+            android:inputType="textCapSentences" />
+    </RelativeLayout>
+</LinearLayout>

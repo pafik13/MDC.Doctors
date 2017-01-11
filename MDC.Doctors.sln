@@ -1,0 +1,57 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDC.Doctors", "MDC.Doctors\MDC.Doctors.csproj", "{2D039EF1-E14E-4ED6-ABC9-22922BD3A6A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDC.Doctors.UITests", "MDC.Doctors.UITests\MDC.Doctors.UITests.csproj", "{31E32759-5573-42D3-88BC-FAC7CE9F0EFA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2D039EF1-E14E-4ED6-ABC9-22922BD3A6A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D039EF1-E14E-4ED6-ABC9-22922BD3A6A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D039EF1-E14E-4ED6-ABC9-22922BD3A6A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D039EF1-E14E-4ED6-ABC9-22922BD3A6A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31E32759-5573-42D3-88BC-FAC7CE9F0EFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31E32759-5573-42D3-88BC-FAC7CE9F0EFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31E32759-5573-42D3-88BC-FAC7CE9F0EFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31E32759-5573-42D3-88BC-FAC7CE9F0EFA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = None
+		$1.ResourceNamePolicy = FileFormatDefault
+		$0.TextStylePolicy = $2
+		$2.FileWidth = 120
+		$2.TabsToSpaces = False
+		$2.EolMarker = Unix
+		$2.inheritsSet = VisualStudio
+		$2.inheritsScope = text/plain
+		$2.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $3
+		$3.IndentSwitchSection = True
+		$3.SpacingAfterMethodDeclarationName = False
+		$3.SpaceAfterMethodCallName = False
+		$3.SpaceBeforeOpenSquareBracket = False
+		$3.inheritsSet = Mono
+		$3.inheritsScope = text/x-csharp
+		$3.scope = text/x-csharp
+		$3.NewLinesForBracesInProperties = True
+		$3.NewLinesForBracesInAccessors = True
+		$3.NewLinesForBracesInAnonymousMethods = True
+		$3.NewLinesForBracesInControlBlocks = True
+		$3.NewLinesForBracesInAnonymousTypes = True
+		$3.NewLinesForBracesInObjectCollectionArrayInitializers = True
+		$3.NewLinesForBracesInLambdaExpressionBody = True
+		$3.NewLineForElse = True
+		$3.NewLineForCatch = True
+		$3.NewLineForFinally = True
+		$3.NewLineForMembersInObjectInit = True
+		$3.NewLineForMembersInAnonymousTypes = True
+		$3.NewLineForClausesInQuery = True
+	EndGlobalSection
+EndGlobal

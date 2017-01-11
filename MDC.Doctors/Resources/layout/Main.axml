@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Indigo_50">
+    <RelativeLayout
+        android:id="@+id/maContentRL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/Indigo_50">
+        <RelativeLayout
+            android:id="@+id/maUpPanelRL"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="@android:color/white"
+            android:layout_alignParentTop="true">
+            <TextView
+                android:text="ИНФОРМАЦИЯ"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/maInfoText"
+                android:gravity="center"
+                android:textColor="@color/Light_Blue_500"
+                android:height="64dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:visibility="gone" />
+            <ImageView
+                android:src="@drawable/ic_account_box_black_48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/maInfoText"
+                android:id="@+id/maProfile"
+                android:padding="8dp" />
+            <ImageView
+                android:src="@drawable/ic_search_black_48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/maProfile"
+                android:id="@+id/maSearch"
+                android:padding="8dp" />
+            <ImageView
+                android:src="@drawable/ic_filter_list_black_48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/maSearch"
+                android:id="@+id/maFilter"
+                android:padding="8dp" />
+        <!-- Конец левой части и начало правой -->
+            <ImageView
+                android:src="@drawable/ic_add_circle_outline_black_48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/maAdd"
+                android:layout_alignParentRight="true"
+                android:padding="8dp" />
+            <ImageView
+                android:src="@drawable/ic_local_library_black_48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/maLibrary"
+                android:layout_toLeftOf="@id/maAdd"
+                android:padding="8dp" />
+            <ImageView
+                android:src="@drawable/ic_swap_vert_black_48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/maSync"
+                android:layout_toLeftOf="@id/maLibrary"
+                android:padding="8dp" />
+            <ImageView
+                android:src="@drawable/ic_directions_black_48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/maRoute"
+                android:layout_toLeftOf="@id/maSync"
+                android:padding="8dp" />
+        <!-- Содержание фильтра -->
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_toRightOf="@id/maFilter"
+                android:layout_toLeftOf="@id/maRoute"
+                android:id="@+id/maFilterTV"
+                android:text="Single-line text view that scrolls automatically if the text is too long to fit in the widget. Single-line text view that scrolls automatically if the text is too long to fit in the widget"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scrollHorizontally="true"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/Light_Blue_500"
+                android:height="64dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp" />
+        </RelativeLayout>
+        <ListView
+            android:layout_marginTop="66dp"
+            android:layout_marginBottom="56dp"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:orientation="vertical"
+            android:divider="@color/Grey_300"
+            android:dividerHeight="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:id="@+id/maDoctorTable" />
+        <RelativeLayout
+            android:id="@+id/maBottomPanelRL"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white">
+            <TextView
+                android:text="СЕГОДНЯ ВИЗИТОВ: "
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/maAttendanceCountTV"
+                android:gravity="center"
+                android:textColor="@color/Light_Blue_500"
+                android:height="56dp"
+                android:paddingRight="32dp"
+                android:paddingLeft="24dp"
+                android:layout_alignParentLeft="true" />
+        </RelativeLayout>
+        <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/maUpPanelRL"
+            android:id="@+id/myButton" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/maSearchRL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/translucent_black_dark">
+        <LinearLayout
+            android:id="@+id/maSearchInputLL"
+            android:layout_marginTop="62dp"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="25px"
+            android:minHeight="25px">
+            <ImageView
+                android:src="@drawable/ic_search_white_36dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:id="@+id/imageView1"
+                android:background="@drawable/semicircle_left"
+                android:focusableInTouchMode="true" />
+            <RelativeLayout
+                android:layout_width="500dp"
+                android:layout_height="64dp"
+                android:background="@android:color/transparent">
+                <View
+                    android:background="@android:color/white"
+                    android:layout_height="3dp"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentTop="true" />
+                <EditText
+                    android:id="@+id/maSearchInput"
+                    android:textCursorDrawable="@null"
+                    android:background="@android:color/transparent"
+                    android:textColorHint="#ffbdbdbd"
+                    android:textColor="@android:color/white"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Например, 36и6"
+                    android:enabled="true"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:inputType="textCapSentences"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent" />
+                <View
+                    android:background="@android:color/white"
+                    android:layout_height="3dp"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentBottom="true" />
+            </RelativeLayout>
+            <ImageView
+                android:src="@drawable/ic_settings_white_36dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:id="@+id/maSearchSettingsIV"
+                android:background="@drawable/semicircle_right" />
+        </LinearLayout>
+        <ListView
+            android:id="@+id/maSearchTable"
+            android:layout_below="@id/maSearchInputLL"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
+            android:divider="@color/translucent_black_dark"
+            android:dividerHeight="2dp"
+            android:choiceMode="multipleChoice"
+            android:layout_width="500dp"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</FrameLayout>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@android:color/white"
+    android:weightSum="100">
+    <TextView
+        android:text="#"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dthNoTV"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:textAppearance="@style/headerTextForPharmacy" />
+    <TextView
+        android:text="State"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dthStateTV"
+        android:layout_weight="6"
+        android:gravity="center"
+        android:textAppearance="@style/headerTextForPharmacy" />
+    <TextView
+        android:text="HospitalArea"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dthHospitalAreaTV"
+        android:layout_weight="5"
+        android:gravity="center"
+        android:textAppearance="@style/headerTextForPharmacy" />
+    <TextView
+        android:text="HospitalName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dthHospitalNameTV"
+        android:layout_weight="10"
+        android:gravity="center"
+        android:textAppearance="@style/headerTextForPharmacy" />
+    <TextView
+        android:text="HospitalAddress"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dthHospitalAddressTV"
+        android:layout_weight="20"
+        android:gravity="center"
+        android:textAppearance="@style/headerTextForPharmacy" />
+    <TextView
+        android:text="Speciality"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dthSpecialityTV"
+        android:layout_weight="10"
+        android:gravity="center"
+        android:textAppearance="@style/headerTextForPharmacy" />
+    <TextView
+        android:text="Name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dthNameTV"
+        android:layout_weight="10"
+        android:gravity="center"
+        android:textAppearance="@style/headerTextForPharmacy" />
+    <TextView
+        android:text="WorkPlaceCabinet"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dthWorkPlaceCabinetTV"
+        android:layout_weight="5"
+        android:gravity="center"
+        android:textAppearance="@style/headerTextForPharmacy" />
+    <TextView
+        android:text="WorkPlaceTimetable"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dthPlaceTimetableTV"
+        android:layout_weight="14"
+        android:gravity="center"
+        android:textAppearance="@style/headerTextForPharmacy" />
+    <TextView
+        android:text="LastAttendanceDate"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dthLastAttendanceDateTV"
+        android:layout_weight="9"
+        android:gravity="center"
+        android:textAppearance="@style/headerTextForPharmacy" />
+    <TextView
+        android:text="NextAttendanceDate"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/dthNextAttendanceDateTV"
+        android:layout_weight="9"
+        android:gravity="center"
+        android:textAppearance="@style/headerTextForPharmacy" />
+</LinearLayout>

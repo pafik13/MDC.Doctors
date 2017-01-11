@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="64px"
+    android:background="@color/Indigo_50">
+    <RelativeLayout
+        android:id="@+id/daUpPanelRL"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minWidth="25px"
+        android:minHeight="64px"
+        android:background="@android:color/white">
+        <TextView
+            android:text="ДОБАВЛЕНИЕ НОВОГО ВРАЧА/МЕДРАБОТНИКА"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/daInfoTV"
+            android:gravity="center"
+            android:textColor="@color/Light_Blue_500"
+            android:height="64dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp" />
+        <Button
+            android:text="ЗАКРЫТЬ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+id/daCloseB"
+            android:background="@color/Deep_Orange_500"
+            android:typeface="monospace"
+            android:width="150dp"
+            android:height="62dp"
+            android:textColor="@android:color/white"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:minHeight="62dp"
+            android:layout_marginBottom="2dp" />
+        <Button
+            android:text="СОХРАНИТЬ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/daCloseB"
+            android:id="@+id/daSaveB"
+            android:background="@color/Light_Green_500"
+            android:typeface="monospace"
+            android:width="150dp"
+            android:height="62dp"
+            android:textColor="@android:color/white"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:minHeight="62dp"
+            android:layout_marginBottom="2dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/daUpPanelRL"
+        android:background="@color/Indigo_50">
+        <ScrollView
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/daMainSV"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/white">
+            <TableLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/daMainTL"
+                android:background="@android:color/white">
+                <TableRow
+                    android:id="@+id/daRowUUID">
+                    <TextView
+                        android:text="UUID"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:layout_gravity="center_vertical"
+                        style="@style/control_label" />
+                    <TextView
+                        android:text="UUID"
+                        android:layout_column="1"
+                        android:id="@+id/daUUIDTV"
+                        android:layout_gravity="center_vertical"
+                        style="@style/fcs_block1" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/daRowState">
+                    <TextView
+                        android:text="Статус"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:gravity="end|center_vertical"
+                        style="@style/control_label"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/daStateS"
+                        android:layout_marginRight="24dp" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/daNameTR">
+                    <TextView
+                        android:text="ФИО"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:gravity="end|center_vertical"
+                        style="@style/control_label"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                    <EditText
+                        android:textCursorDrawable="@null"
+                        android:layout_column="1"
+                        android:id="@+id/daNameET"
+                        android:background="@drawable/bottomline"
+                        android:textColorHint="@color/Grey_300"
+                        android:textColor="@android:color/black"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="Например, Иванов Иван Иванович"
+                        android:enabled="true"
+                        android:layout_marginRight="24dp"
+                        android:inputType="textCapWords"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/daSpecialtyTR">
+                    <TextView
+                        android:text="Специальность"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:gravity="end|center_vertical"
+                        style="@style/control_label"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                    <AutoCompleteTextView
+                        android:dropDownWidth="650dp"
+                        android:textCursorDrawable="@null"
+                        android:layout_column="1"
+                        android:id="@+id/daSpecialtyACTV"
+                        android:background="@drawable/bottomline"
+                        android:textColorHint="@color/Grey_300"
+                        android:textColor="@android:color/black"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="Например, Специальность"
+                        android:enabled="true"
+                        android:layout_marginRight="24dp"
+                        android:inputType="textCapSentences"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/daSpecialismTR">
+                    <TextView
+                        android:text="Специализация"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:gravity="end|center_vertical"
+                        style="@style/control_label"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                    <EditText
+                        android:textCursorDrawable="@null"
+                        android:layout_column="1"
+                        android:id="@+id/daSpecialismET"
+                        android:background="@drawable/bottomline"
+                        android:textColorHint="@color/Grey_300"
+                        android:textColor="@android:color/black"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="Например, Специализация"
+                        android:enabled="true"
+                        android:layout_marginRight="24dp"
+                        android:inputType="textCapSentences"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/daPositionTR">
+                    <TextView
+                        android:text="Должность"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:gravity="end|center_vertical"
+                        style="@style/control_label"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                    <AutoCompleteTextView
+                        android:dropDownWidth="650dp"
+                        android:textCursorDrawable="@null"
+                        android:layout_column="1"
+                        android:id="@+id/daPositionACTV"
+                        android:background="@drawable/bottomline"
+                        android:textColorHint="@color/Grey_300"
+                        android:textColor="@android:color/black"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="Например, Должность"
+                        android:enabled="true"
+                        android:layout_marginRight="24dp"
+                        android:inputType="textCapSentences"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/daPhoneTR">
+                    <TextView
+                        android:text="Телефон (личный)"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:gravity="end|center_vertical"
+                        style="@style/control_label"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                    <EditText
+                        android:textCursorDrawable="@null"
+                        android:layout_column="1"
+                        android:id="@+id/daPhoneET"
+                        android:background="@drawable/bottomline"
+                        android:textColorHint="@color/Grey_300"
+                        android:textColor="@android:color/black"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="Например, Телефон"
+                        android:enabled="true"
+                        android:layout_marginRight="24dp"
+                        android:inputType="textCapSentences"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/daEmailTR">
+                    <TextView
+                        android:text="Почта"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:gravity="end|center_vertical"
+                        style="@style/control_label"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                    <EditText
+                        android:textCursorDrawable="@null"
+                        android:layout_column="1"
+                        android:id="@+id/daEmailET"
+                        android:background="@drawable/bottomline"
+                        android:textColorHint="@color/Grey_300"
+                        android:textColor="@android:color/black"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="Например, Почта"
+                        android:enabled="true"
+                        android:layout_marginRight="24dp"
+                        android:inputType="textCapSentences"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/daCanParticipateInActionsTR">
+                    <TextView
+                        android:text="Является заказчиком?"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:gravity="end|center_vertical"
+                        style="@style/control_label"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                    <CheckBox
+                        android:layout_column="1"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:id="@+id/daCanParticipateInActionsCB"
+                        android:enabled="true"
+                        android:layout_gravity="center" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/daCanParticipateInConferenceTR">
+                    <TextView
+                        android:text="Является заказчиком?"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:gravity="end|center_vertical"
+                        style="@style/control_label"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                    <CheckBox
+                        android:layout_column="1"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:id="@+id/daCanParticipateInConferenceCB"
+                        android:enabled="true"
+                        android:layout_gravity="center" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/daLastAttendanceDateTR">
+                    <TextView
+                        android:text="Последний визит"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:gravity="end|center_vertical"
+                        style="@style/control_label"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                    <TextView
+                        android:hint="Дата последнего визита"
+                        android:layout_column="1"
+                        android:id="@+id/daLastAttendanceDateTV"
+                        style="@style/fcs_block1"
+                        android:gravity="end|center_vertical"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/daNextAttendanceDateTR">
+                    <TextView
+                        android:text="Следующий визит"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:gravity="end|center_vertical"
+                        style="@style/control_label"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                    <TextView
+                        android:hint="Дата следующего визита"
+                        android:layout_column="1"
+                        android:id="@+id/daNextAttendanceDateTV"
+                        style="@style/fcs_block1"
+                        android:gravity="end|center_vertical"
+                        android:layout_height="@dimen/row_height"
+                        android:layout_width="match_parent" />
+                </TableRow>
+                <TableRow
+                    android:id="@+id/daCommentTR">
+                    <TextView
+                        android:text="Комментарий"
+                        android:layout_column="0"
+                        android:background="@android:color/background_light"
+                        android:gravity="end|center_vertical"
+                        style="@style/control_label"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="10dp" />
+                    <EditText
+                        android:textCursorDrawable="@null"
+                        android:layout_column="1"
+                        android:id="@+id/daCommentET"
+                        android:background="@drawable/bottomline"
+                        android:textColorHint="@color/Grey_300"
+                        android:textColor="@android:color/black"
+                        android:hint="Комментарий"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:maxWidth="450dp"
+                        android:layout_marginBottom="10dp"
+                        android:enabled="true"
+                        android:layout_marginRight="24dp"
+                        android:minWidth="300dp"
+                        android:minLines="2"
+                        android:maxLines="5" />
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+    </RelativeLayout>
+</RelativeLayout>
