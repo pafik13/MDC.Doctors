@@ -9,7 +9,7 @@ namespace MDC.Doctors.Lib.Entities
 	/// <summary>
 	/// Место работы - связь врача/медработника с ЛПУ и дополнительная информация.
 	/// </summary>
-	public class WorkPlace: IEntityFromClient, ISync
+	public class WorkPlace: RealmObject, IEntityFromClient, ISync
 	{
 		/// <summary>
 		/// Уникальный идентификатор. Используется Guid.

@@ -139,6 +139,9 @@
     <AndroidResource Include="Resources\layout\InfoDataTableItem.axml" />
     <AndroidResource Include="Resources\drawable-hdpi\ic_keyboard_arrow_left_black_24dp.png" />
     <AndroidResource Include="Resources\drawable-hdpi\ic_keyboard_arrow_right_black_24dp.png" />
+    <AndroidResource Include="Resources\layout\WorkPlaceItem.axml" />
+    <AndroidResource Include="Resources\layout\DoctorMainInfoFragment.axml" />
+    <AndroidResource Include="Resources\layout\DoctorWorkPlaceFragment.axml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
