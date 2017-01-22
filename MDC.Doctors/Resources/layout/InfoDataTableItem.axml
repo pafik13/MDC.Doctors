@@ -17,6 +17,7 @@
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
+        android:id="@+id/idtiWorkTypesTV"
         android:layout_marginRight="1dp"
         android:layout_marginBottom="1dp"
         android:background="@android:color/white"
@@ -43,6 +44,7 @@
             android:textColorHint="@color/Grey_300"
             android:textColor="@android:color/black"
             android:hint="Обратная связь"
+            android:enabled="false"
             android:inputType="textCapSentences" />
     </RelativeLayout>
     <RelativeLayout
@@ -62,6 +64,7 @@
             android:textColorHint="@color/Grey_300"
             android:textColor="@android:color/black"
             android:hint="Резюме"
+            android:enabled="false"
             android:inputType="textCapSentences" />
     </RelativeLayout>
     <RelativeLayout
@@ -81,6 +84,7 @@
             android:textColorHint="@color/Grey_300"
             android:textColor="@android:color/black"
             android:hint="Цель на след визит"
+            android:enabled="false"
             android:inputType="textCapSentences" />
     </RelativeLayout>
     <RelativeLayout
@@ -100,6 +104,7 @@
             android:textColorHint="@color/Grey_300"
             android:textColor="@android:color/black"
             android:hint="Комментарий"
+            android:enabled="false"
             android:inputType="textCapSentences" />
     </RelativeLayout>
 </LinearLayout>

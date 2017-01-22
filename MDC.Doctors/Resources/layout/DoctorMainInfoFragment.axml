@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="25px"
     android:minHeight="25px"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@id/daUpPanelRL"
+    android:id="@+id/daMainSV"
     android:background="@color/Indigo_50">
-    <ScrollView
+    <FrameLayout
         android:minWidth="25px"
         android:minHeight="25px"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/daMainSV"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/white">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <TableLayout
             android:minWidth="25px"
             android:minHeight="25px"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:id="@+id/daMainTL"
             android:background="@android:color/white">
             <TableRow
@@ -313,5 +311,5 @@
                     android:maxLines="5" />
             </TableRow>
         </TableLayout>
-    </ScrollView>
-</RelativeLayout>
+    </FrameLayout>
+</ScrollView>

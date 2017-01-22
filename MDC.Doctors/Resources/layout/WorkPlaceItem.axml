@@ -52,20 +52,20 @@
         <EditText
             android:inputType="textMultiLine"
             android:hint="Кабинет"
-            android:layout_width="0dp"
-            android:layout_gravity="fill_horizontal"
-            android:layout_height="280dp"
+            android:layout_width="120dp"
+            android:layout_height="180dp"
             android:layout_margin="10dp"
+            android:gravity="top"
             android:textColor="@android:color/black" />
         <EditText
             android:inputType="textMultiLine"
             android:hint="Расписание"
             android:layout_column="2"
             android:layout_columnSpan="2"
-            android:layout_width="0dp"
-            android:layout_gravity="fill_horizontal"
-            android:layout_height="280dp"
+            android:layout_width="280dp"
+            android:layout_height="180dp"
             android:layout_margin="10dp"
+            android:gravity="top"
             android:textColor="@android:color/black" />
         <TextView
             android:text="IsMain"

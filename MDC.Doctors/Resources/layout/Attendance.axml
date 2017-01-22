@@ -5,216 +5,75 @@
     android:layout_height="match_parent"
     android:background="@color/Indigo_50">
     <RelativeLayout
-        android:orientation="vertical"
+        android:id="@+id/aaUpPanelRL"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@drawable/bottomline">
+        <Button
+            android:text="ОСТАНОВИТЬ ВИЗИТ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/aaResumeOrPauseAttendanceB"
+            android:background="@color/Yellow_600"
+            android:typeface="monospace"
+            android:width="150dp"
+            android:height="62dp"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:minHeight="62dp"
+            android:layout_marginBottom="2dp" />
+        <Button
+            android:text="НАЧАТЬ ВИЗИТ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/aaStartOrStopAttendanceB"
+            android:layout_toRightOf="@id/aaResumeOrPauseAttendanceB"
+            android:background="@color/Light_Green_500"
+            android:typeface="monospace"
+            android:width="150dp"
+            android:height="62dp"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:minHeight="62dp"
+            android:layout_marginBottom="2dp" />
+        <TextView
+            android:text="&lt;TITLE&gt;"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/aaTitleTV"
+            android:gravity="center"
+            android:textColor="@color/Light_Blue_500"
+            android:height="64dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:layout_centerHorizontal="true" />
+        <Button
+            android:text="ЗАКРЫТЬ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+id/aaCloseB"
+            android:background="@color/Deep_Orange_500"
+            android:typeface="monospace"
+            android:width="150dp"
+            android:height="62dp"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:minHeight="62dp"
+            android:layout_marginBottom="2dp" />
+    </RelativeLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/aaContainerVP"
+        android:layout_below="@id/aaUpPanelRL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="64dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/Indigo_50">
-        <RelativeLayout
-            android:id="@+id/aaUpPanelRL"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:background="@drawable/bottomline">
-            <Button
-                android:text="НАЧАТЬ ВИЗИТ"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:id="@+id/aaStartOrStopAttendanceB"
-                android:background="@color/Light_Green_500"
-                android:typeface="monospace"
-                android:width="150dp"
-                android:height="62dp"
-                android:textColor="@android:color/white"
-                android:textSize="24dp"
-                android:textStyle="bold"
-                android:minHeight="62dp"
-                android:layout_marginBottom="2dp" />
-            <TextView
-                android:text="&lt;TITLE&gt;"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/aaTitleTV"
-                android:gravity="center"
-                android:textColor="@color/Light_Blue_500"
-                android:height="64dp"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                android:layout_centerHorizontal="true" />
-            <Button
-                android:text="ЗАКРЫТЬ"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:id="@+id/aaCloseB"
-                android:background="@color/Deep_Orange_500"
-                android:typeface="monospace"
-                android:width="150dp"
-                android:height="62dp"
-                android:textColor="@android:color/white"
-                android:textSize="24dp"
-                android:textStyle="bold"
-                android:minHeight="62dp"
-                android:layout_marginBottom="2dp" />
-        </RelativeLayout>
-        <ScrollView
-            android:layout_below="@id/aaUpPanelRL"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/Indigo_50">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:id="@+id/aaDoctorLL"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:weightSum="100">
-                    <TextView
-                        android:minHeight="60dp"
-                        android:text="Данные о враче"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="30"
-                        android:gravity="center"
-                        android:textAppearance="@style/rowTextForPharmacy"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false" />
-                    <TextView
-                        android:layout_margin="10dp"
-                        android:minHeight="50dp"
-                        android:text="Данные о враче"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:id="@+id/aaDoctorTV"
-                        android:layout_weight="70"
-                        android:gravity="center_vertical"
-                        android:textAppearance="@style/rowTextForPharmacy"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false" />
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/aaHospitalLL"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:weightSum="100">
-                    <TextView
-                        android:minHeight="50dp"
-                        android:text="Данные о ЛПУ"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="30"
-                        android:gravity="center"
-                        android:textAppearance="@style/rowTextForPharmacy"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false" />
-                    <TextView
-                        android:layout_margin="10dp"
-                        android:minHeight="50dp"
-                        android:text="Данные о ЛПУ"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:id="@+id/aaHospitalTV"
-                        android:layout_weight="70"
-                        android:gravity="center_vertical"
-                        android:textAppearance="@style/rowTextForPharmacy"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false" />
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/aaGoalsLL"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:weightSum="100">
-                    <TextView
-                        android:minHeight="60dp"
-                        android:text="Цель на визит"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="30"
-                        android:gravity="center"
-                        android:textAppearance="@style/rowTextForPharmacy"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false" />
-                    <EditText
-                        android:enabled="false"
-                        android:textCursorDrawable="@null"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="70"
-                        android:layout_margin="10dp"
-                        android:id="@+id/aaGoalsET"
-                        android:background="@drawable/bottomline"
-                        android:textColorHint="@color/Grey_300"
-                        android:textColor="@android:color/black"
-                        android:hint="Цель на визит"
-                        android:inputType="textCapSentences" />
-                </LinearLayout>
-                <View
-                    android:id="@+id/ifMessageDividerV"
-                    android:layout_width="match_parent"
-                    android:layout_height="12dp" />
-                <LinearLayout
-                    android:id="@+id/aaInfoLL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
-                        android:text="Содержание визита"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:textSize="32sp"
-                        android:textColor="@android:color/black"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false" />
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="100">
-                        <ImageView
-                            android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:id="@+id/aaDrugBrandInfoLeftArrow"
-                            android:layout_weight="5" />
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:id="@+id/aaDrugBrandInfoTable"
-                            android:layout_weight="90" />
-                        <ImageView
-                            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:id="@+id/aaDrugBrandInfoLRigthArrow"
-                            android:layout_weight="5" />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="6dp" />
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:id="@+id/aaInfoTable" />
-                </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp" />
-            </LinearLayout>
-        </ScrollView>
-    </RelativeLayout>
+        android:layout_marginRight="20dp" />
 </FrameLayout>

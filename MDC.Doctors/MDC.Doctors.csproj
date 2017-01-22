@@ -88,13 +88,21 @@
     <Compile Include="Lib\Entities\WorkPlace.cs" />
     <Compile Include="DoctorActivity.cs" />
     <Compile Include="Lib\Adapters\DoctorAdapter.cs" />
-    <Compile Include="Lib\Interfaces\IAttendanceControl.cs" />
+    <Compile Include="Lib\Interfaces\IHospital.cs" />
     <Compile Include="LoadDataActivity.cs" />
     <Compile Include="AttendanceActivity.cs" />
     <Compile Include="Lib\Entities\Attendance.cs" />
     <Compile Include="Lib\Entities\InfoData.cs" />
     <Compile Include="Lib\Interfaces\IAttendanceData.cs" />
     <Compile Include="Lib\Entities\WorkType.cs" />
+    <Compile Include="Lib\Entities\GPSData.cs" />
+    <Compile Include="Lib\Interfaces\IAttendanceControl.cs" />
+    <Compile Include="Lib\Helper.cs" />
+    <Compile Include="Lib\Fragments\InfoFragment.cs" />
+    <Compile Include="Lib\Consts.cs" />
+    <Compile Include="Lib\Fragments\DoctorMainInfoFragment.cs" />
+    <Compile Include="Lib\Fragments\DoctorWorkPlacesFragment.cs" />
+    <Compile Include="Lib\Interfaces\ISave.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -141,7 +149,8 @@
     <AndroidResource Include="Resources\drawable-hdpi\ic_keyboard_arrow_right_black_24dp.png" />
     <AndroidResource Include="Resources\layout\WorkPlaceItem.axml" />
     <AndroidResource Include="Resources\layout\DoctorMainInfoFragment.axml" />
-    <AndroidResource Include="Resources\layout\DoctorWorkPlaceFragment.axml" />
+    <AndroidResource Include="Resources\layout\DoctorWorkPlacesFragment.axml" />
+    <AndroidResource Include="Resources\layout\InfoFragment.axml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -150,6 +159,7 @@
     <Folder Include="Lib\Entities\" />
     <Folder Include="Lib\Interfaces\" />
     <Folder Include="Lib\Dialogs\" />
+    <Folder Include="Lib\Fragments\" />
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="hockeyappandroid">

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SD = System.Diagnostics;
 
 using Android.App;
 using Android.Content;
@@ -10,26 +11,64 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-using Realms;
+using V4App = Android.Support.V4.App;
+using Android.Support.V4.View;
 
-using MDC.Doctors.Lib;
-using MDC.Doctors.Lib.Entities;
+using MDC.Doctors.Fragments;
+using MDC.Doctors.Lib.Interfaces;
 
 namespace MDC.Doctors
 {
 	[Activity(Label = "DoctorActivity", WindowSoftInputMode = SoftInput.StateHidden)]
-	public class DoctorActivity : Activity
+	public class DoctorActivity : V4App.FragmentActivity, ViewPager.IOnPageChangeListener
 	{
-		public const string C_DOCTOR_UUID = "C_DOCTOR_UUID";
+		public const int C_NUM_PAGES = 2;
 
-		Realm DB;
-		Doctor Doctor;
+
+		public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+		{
+			return;
+		}
+
+		public void OnPageScrollStateChanged(int state)
+		{
+			return;
+		}
+
+		public void OnPageSelected(int position)
+		{
+			switch (position)
+			{
+				case 0:
+					SelectMainInfo();
+					break;
+				case 1:
+					SelectWorkPlaces();
+					break;
+			}
+		}
+
+		ViewPager Pager;
+
+		View TabMainInfoView;
+
+		View TabWorkPlacesView;
+
+		void SelectMainInfo()
+		{
+			TabMainInfoView.SetBackgroundColor(Android.Graphics.Color.Black);
+			TabWorkPlacesView.SetBackgroundColor(Android.Graphics.Color.Transparent);			
+		}
+
+		void SelectWorkPlaces()
+		{
+			TabMainInfoView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+			TabWorkPlacesView.SetBackgroundColor(Android.Graphics.Color.Black);			
+		}
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-
-			DB = Realm.GetInstance();
 
 			RequestWindowFeature(WindowFeatures.NoTitle);
 			Window.AddFlags(WindowManagerFlags.KeepScreenOn);
@@ -42,65 +81,84 @@ namespace MDC.Doctors
 				Finish();
 			};
 
+
+			var doctorUUID = Intent.GetStringExtra(Consts.C_DOCTOR_UUID);
+
+			Pager = FindViewById<ViewPager>(Resource.Id.daContainerVP);
+			Pager.AddOnPageChangeListener(this);
+			Pager.Adapter = new DoctorPagerAdapter(SupportFragmentManager, doctorUUID, this);
+
 			FindViewById<Button>(Resource.Id.daSaveB).Click += (s, e) =>
 			{
-				// TIP: check section
-				var errors = string.Empty;
-				// TODO: state fired and comment not empty
-				//if()
-
-				if (!string.IsNullOrEmpty(errors))
+				for (int f = 0; f < C_NUM_PAGES; f++)
 				{
-					new AlertDialog.Builder(this)
-								   .SetTitle(Resource.String.error_caption)
-								   .SetMessage("Обнаружены следующие проблемы:" + System.Environment.NewLine + errors)
-								   .SetCancelable(false)
-					               .SetPositiveButton(Resource.String.ok_button, (dialog, args) =>
-								   {
-									   if (dialog is Dialog)
-									   {
-										   ((Dialog)dialog).Dismiss();
-									   }
-								   })
-								   .Show();
-					return;
-				}
-
-
-				// TIP: save section
-				using (var transaction = DB.BeginWrite())
-				{
-
-					Doctor item;
-					if (Doctor == null)
-                    {
-						item = DBHelper.Create<Doctor>(DB, transaction);
-						item.SetState(DoctorState.dsActive);
-					} else
-                    {
-						item = Doctor;
+					var fragment = GetFragment(f);
+					if (fragment is ISave)
+					{
+						(fragment as ISave).Save();
 					}
-
-					item.UpdatedAt = DateTimeOffset.Now;
-					item.IsSynced = false;
-					//item.SetState((PharmacyState)State.SelectedItemPosition);
-                    item.Name = FindViewById<EditText>(Resource.Id.daNameET).Text;
-                    item.Specialty = FindViewById<AutoCompleteTextView>(Resource.Id.daSpecialtyACTV).Text;
-                    item.Specialism = FindViewById<EditText>(Resource.Id.daSpecialismET).Text;
-                    item.Position = FindViewById<AutoCompleteTextView>(Resource.Id.daPositionACTV).Text;
-                    item.Phone = FindViewById<EditText>(Resource.Id.daPhoneET).Text;
-                    item.Email = FindViewById<EditText>(Resource.Id.daEmailET).Text;
-                    item.CanParticipateInActions = FindViewById<CheckBox>(Resource.Id.daCanParticipateInActionsCB).Checked;
-                    item.CanParticipateInConference = FindViewById<CheckBox>(Resource.Id.daCanParticipateInConferenceCB).Checked;
-                    item.Comment = FindViewById<EditText>(Resource.Id.daCommentET).Text;
-
-                    if (!item.IsManaged) DBHelper.Save(DB, transaction, item);
-
-					transaction.Commit();
 				}
 
 				Finish();
 			};
+
+			TabMainInfoView = FindViewById<View>(Resource.Id.daTabMainInfoV);
+			(TabMainInfoView.Parent as RelativeLayout).Click += (sender, e) => { Pager.CurrentItem = 0;/*SelectMainInfo();*/ };
+			TabWorkPlacesView = FindViewById<View>(Resource.Id.daTabWorkPlacesV);
+			(TabWorkPlacesView.Parent as RelativeLayout).Click += (sender, e) => { Pager.CurrentItem = 1;/*SelectWorkPlaces();*/ };
+		}
+
+		V4App.Fragment GetFragment(int position)
+		{
+			string tag = string.Concat("android:switcher:", Pager.Id, ":", position);
+			var fragment = SupportFragmentManager.FindFragmentByTag(tag);
+			return fragment;
+		}
+
+		/**
+		 * A pager adapter that represents <NUM_PAGES> fragments.
+		 */
+		class DoctorPagerAdapter : V4App.FragmentPagerAdapter
+		{
+			readonly SD.Stopwatch Chrono;
+			readonly Context Conext;
+			readonly string DoctorUUID;
+
+			public DoctorPagerAdapter(V4App.FragmentManager fm, string doctorUUID, Context context) : base(fm)
+			{
+				Chrono = new SD.Stopwatch();
+				Conext = context;
+				DoctorUUID = doctorUUID;
+			}
+
+			public override int Count
+			{
+				get
+				{
+					return C_NUM_PAGES;
+				}
+			}
+
+			public override V4App.Fragment GetItem(int position)
+			{
+				V4App.Fragment result = null;
+				string fragmentName = string.Empty;
+				Chrono.Restart();
+				switch (position)
+				{
+					case 0:
+						fragmentName = "DoctorMainInfoFragment";
+						result = DoctorMainInfoFragment.Create(DoctorUUID);
+						break;
+					case 1:
+						fragmentName = "DoctorWorkPlacesFragment";
+						result = DoctorWorkPlacesFragment.Create(DoctorUUID);
+						break;
+				}
+				SD.Debug.WriteLine(string.Concat(typeof(DoctorPagerAdapter).FullName, fragmentName, ":", Chrono.ElapsedMilliseconds));
+				Chrono.Stop();
+				return result;
+			}
 		}
 	}
 }

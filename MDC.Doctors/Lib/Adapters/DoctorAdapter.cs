@@ -126,7 +126,7 @@ namespace MDC.Doctors.Lib.Adapters
 			{
                 var doctorUUID = ((Button)sender).GetTag(Resource.String.DoctorUUID).ToString();
                 var attendanceAcivity = new Intent(Context, typeof(AttendanceActivity));
-				attendanceAcivity.PutExtra(DoctorActivity.C_DOCTOR_UUID, doctorUUID);
+				attendanceAcivity.PutExtra(Consts.C_DOCTOR_UUID, doctorUUID);
                 Context.StartActivity(attendanceAcivity);
                 //Toast.MakeText(Context, "Button clicked", ToastLength.Short).Show();
 			}

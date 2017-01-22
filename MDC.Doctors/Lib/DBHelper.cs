@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using Realms;
 
 using MDC.Doctors.Lib.Interfaces;
+using MDC.Doctors.Lib.Entities;
 
 namespace MDC.Doctors.Lib
 {
 	public static class DBHelper
 	{
-		static string AgentUUID;
-
 		internal static void GetDB(ref Realm db)
 		{
 			if (db == null) {
@@ -57,7 +56,7 @@ namespace MDC.Doctors.Lib
 			}
 			var item = new T();
 			item.UUID = Guid.NewGuid().ToString();
-			item.CreatedBy = string.IsNullOrEmpty(AgentUUID) ? @"AgentUUID is Empty" : AgentUUID;
+			item.CreatedBy = string.IsNullOrEmpty(Helper.AgentUUID) ? @"AgentUUID is Empty" : Helper.AgentUUID;
 			item.CreatedAt = DateTimeOffset.Now;
 			item.UpdatedAt = DateTimeOffset.Now;
 

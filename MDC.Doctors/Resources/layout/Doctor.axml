@@ -62,34 +62,35 @@
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <RelativeLayout
+            android:id="@+id/daTabMainInfoRL"
             android:layout_width="639dp"
             android:layout_height="50dp"
             android:minWidth="25px"
             android:minHeight="64px">
             <TextView
-                android:id="@+id/daTabInfoTV"
+                android:id="@+id/daTabMainInfoTV"
                 android:text="Общая информация"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:textSize="24sp"
-                android:textColor="@android:color/white" />
+                android:textColor="@color/translucent_black_dark" />
             <ImageView
-                android:id="@+id/daTabInfoIV"
+                android:id="@+id/daTabMainInfoIV"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/daTabInfoTV"
+                android:layout_toLeftOf="@id/daTabMainInfoTV"
                 android:src="@drawable/ic_search_white_36dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <View
-                android:id="@+id/daTabInfoV"
+                android:id="@+id/daTabMainInfoV"
                 android:layout_width="640dp"
                 android:layout_height="4dp"
-                android:background="@android:color/transparent"
+                android:background="@android:color/black"
                 android:layout_alignParentBottom="true" />
         </RelativeLayout>
         <View
-            android:id="@+id/daTabInfoV"
+            android:id="@+id/daTabDividerV"
             android:layout_width="2dp"
             android:layout_height="42dp"
             android:layout_marginTop="4dp"
@@ -97,30 +98,31 @@
             android:background="@android:color/darker_gray"
             android:layout_alignParentBottom="true" />
         <RelativeLayout
+            android:id="@+id/daTabWorkPlacesRL"
             android:layout_width="639dp"
             android:layout_height="50dp"
             android:minWidth="25px"
             android:minHeight="64px">
             <TextView
-                android:id="@+id/daTabWorkPlaceTV"
+                android:id="@+id/daTabWorkPlacesTV"
                 android:text="Места работы"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:textSize="24sp"
-                android:textColor="@android:color/white" />
+                android:textColor="@color/translucent_black_dark" />
             <ImageView
-                android:id="@+id/daTabWorkPlaceIV"
+                android:id="@+id/daTabWorkPlacesIV"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/daTabWorkPlaceTV"
+                android:layout_toLeftOf="@id/daTabWorkPlacesTV"
                 android:src="@drawable/ic_search_white_36dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <View
-                android:id="@+id/daTabWorkPlaceV"
+                android:id="@+id/daTabWorkPlacesV"
                 android:layout_width="640dp"
                 android:layout_height="4dp"
-                android:background="@android:color/black"
+                android:background="@android:color/transparent"
                 android:layout_alignParentBottom="true" />
         </RelativeLayout>
     </LinearLayout>

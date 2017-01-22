@@ -1,15 +1,20 @@
-﻿namespace MDC.Doctors.Lib.Interfaces
+﻿using MDC.Doctors.Lib.Entities;
+
+namespace MDC.Doctors.Lib.Interfaces
 {
-	public interface IHospital
+	public interface IAttendanceControl
 	{
-		string GetName();
+		// Добавить в начало строки и снять экран блокировки
+		void OnAttendanceStart(Attendance newAttendance);
 
-		string GetAddress();
+		// Разблокировать строки для ввода данных
+		void OnAttendanceResume(Attendance oldAttendance);
 
-		string GetArea();
+		// Заблокировать строки от ввода данных
+		void OnAttendancePause();
 
-		// Phone (+2)
-		string GetPhone();
+		// Сохранить данные
+		void OnAttendanceStop();
 	}
 }
 

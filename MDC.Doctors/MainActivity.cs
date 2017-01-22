@@ -59,6 +59,7 @@ namespace MDC.Doctors
             base.OnResume();
 			var sw = new SDiag.Stopwatch();
 			sw.Start();
+			Realm.DeleteRealm(RealmConfiguration.DefaultConfiguration);
 			DBHelper.GetDB(ref DB);
 			SDiag.Debug.WriteLine(sw.ElapsedMilliseconds, DEBUG_CATEGORY);
 			sw.Reset();
