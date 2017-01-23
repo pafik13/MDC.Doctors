@@ -12,6 +12,7 @@ using Realms;
 using MDC.Doctors.Lib;
 using MDC.Doctors.Lib.Adapters;
 using MDC.Doctors.Lib.Entities;
+using System;
 
 namespace MDC.Doctors
 {
@@ -63,6 +64,20 @@ namespace MDC.Doctors
 			DBHelper.GetDB(ref DB);
 			SDiag.Debug.WriteLine(sw.ElapsedMilliseconds, DEBUG_CATEGORY);
 			sw.Reset();
+			for (int i = 0; i < 10; i++)
+			{
+				DB.Write(() =>
+				{
+					DB.Add(new HospitalInputed
+					{
+						UUID = Guid.NewGuid().ToString(),
+						Name = string.Concat("Hospital #", i),
+						Key = string.Concat("Key #", i),
+						Address = string.Concat("Address #", i),
+						Area = string.Concat("Area #", i)
+					});
+				});	
+			}
 			DoctorTable.Adapter = new DoctorAdapter(this, DBHelper.GetList<Doctor>(DB));
 			SDiag.Debug.WriteLine(sw.ElapsedMilliseconds, DEBUG_CATEGORY);
 			sw.Stop();

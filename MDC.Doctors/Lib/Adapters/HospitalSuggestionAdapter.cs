@@ -6,20 +6,42 @@ using Android.Views;
 using Android.Widget;
 using MDC.Doctors.Lib.Interfaces;
 using Java.Lang;
+using Realms;
+using MDC.Doctors.Lib.Entities;
 
-namespace MDC.Doctors.Adapters
+namespace MDC.Doctors.Lib.Adapters
 {
 	public class HospitalSuggestionAdapter: BaseAdapter<IHospital>, IFilterable
 	{
+		public struct SearchItem
+		{
+			public string UUID;
+			public string Key;
+			public string Area;
+			public string Address;
+		}
+
 		readonly Activity Context;
 		readonly public IHospital[] Hospitals;
-		public IHospital[] ForDisplay;
+		public List<IHospital> ForDisplay;
+		public SearchItem[] Searches;
 		Filter HFilter;
+
 
 		public HospitalSuggestionAdapter(Activity context, IList<IHospital> hospitals)
 		{
 			Context = context;
 			Hospitals = hospitals.ToArray();
+			Searches = new SearchItem[Hospitals.Count()];
+			for (int i = 0; i < Hospitals.Count(); i++)
+			{
+				Searches[i] = new SearchItem
+				{
+					Key = string.Copy(Hospitals[i].GetName()),
+					Area = string.Copy(Hospitals[i].GetArea()),
+					Address = string.Copy(Hospitals[i].GetAddress())
+				};
+			}
 			ForDisplay = null;
 		}
 
@@ -58,18 +80,30 @@ namespace MDC.Doctors.Adapters
 			protected override FilterResults PerformFiltering(ICharSequence constraint)
 			{
 				var result = new FilterResults();
+				if (constraint == null) return result;
+
 				var list = new List<IHospital>();
 				var search = constraint.ToString();
-				for(int i = 0; i < Hospitals.Count(); i++){
-					var hospital = Hospitals[i];
-					if (hospital.GetName().Contains(search)){
+				for (int i = 0; i < Adapter.Searches.Count(); i++)
+				{
+					var item = Adapter.Searches[i];
+					if (item.Key.Contains(search))
+					{
 						list.Add(Hospitals[i]);
-					} else if (hospital.GetAddress().Contains(search)){
+					}
+					else if (item.Address.Contains(search))
+					{
 						list.Add(Hospitals[i]);
-					} else if (hospital.GetArea().Contains(search)){
+					}
+					else if (item.Area.Contains(search))
+					{
 						list.Add(Hospitals[i]);
 					}
 				}
+				//for(int i = 0; i < Hospitals.Count(); i++){
+				//var hospital = Hospitals[i];
+
+				//}
 
 				Object[] matchObjects;
 				matchObjects = new Object[list.Count];
@@ -81,7 +115,7 @@ namespace MDC.Doctors.Adapters
 				result.Values = matchObjects;
 				result.Count = matchObjects.Count();
 
-				Adapter.SetHospitalsForDisplay(list.ToArray());
+				Adapter.SetHospitalsForDisplay(list);
 
 				return result;
 			}
@@ -93,9 +127,12 @@ namespace MDC.Doctors.Adapters
 			}
 		}
 
-		public void SetHospitalsForDisplay(IHospital[] hospitals)
+		public void SetHospitalsForDisplay(List<IHospital> hospitals)
 		{
-			ForDisplay = hospitals;
+			Context.RunOnUiThread(() =>
+			{
+				ForDisplay = hospitals.Count == 0 ? null : hospitals;
+			});
 		}
 
 		public override long GetItemId(int position)

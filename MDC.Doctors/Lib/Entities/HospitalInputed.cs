@@ -59,6 +59,7 @@ namespace MDC.Doctors.Lib.Entities
 		public string GetName()
 		{
 			//throw new NotImplementedException();
+			System.Diagnostics.Debug.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId, "Thread_Name");
 			return Key;
 		}
 

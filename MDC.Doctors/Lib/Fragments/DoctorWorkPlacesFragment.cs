@@ -7,10 +7,11 @@ using Realms;
 
 using V4App = Android.Support.V4.App;
 
-using MDC.Doctors.Lib;
+using MDC.Doctors.Lib.Adapters;
 using MDC.Doctors.Lib.Entities;
-using System;
 using MDC.Doctors.Lib.Interfaces;
+using MDC.Doctors.Lib;
+using System.Collections.Generic;
 
 namespace MDC.Doctors
 {
@@ -43,7 +44,9 @@ namespace MDC.Doctors
 
 			var WPTable = mainView.FindViewById<LinearLayout>(Resource.Id.dwpfMainLL);
 			var item = inflater.Inflate(Resource.Layout.WorkPlaceItem, WPTable, true);
-
+			var hospital = item.FindViewById<AutoCompleteTextView>(Resource.Id.autoCompleteTextView1);
+			var hospitals = DBHelper.GetList<HospitalInputed>(DB).ToArray();
+			hospital.Adapter = new HospitalSuggestionAdapter(Activity, hospitals);
 			return mainView;
 		}
 
