@@ -11,16 +11,16 @@ using MDC.Doctors.Lib.Entities;
 
 namespace MDC.Doctors.Lib.Adapters
 {
-	public class HospitalSuggestionAdapter: BaseAdapter<IHospital>, IFilterable
+	public struct IHospitalHolder
 	{
-		public struct IHospitalHolder
-		{
-			public string UUID;
-			public string Name;
-			public string Area;
-			public string Address;
-		}
+		public string UUID;
+		public string Name;
+		public string Area;
+		public string Address;
+	}
 
+	public class HospitalSuggestionAdapter: BaseAdapter<IHospitalHolder>, IFilterable
+	{
 		readonly Activity Context;
 		readonly public IHospitalHolder[] IHospitals;
 		public List<IHospitalHolder> ForDisplay;
@@ -32,7 +32,7 @@ namespace MDC.Doctors.Lib.Adapters
 			var DB = Realm.GetInstance();
 			var inputedHospitals = DBHelper.GetAll<HospitalInputed>(DB);
 			var checkedHospitals = DBHelper.GetAll<HospitalChecked>(DB);
-			IHospitals = new IHospitals[inputedHospitals.Count() + checkedHospitals.Count()];
+			IHospitals = new IHospitalHolder[inputedHospitals.Count() + checkedHospitals.Count()];
 			
 			int i = 0;
 			
@@ -65,7 +65,7 @@ namespace MDC.Doctors.Lib.Adapters
 			ForDisplay = null;
 		}
 
-		public override IHospital this[int position] {
+		public override IHospitalHolder this[int position] {
 			get {
 				return ForDisplay == null ? IHospitals[position] : ForDisplay[position];
 			}
@@ -97,10 +97,25 @@ namespace MDC.Doctors.Lib.Adapters
 				IHospitals = adapter.IHospitals;
 			}
 
+			public override ICharSequence ConvertResultToStringFormatted(Object resultValue)
+			{
+				var piInstance = resultValue.GetType().GetProperty("Instance");
+				var instance  = piInstance == null ? null : piInstance.GetValue(resultValue, null);
+
+				if (instance == null) return base.ConvertResultToStringFormatted(resultValue);
+
+				var piName = instance.GetType().GetField("Name");
+				var name = piName == null ? null : piName.GetValue(instance);
+
+				if (name == null) return base.ConvertResultToStringFormatted(resultValue);
+
+				return new String(name.ToString());
+			}
+
 			protected override FilterResults PerformFiltering(ICharSequence constraint)
 			{
 				var results = new FilterResults();
-				if (constraint == null) return result;
+				if (constraint == null) return results;
 
 				var list = new List<IHospitalHolder>();
 				var search = constraint.ToString();

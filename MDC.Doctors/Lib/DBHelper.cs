@@ -142,6 +142,17 @@ namespace MDC.Doctors.Lib
 
 			return db.Find<T>(UUID);
 		}
+
+		public static IHospital GetHospital(Realm db, string hospitalUUID)
+		{
+			var hInputed = db.All<HospitalInputed>().FirstOrDefault(hi => hi.UUID == hospitalUUID);
+			if (hInputed == null)
+			{
+				var hChecked = db.All<HospitalChecked>().FirstOrDefault(hc => hc.uuid == hospitalUUID);
+				return hChecked;
+			}
+			return hInputed;
+		}
 	}
 }
 

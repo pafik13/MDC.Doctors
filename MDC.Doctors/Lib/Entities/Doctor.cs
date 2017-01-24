@@ -135,6 +135,12 @@ namespace MDC.Doctors.Lib.Entities
 		/// <value>The comment.</value>
 		public string Comment { get; set; }
 
+		/// <summary>
+		/// Комментарий по сотруднику.
+		/// </summary>
+		/// <value>The comment.</value>
+		public string MainWorkPlace { get; set; }
+
         /// <summary>
         /// Ссылка на последний визит ко врачу. UUID класса Attendance.
         /// </summary>

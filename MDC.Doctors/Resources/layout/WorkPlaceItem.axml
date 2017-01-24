@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minWidth="25px"
-	android:minHeight="25px">
+    android:minHeight="25px">
     <GridLayout
         android:minWidth="25px"
         android:minHeight="25px"
@@ -22,7 +22,7 @@
             android:gravity="center"
             android:textColor="@android:color/black" />
         <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView1"
+            android:id="@+id/wpiHospitalACTV"
             android:layout_columnSpan="2"
             android:layout_width="0dp"
             android:layout_gravity="fill_horizontal"
@@ -33,6 +33,7 @@
             android:layout_height="50dp"
             android:text="@string/ok_button" />
         <EditText
+            android:id="@+id/wpiCabinetET"
             android:inputType="textMultiLine"
             android:hint="Кабинет"
             android:layout_column="1"
@@ -42,6 +43,7 @@
             android:gravity="top"
             android:textColor="@android:color/black" />
         <EditText
+            android:id="@+id/wpiTimetableET"
             android:inputType="textMultiLine"
             android:hint="Расписание"
             android:layout_column="2"
@@ -52,6 +54,7 @@
             android:gravity="top"
             android:textColor="@android:color/black" />
         <Switch
+            android:id="@+id/wpiIsMainS"
             android:text="IsMain"
             android:gravity="center"
             android:layout_columnSpan="4"

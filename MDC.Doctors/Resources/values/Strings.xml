@@ -7,6 +7,8 @@
 	
 	<string name="DoctorUUID">DoctorUUID</string>
 	<string name="AttendanceUUID">AttendanceUUID</string>
+	<string name="HospitalUUID">HospitalUUID</string>
+	<string name="WorkPlaceUUID">WorkPlaceUUID</string>
 
 
 	<string name="error_caption">Ошибка!</string>

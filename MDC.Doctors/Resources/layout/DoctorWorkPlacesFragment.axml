@@ -11,25 +11,24 @@
         android:minHeight="25px"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-		<LinearLayout
-			android:minWidth="100dp"
-			android:minHeight="100dp"
-			android:layout_width="800dp"
-			android:layout_height="wrap_content" >
-			<LinearLayout
-				android:minWidth="100dp"
-				android:minHeight="100dp"
-				android:layout_width="800dp"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center"
-				android:id="@+id/dwpfMainLL"
-				android:background="@android:color/white" />
-			<Button
-				android:id="@+id/dwpfAddB"
-				android:text="ДОБАВИТЬ"
-				android:layout_width="800dp"
-				android:layout_height="48dp"
-				/>
-		</LinearLayout>
+        <LinearLayout
+            android:minWidth="100dp"
+            android:minHeight="100dp"
+            android:layout_gravity="center"
+            android:layout_width="800dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:layout_width="800dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/dwpfMainLL"
+                android:background="@android:color/white" />
+            <Button
+                android:id="@+id/dwpfAddB"
+                android:text="ДОБАВИТЬ"
+                android:layout_width="800dp"
+                android:layout_height="48dp" />
+        </LinearLayout>
     </FrameLayout>
 </ScrollView>

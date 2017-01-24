@@ -13,7 +13,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <LinearLayout
-                android:id="@+id/aaDoctorLL"
+                android:id="@+id/ifDoctorLL"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                     android:text="Данные о враче"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:id="@+id/aaDoctorTV"
+                    android:id="@+id/ifDoctorTV"
                     android:layout_weight="70"
                     android:gravity="center_vertical"
                     android:textAppearance="@style/rowTextForPharmacy"
@@ -65,7 +65,7 @@
                     android:text="Данные о ЛПУ"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:id="@+id/aaHospitalTV"
+                    android:id="@+id/ifHospitalTV"
                     android:layout_weight="70"
                     android:gravity="center_vertical"
                     android:textAppearance="@style/rowTextForPharmacy"
@@ -73,7 +73,7 @@
                     android:focusableInTouchMode="false" />
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/aaGoalsLL"
+                android:id="@+id/ifGoalsLL"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="70"
                     android:layout_margin="10dp"
-                    android:id="@+id/aaGoalsET"
+                    android:id="@+id/ifGoalsET"
                     android:background="@drawable/bottomline"
                     android:textColorHint="@color/Grey_300"
                     android:textColor="@android:color/black"
@@ -149,7 +149,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="6dp" />
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="1280dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:id="@+id/aaInfoTable" />

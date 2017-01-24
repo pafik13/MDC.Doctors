@@ -45,25 +45,24 @@ namespace MDC.Doctors
 			
 			WPTable = mainView.FindViewById<LinearLayout>(Resource.Id.dwpfMainLL);
 			AddWorkPlace();
-			
-			mainView.FindViewById<Button>(Resource.Id.dwpfAddB).Click += (s,e) {
-				AddWorkPlace();
-			}
 
-			
+			mainView.FindViewById<Button>(Resource.Id.dwpfAddB).Click += (s, e) =>
+			{
+				AddWorkPlace();
+			};
+
 			return mainView;
 		}
 		
 		void AddWorkPlace()
 		{
-			var item = inflater.Inflate(Resource.Layout.WorkPlaceItem, WPTable, true);
-			var hospital = item.FindViewById<AutoCompleteTextView>(Resource.Id.wpiHospitalACTV);
-			var hospitals = DBHelper.GetList<HospitalInputed>(DB).ToArray();
-			hospital.Adapter = new HospitalSuggestionAdapter(Activity, hospitals);
+			var workPlaceItem = Activity.LayoutInflater.Inflate(Resource.Layout.WorkPlaceItem, WPTable, true);
+			var hospital = workPlaceItem.FindViewById<AutoCompleteTextView>(Resource.Id.wpiHospitalACTV);
+			hospital.Adapter = new HospitalSuggestionAdapter(Activity);
 			hospital.ItemClick += (sender, e) => {
 				var actv = ((AutoCompleteTextView)sender);
-				var item = (actv.Adapter as HospitalSuggestionAdapter)[e.Position];
-				actv.SetTag(Resource.String.HospitalUUID, item.UUID);
+				var hospitalHolder = (actv.Adapter as HospitalSuggestionAdapter)[e.Position];
+				actv.SetTag(Resource.String.HospitalUUID, hospitalHolder.UUID);
 			};
 		}
 
@@ -108,21 +107,21 @@ namespace MDC.Doctors
 					for(int c = 0; c < WPTable.ChildCount; c++)
 					{
 						var item = WPTable.GetChildAt(c);
-						var workPlaceUUID = item.GetTag(Resource.String.WorkPlaceUUID);
+						var workPlaceUUID = (string)item.GetTag(Resource.String.WorkPlaceUUID);
 						var hospital = item.FindViewById<AutoCompleteTextView>(Resource.Id.wpiHospitalACTV);
-						var hospitalUUID = (string)actv.GetTag(Resource.String.HospitalUUID);
+						var hospitalUUID = (string)hospital.GetTag(Resource.String.HospitalUUID);
 						if (!string.IsNullOrEmpty(hospitalUUID))
 						{
-							WorkPlace wp;
+							WorkPlace wp = null;
 							if (string.IsNullOrEmpty(workPlaceUUID))
 							{
-								wp = DBHelper.Create<WorkPlace>(DB);
+								wp = DBHelper.Create<WorkPlace>(DB, trans);
 							}
 							else
 							{
-								bool isChanged = item.GetTag(Resource.Id.IsChanged);
+								bool isChanged = (bool)item.GetTag(Resource.String.IsChanged);
 								if (isChanged) {
-									wp = DBHelper.Get<WorkPlace>(DB,workPlaceUUID);
+									wp = DBHelper.Get<WorkPlace>(DB, workPlaceUUID);
 								}
 							}
 							
@@ -130,9 +129,9 @@ namespace MDC.Doctors
 							
 							wp.Doctor = Doctor.UUID;
 							wp.Hospital = hospitalUUID;
-							wp.IsMain = item.FindViewById<CheckBox>(Resource.Id.wpiIsMainCB).Checked;
-							wp.Cabinet = item.FindViewById<TextView>(Resource.Id.wpiCabinetTV).Text;
-							wp.Timetable = item.FindViewById<TextView>(Resource.Id.wpiTimetableTV).Text;
+							wp.IsMain = item.FindViewById<Switch>(Resource.Id.wpiIsMainS).Checked;
+							wp.Cabinet = item.FindViewById<EditText>(Resource.Id.wpiCabinetET).Text;
+							wp.Timetable = item.FindViewById<EditText>(Resource.Id.wpiTimetableET).Text;
 							
 							if (wp.IsMain) {
 								Doctor.MainWorkPlace = wp.UUID;

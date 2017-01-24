@@ -13,6 +13,7 @@ using SD = System.Diagnostics;
 
 using MDC.Doctors.Lib.Interfaces;
 using System;
+using System.Linq;
 
 namespace MDC.Doctors
 {
@@ -72,13 +73,15 @@ namespace MDC.Doctors
 			Doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
 
 			var attendanceLastOrNewUUID = Arguments.GetString(Consts.C_ATTENDANCE_UUID);
-			Attendance = DBHelper.Get<Attendance>(DB, attendanceLastOrNewUUID);
-			
-			var infoDatas = DBHelper.GetList<InfoData>(DB).Where(id => id.Attendance = Attendance.UUID).Select(id => id.Goal).Join(", ");
-			
-			mainView.FindViewById<TextView>(Resource.Id.aaGoalsTV).Text = infoDatas;
-					
-			mainView.FindViewById<TextView>(Resource.Id.aaDoctorTV).Text = Doctor.Name;
+			if (!string.IsNullOrEmpty(attendanceLastOrNewUUID))
+			{
+				Attendance = DBHelper.Get<Attendance>(DB, attendanceLastOrNewUUID);
+
+				var infoDatas = DBHelper.GetList<InfoData>(DB).Where(iData => iData.Attendance == Attendance.UUID);
+
+				mainView.FindViewById<EditText>(Resource.Id.ifGoalsET).Text = string.Join(", ", infoDatas.Select(iData => iData.Goal));
+			}	
+			mainView.FindViewById<TextView>(Resource.Id.ifDoctorTV).Text = Doctor.Name;
 			var brands = DBHelper.GetList<DrugBrand>(DB);
 
 			DrugBrandInfoTable = mainView.FindViewById<LinearLayout>(Resource.Id.aaDrugBrandInfoTable);
@@ -159,7 +162,7 @@ namespace MDC.Doctors
 					row.FindViewById<TextView>(Resource.Id.idtiCallbackET).Enabled = true;
 					row.FindViewById<TextView>(Resource.Id.idtiResumeET).Enabled = true;
 					row.FindViewById<TextView>(Resource.Id.idtiGoalET).Enabled = true;
-					row.FindViewById<TextView>(Resource.Id.idtiCommentET).Enabled = true;
+					//row.FindViewById<TextView>(Resource.Id.idtiCommentET).Enabled = true;
 				}
 				infoDataTable.AddView(row);
 			}
@@ -209,7 +212,7 @@ namespace MDC.Doctors
 						row.FindViewById<TextView>(Resource.Id.idtiCallbackET).Enabled = true;
 						row.FindViewById<TextView>(Resource.Id.idtiResumeET).Enabled = true;
 						row.FindViewById<TextView>(Resource.Id.idtiGoalET).Enabled = true;
-						row.FindViewById<TextView>(Resource.Id.idtiCommentET).Enabled = true;
+						//row.FindViewById<TextView>(Resource.Id.idtiCommentET).Enabled = true;
 					}
 				}
 			}
@@ -233,7 +236,7 @@ namespace MDC.Doctors
 					row.FindViewById<TextView>(Resource.Id.idtiCallbackET).Enabled = false;
 					row.FindViewById<TextView>(Resource.Id.idtiResumeET).Enabled = false;
 					row.FindViewById<TextView>(Resource.Id.idtiGoalET).Enabled = false;
-					row.FindViewById<TextView>(Resource.Id.idtiCommentET).Enabled = false;
+					//row.FindViewById<TextView>(Resource.Id.idtiCommentET).Enabled = false;
 				}
 			}
 		}

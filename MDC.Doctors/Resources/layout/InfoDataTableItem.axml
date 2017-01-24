@@ -2,39 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="@android:color/transparent"
-    android:weightSum="6">
+    android:layout_height="100dp"
+    android:background="@android:color/transparent">
     <TextView
-        android:layout_marginRight="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="2dp"
         android:background="@android:color/white"
         android:id="@+id/idtiBrandTV"
         android:text="Бренд"
-        android:layout_width="40dp"
-        android:layout_height="100dp"
+        android:layout_width="148dp"
+        android:layout_height="98dp"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
         android:id="@+id/idtiWorkTypesTV"
-        android:layout_marginRight="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="2dp"
         android:background="@android:color/white"
         android:text="Выберите"
-        android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_width="148dp"
+        android:layout_height="98dp"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <RelativeLayout
-        android:layout_marginRight="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="2dp"
         android:background="@android:color/white"
-        android:layout_width="0dp"
-        android:layout_height="100dp">
+        android:layout_width="398dp"
+        android:layout_height="98dp">
         <EditText
             android:textCursorDrawable="@null"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:id="@+id/idtiCallbackET"
             android:background="@drawable/bottomline"
@@ -45,12 +44,11 @@
             android:inputType="textCapSentences" />
     </RelativeLayout>
     <RelativeLayout
-        android:layout_marginRight="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="2dp"
         android:background="@android:color/white"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_width="398dp"
+        android:layout_height="98dp">
         <EditText
             android:textCursorDrawable="@null"
             android:layout_width="match_parent"
@@ -65,12 +63,11 @@
             android:inputType="textCapSentences" />
     </RelativeLayout>
     <RelativeLayout
-        android:layout_marginRight="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="2dp"
         android:background="@android:color/white"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_width="138dp"
+        android:layout_height="98dp">
         <EditText
             android:textCursorDrawable="@null"
             android:layout_width="match_parent"
@@ -82,6 +79,6 @@
             android:textColor="@android:color/black"
             android:hint="Цель на след визит"
             android:enabled="false"
-            android:inputType="textCapSentences" />
+            android:inputType="textMultiLine" />
     </RelativeLayout>
 </LinearLayout>

@@ -72,15 +72,16 @@ namespace MDC.Doctors.Lib.Adapters
 
 			if (!string.IsNullOrEmpty(item.MainWorkPlace))
 			{
-				var workPlace = DBHelper.Get<WorkPlace>(item.MainWorkPlace);
-				var hospital = DBHelper.GetHospital(workPlace.Hospital);
+				var DB = Realms.Realm.GetInstance();
+				var workPlace = DBHelper.Get<WorkPlace>(DB, item.MainWorkPlace);
+				var hospital = DBHelper.GetHospital(DB, workPlace.Hospital);
 				
 				view.FindViewById<TextView>(Resource.Id.dtiHospitalAreaTV).Text = 
-					string.IsNullOrEmpty(hospital.Area) ? @"<нет округа>" : hospital.Area;
+					string.IsNullOrEmpty(hospital.GetArea()) ? @"<нет округа>" : hospital.GetArea();
 				view.FindViewById<TextView>(Resource.Id.dtiHospitalNameTV).Text = 
-					string.IsNullOrEmpty(hospital.Name) ? @"<нет названия>" : hospital.Name;
+					string.IsNullOrEmpty(hospital.GetName()) ? @"<нет названия>" : hospital.GetName();
 				view.FindViewById<TextView>(Resource.Id.dtiHospitalAddressTV).Text = 
-					string.IsNullOrEmpty(hospital.Address) ? @"<нет адреса>" : hospital.Address;
+					string.IsNullOrEmpty(hospital.GetAddress()) ? @"<нет адреса>" : hospital.GetAddress();
 					
 				view.FindViewById<TextView>(Resource.Id.dtiWorkPlaceCabinetTV).Text = 
 					string.IsNullOrEmpty(workPlace.Cabinet) ? @"<нет кабинета>" : workPlace.Cabinet;
