@@ -23,6 +23,12 @@ namespace MDC.Doctors.Lib.Entities
 
 		public float? longitude { get; set;}
 
+		public string GetUUID()
+		{
+			//throw new NotImplementedException();
+			return uuid;
+		}
+		
 		public string GetName()
 		{
 			//throw new NotImplementedException();

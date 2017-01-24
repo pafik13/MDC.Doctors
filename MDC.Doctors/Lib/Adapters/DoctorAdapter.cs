@@ -48,6 +48,7 @@ namespace MDC.Doctors.Lib.Adapters
 			// Get our object for position
 			var item = Doctors[position];
 
+			
             var view = (convertView ?? Context.LayoutInflater.Inflate(Resource.Layout.DoctorTableItem, parent, false)
 			           ) as LinearLayout;
 			view.FindViewById<TextView>(Resource.Id.dtiNoTV).Text = (position + 1).ToString();
@@ -69,6 +70,24 @@ namespace MDC.Doctors.Lib.Adapters
 			lastAttendance.Text = item.LastAttendanceDate.HasValue ? 
 				item.LastAttendanceDate.Value.ToString(@"dd.MM.yyyy") : @"<нет визита>";
 
+			if (!string.IsNullOrEmpty(item.MainWorkPlace))
+			{
+				var workPlace = DBHelper.Get<WorkPlace>(item.MainWorkPlace);
+				var hospital = DBHelper.GetHospital(workPlace.Hospital);
+				
+				view.FindViewById<TextView>(Resource.Id.dtiHospitalAreaTV).Text = 
+					string.IsNullOrEmpty(hospital.Area) ? @"<нет округа>" : hospital.Area;
+				view.FindViewById<TextView>(Resource.Id.dtiHospitalNameTV).Text = 
+					string.IsNullOrEmpty(hospital.Name) ? @"<нет названия>" : hospital.Name;
+				view.FindViewById<TextView>(Resource.Id.dtiHospitalAddressTV).Text = 
+					string.IsNullOrEmpty(hospital.Address) ? @"<нет адреса>" : hospital.Address;
+					
+				view.FindViewById<TextView>(Resource.Id.dtiWorkPlaceCabinetTV).Text = 
+					string.IsNullOrEmpty(workPlace.Cabinet) ? @"<нет кабинета>" : workPlace.Cabinet;
+				view.FindViewById<TextView>(Resource.Id.dtiWorkPlaceTimetableTV).Text = 
+					string.IsNullOrEmpty(workPlace.Timetable) ? @"<нет расписания>" : workPlace.Timetable;
+			}
+				
 			if (PharmaciesInRoute == null) return view;
 			if (PharmaciesInRoute.Length == 0) return view;
 

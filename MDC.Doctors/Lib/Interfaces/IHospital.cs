@@ -2,6 +2,8 @@
 {
 	public interface IHospital
 	{
+		string GetUUID();
+		
 		string GetName();
 
 		string GetAddress();

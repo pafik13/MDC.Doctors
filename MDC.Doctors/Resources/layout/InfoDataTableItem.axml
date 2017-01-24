@@ -11,9 +11,8 @@
         android:background="@android:color/white"
         android:id="@+id/idtiBrandTV"
         android:text="Бренд"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_width="40dp"
+        android:layout_height="100dp"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
@@ -23,8 +22,7 @@
         android:background="@android:color/white"
         android:text="Выберите"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_height="100dp"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <RelativeLayout
@@ -32,12 +30,11 @@
         android:layout_marginBottom="1dp"
         android:background="@android:color/white"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_height="100dp">
         <EditText
             android:textCursorDrawable="@null"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="80dp"
             android:layout_margin="10dp"
             android:id="@+id/idtiCallbackET"
             android:background="@drawable/bottomline"
@@ -84,26 +81,6 @@
             android:textColorHint="@color/Grey_300"
             android:textColor="@android:color/black"
             android:hint="Цель на след визит"
-            android:enabled="false"
-            android:inputType="textCapSentences" />
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_marginRight="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@android:color/white"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-        <EditText
-            android:textCursorDrawable="@null"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:id="@+id/idtiCommentET"
-            android:background="@drawable/bottomline"
-            android:textColorHint="@color/Grey_300"
-            android:textColor="@android:color/black"
-            android:hint="Комментарий"
             android:enabled="false"
             android:inputType="textCapSentences" />
     </RelativeLayout>

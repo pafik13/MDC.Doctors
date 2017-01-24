@@ -19,6 +19,7 @@ namespace MDC.Doctors
 	{
 		Realm DB;
 		Doctor Doctor;
+		LinearLayout WPTable;
 		
 		public static DoctorWorkPlacesFragment Create(string doctorUUID)
 		{
@@ -41,13 +42,29 @@ namespace MDC.Doctors
 			base.OnCreateView(inflater, container, savedInstanceState);
 
 			var mainView = inflater.Inflate(Resource.Layout.DoctorWorkPlacesFragment, container, false);
+			
+			WPTable = mainView.FindViewById<LinearLayout>(Resource.Id.dwpfMainLL);
+			AddWorkPlace();
+			
+			mainView.FindViewById<Button>(Resource.Id.dwpfAddB).Click += (s,e) {
+				AddWorkPlace();
+			}
 
-			var WPTable = mainView.FindViewById<LinearLayout>(Resource.Id.dwpfMainLL);
+			
+			return mainView;
+		}
+		
+		void AddWorkPlace()
+		{
 			var item = inflater.Inflate(Resource.Layout.WorkPlaceItem, WPTable, true);
-			var hospital = item.FindViewById<AutoCompleteTextView>(Resource.Id.autoCompleteTextView1);
+			var hospital = item.FindViewById<AutoCompleteTextView>(Resource.Id.wpiHospitalACTV);
 			var hospitals = DBHelper.GetList<HospitalInputed>(DB).ToArray();
 			hospital.Adapter = new HospitalSuggestionAdapter(Activity, hospitals);
-			return mainView;
+			hospital.ItemClick += (sender, e) => {
+				var actv = ((AutoCompleteTextView)sender);
+				var item = (actv.Adapter as HospitalSuggestionAdapter)[e.Position];
+				actv.SetTag(Resource.String.HospitalUUID, item.UUID);
+			};
 		}
 
 		public override void OnResume()
@@ -82,8 +99,50 @@ namespace MDC.Doctors
 		}
 
 		public void Save()
-		{
-			//throw new NotImplementedException();
+		{	
+			if (WPTable.ChildCount > 0)
+			{
+				using(var trans = DB.BeginWrite())
+				{
+					var list = DBHelper.GetList<WorkPlace>(DB);
+					for(int c = 0; c < WPTable.ChildCount; c++)
+					{
+						var item = WPTable.GetChildAt(c);
+						var workPlaceUUID = item.GetTag(Resource.String.WorkPlaceUUID);
+						var hospital = item.FindViewById<AutoCompleteTextView>(Resource.Id.wpiHospitalACTV);
+						var hospitalUUID = (string)actv.GetTag(Resource.String.HospitalUUID);
+						if (!string.IsNullOrEmpty(hospitalUUID))
+						{
+							WorkPlace wp;
+							if (string.IsNullOrEmpty(workPlaceUUID))
+							{
+								wp = DBHelper.Create<WorkPlace>(DB);
+							}
+							else
+							{
+								bool isChanged = item.GetTag(Resource.Id.IsChanged);
+								if (isChanged) {
+									wp = DBHelper.Get<WorkPlace>(DB,workPlaceUUID);
+								}
+							}
+							
+							if (wp == null) continue;
+							
+							wp.Doctor = Doctor.UUID;
+							wp.Hospital = hospitalUUID;
+							wp.IsMain = item.FindViewById<CheckBox>(Resource.Id.wpiIsMainCB).Checked;
+							wp.Cabinet = item.FindViewById<TextView>(Resource.Id.wpiCabinetTV).Text;
+							wp.Timetable = item.FindViewById<TextView>(Resource.Id.wpiTimetableTV).Text;
+							
+							if (wp.IsMain) {
+								Doctor.MainWorkPlace = wp.UUID;
+							}
+						}
+					}
+					
+					trans.Commit();
+				}
+			}
 			return;
 		}
 	}

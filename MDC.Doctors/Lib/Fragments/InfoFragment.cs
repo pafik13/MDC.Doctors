@@ -71,6 +71,13 @@ namespace MDC.Doctors
 			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID);
 			Doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
 
+			var attendanceLastOrNewUUID = Arguments.GetString(Consts.C_ATTENDANCE_UUID);
+			Attendance = DBHelper.Get<Attendance>(DB, attendanceLastOrNewUUID);
+			
+			var infoDatas = DBHelper.GetList<InfoData>(DB).Where(id => id.Attendance = Attendance.UUID).Select(id => id.Goal).Join(", ");
+			
+			mainView.FindViewById<TextView>(Resource.Id.aaGoalsTV).Text = infoDatas;
+					
 			mainView.FindViewById<TextView>(Resource.Id.aaDoctorTV).Text = Doctor.Name;
 			var brands = DBHelper.GetList<DrugBrand>(DB);
 

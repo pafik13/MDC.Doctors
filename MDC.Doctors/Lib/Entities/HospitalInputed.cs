@@ -56,6 +56,13 @@ namespace MDC.Doctors.Lib.Entities
 
 		public bool IsSynced { get; set; }
 
+		public string GetUUID()
+		{
+			//throw new NotImplementedException();
+			System.Diagnostics.Debug.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId, "Thread_Name");
+			return UUID;
+		}
+		
 		public string GetName()
 		{
 			//throw new NotImplementedException();
