@@ -10,7 +10,10 @@
         android:background="@android:color/white"
         android:id="@+id/idtiBrandTV"
         android:text="Бренд"
-        android:layout_width="148dp"
+		android:ellipsize="none"  
+		android:maxLines="10"  
+		android:scrollHorizontally="false"
+        android:layout_width="128dp"
         android:layout_height="98dp"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
@@ -20,15 +23,18 @@
         android:layout_marginBottom="2dp"
         android:background="@android:color/white"
         android:text="Выберите"
-        android:layout_width="148dp"
+        android:layout_width="128dp"
         android:layout_height="98dp"
+		android:ellipsize="none"  
+		android:maxLines="10"  
+		android:scrollHorizontally="false"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <RelativeLayout
         android:layout_marginRight="2dp"
         android:layout_marginBottom="2dp"
         android:background="@android:color/white"
-        android:layout_width="398dp"
+        android:layout_width="378dp"
         android:layout_height="98dp">
         <EditText
             android:textCursorDrawable="@null"
@@ -47,7 +53,7 @@
         android:layout_marginRight="2dp"
         android:layout_marginBottom="2dp"
         android:background="@android:color/white"
-        android:layout_width="398dp"
+        android:layout_width="378dp"
         android:layout_height="98dp">
         <EditText
             android:textCursorDrawable="@null"
@@ -66,7 +72,7 @@
         android:layout_marginRight="2dp"
         android:layout_marginBottom="2dp"
         android:background="@android:color/white"
-        android:layout_width="138dp"
+        android:layout_width="134dp"
         android:layout_height="98dp">
         <EditText
             android:textCursorDrawable="@null"
