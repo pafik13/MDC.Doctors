@@ -95,16 +95,17 @@ namespace MDC.Doctors.Fragments
 
 				item.UpdatedAt = DateTimeOffset.Now;
 				item.IsSynced = false;
+				item.SetState(DoctorState.dsActive);
 				//item.SetState((PharmacyState)State.SelectedItemPosition);
-				item.Name = View.FindViewById<EditText>(Resource.Id.daNameET).Text;
-				item.Specialty = View.FindViewById<AutoCompleteTextView>(Resource.Id.daSpecialtyACTV).Text;
-				item.Specialism = View.FindViewById<EditText>(Resource.Id.daSpecialismET).Text;
-				item.Position = View.FindViewById<AutoCompleteTextView>(Resource.Id.daPositionACTV).Text;
-				item.Phone = View.FindViewById<EditText>(Resource.Id.daPhoneET).Text;
-				item.Email = View.FindViewById<EditText>(Resource.Id.daEmailET).Text;
-				item.CanParticipateInActions = View.FindViewById<CheckBox>(Resource.Id.daCanParticipateInActionsCB).Checked;
-				item.CanParticipateInConference = View.FindViewById<CheckBox>(Resource.Id.daCanParticipateInConferenceCB).Checked;
-				item.Comment = View.FindViewById<EditText>(Resource.Id.daCommentET).Text;
+				item.Name = View.FindViewById<EditText>(Resource.Id.dmifNameET).Text;
+				item.Specialty = View.FindViewById<AutoCompleteTextView>(Resource.Id.dmifSpecialtyACTV).Text;
+				item.Specialism = View.FindViewById<EditText>(Resource.Id.dmifSpecialismET).Text;
+				item.Position = View.FindViewById<AutoCompleteTextView>(Resource.Id.dmifPositionACTV).Text;
+				item.Phone = View.FindViewById<EditText>(Resource.Id.dmifPhoneET).Text;
+				item.Email = View.FindViewById<EditText>(Resource.Id.dmifEmailET).Text;
+				item.CanParticipateInActions = View.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInActionsCB).Checked;
+				item.CanParticipateInConference = View.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInConferenceCB).Checked;
+				item.Comment = View.FindViewById<EditText>(Resource.Id.dmifCommentET).Text;
 
 				if (!item.IsManaged) DBHelper.Save(DB, transaction, item);
 

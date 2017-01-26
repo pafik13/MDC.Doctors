@@ -13,6 +13,7 @@ using MDC.Doctors.Lib;
 using MDC.Doctors.Lib.Adapters;
 using MDC.Doctors.Lib.Entities;
 using System;
+using System.Linq;
 
 namespace MDC.Doctors
 {
@@ -53,6 +54,7 @@ namespace MDC.Doctors
 			{
 				StartActivity(new Intent(this, typeof(LoadDataActivity)));
 			};
+			
 		}
 
         protected override void OnResume()
@@ -62,89 +64,131 @@ namespace MDC.Doctors
 			sw.Start();
 			Realm.DeleteRealm(RealmConfiguration.DefaultConfiguration);
 			DBHelper.GetDB(ref DB);
-			SDiag.Debug.WriteLine(sw.ElapsedMilliseconds, DEBUG_CATEGORY);
-			sw.Reset();
-			for (int i = 0; i < 3; i++)
+
+			var inputedHospitals = DBHelper.GetAll<HospitalInputed>(DB);
+
+			if (inputedHospitals.Count() < 1)
 			{
+				for (int i = 0; i < 3; i++)
+				{
+					DB.Write(() =>
+					{
+						DB.Add(new HospitalInputed
+						{
+							UUID = Guid.NewGuid().ToString(),
+							Name = string.Concat("Hospital #", i),
+							Key = string.Concat("Key #", i),
+							Address = string.Concat("Address #", i),
+							Area = string.Concat("Area #", i)
+						});
+
+						DB.Add(new HospitalChecked
+						{
+							uuid = Guid.NewGuid().ToString(),
+							name = string.Concat("hospital #", i),
+							key = string.Concat("key #", i),
+							address = string.Concat("address #", i),
+							area = string.Concat("area #", i)
+						});
+					});
+				}
+
 				DB.Write(() =>
 				{
 					DB.Add(new HospitalInputed
 					{
 						UUID = Guid.NewGuid().ToString(),
-						Name = string.Concat("Hospital #", i),
-						Key = string.Concat("Key #", i),
-						Address = string.Concat("Address #", i),
-						Area = string.Concat("Area #", i)
+						Name = @"ГБУЗ ""Детская городская поликлиника № 69 ДЗМ"" Филиал № 1",
+						Key = @"ГБУЗ ""ДГП № 69 ДЗМ"" Филиал № 1",
+						Address = "Москва, Севастопольский проспект, 40",
+						Area = "ЮЗАО"
 					});
-					
+
 					DB.Add(new HospitalChecked
 					{
 						uuid = Guid.NewGuid().ToString(),
-						name = string.Concat("hospital #", i),
-						key = string.Concat("key #", i),
-						address = string.Concat("address #", i),
-						area = string.Concat("area #", i)
+						name = @"ГБУЗ ""Детская городская поликлиника № 10 ДЗМ"" Филиал № 4",
+						key = @"ГБУЗ ""ДГП № 10 ДЗМ"" Филиал № 4",
+						address = "Москва, Профсоюзная улица, 52",
+						area = "ЮЗАО"
 					});
-				});	
+
+					DB.Add(new HospitalInputed
+					{
+						UUID = Guid.NewGuid().ToString(),
+						Name = @"ГБУЗ ""Городская поликлиника № 22 ДЗМ"" Филиал № 1",
+						Key = @"ГБУЗ ""ГП № 22 ДЗМ"" Филиал № 1",
+						Address = "Москва, улица Цюрупы, 30/63",
+						Area = "ЮЗАО"
+					});
+
+					DB.Add(new HospitalChecked
+					{
+						uuid = Guid.NewGuid().ToString(),
+						name = @"ГБУЗ ""Детская городская поликлиника № 69 ДЗМ"" Филиал № 3",
+						key = @"ГБУЗ ""ДГП № 69 ДЗМ"" Филиал № 3",
+						address = "Москва, улица Винокурова, 14",
+						area = "ЮЗАО"
+					});
+
+					DB.Add(new HospitalInputed
+					{
+						UUID = Guid.NewGuid().ToString(),
+						Name = @"ГБУЗ ""Детская городская поликлиника № 69 ДЗМ"" Филиал № 4",
+						Key = @"ГБУЗ ""ДГП № 69 ДЗМ"" Филиал № 4",
+						Address = "Москва, улица Винокурова, 4, корпус 3",
+						Area = "ЮЗАО"
+					});
+
+					DB.Add(new HospitalChecked
+					{
+						uuid = Guid.NewGuid().ToString(),
+						name = @"ГБУЗ ""Городская поликлиника № 22 ДЗМ"" Филиал № 3",
+						key = @"ГБУЗ ""ГП № 22 ДЗМ"" Филиал № 3",
+						address = "Большая Черемушкинская улица, 6а",
+						area = "ЮЗАО"
+					});
+ 
+					DB.Add(new HospitalInputed
+					{
+						UUID = Guid.NewGuid().ToString(),
+						Name = @"ГБУЗ ""Городская поликлиника № 22 ДЗМ"" Филиал № 1",
+						Key = @"ГБУЗ ""ГП № 22 ДЗМ"" Филиал № 1",
+						Address = "Москва, улица Цюрупы, 30/63",
+						Area = "ЮЗАО"
+					});
+	
+					DB.Add(new HospitalChecked
+					{
+						uuid = Guid.NewGuid().ToString(),
+						name = @"ГБУЗ ""Детская городская поликлиника № 69 ДЗМ"" Филиал № 3",
+						key = @"ГБУЗ ""ДГП № 69 ДЗМ"" Филиал № 3",
+						address = "Москва, улица Винокурова, 14",
+						area = "ЮЗАО"
+					});
+	
+					DB.Add(new HospitalInputed
+					{
+						UUID = Guid.NewGuid().ToString(),
+						Name = @"ГБУЗ ""Детская городская поликлиника № 69 ДЗМ"" Филиал № 4",
+						Key = @"ГБУЗ ""ДГП № 69 ДЗМ"" Филиал № 4",
+						Address = "Москва, улица Винокурова, 4, корпус 3",
+						Area = "ЮЗАО"
+					});
+	
+					DB.Add(new HospitalChecked
+					{
+						uuid = Guid.NewGuid().ToString(),
+						name = @"ГБУЗ ""Городская поликлиника № 22 ДЗМ"" Филиал № 3",
+						key = @"ГБУЗ ""ГП № 22 ДЗМ"" Филиал № 3",
+						address = "Большая Черемушкинская улица, 6а",
+						area = "ЮЗАО"
+					});
+				});
 			}
-			
-			DB.Write(() =>
-			{
-				DB.Add(new HospitalInputed
-				{
-					UUID = Guid.NewGuid().ToString(),
-					Name = @"ГБУЗ ""Детская городская поликлиника № 69 ДЗМ"" Филиал № 1",
-					Key = @"ГБУЗ ""ДГП № 69 ДЗМ"" Филиал № 1",
-					Address = "Москва, Севастопольский проспект, 40",
-					Area = "ЮЗАО"
-				});
-				
-				DB.Add(new HospitalChecked
-				{
-					uuid = Guid.NewGuid().ToString(),
-					name = @"ГБУЗ ""Детская городская поликлиника № 10 ДЗМ"" Филиал № 4",
-					key = @"ГБУЗ ""ДГП № 10 ДЗМ"" Филиал № 4",
-					address = "Москва, Профсоюзная улица, 52",
-					area = "ЮЗАО"
-				});
-				
-				DB.Add(new HospitalInputed
-				{
-					UUID = Guid.NewGuid().ToString(),
-					Name = @"ГБУЗ ""Городская поликлиника № 22 ДЗМ"" Филиал № 1",
-					Key = @"ГБУЗ ""ГП № 22 ДЗМ"" Филиал № 1",
-					Address = "Москва, улица Цюрупы, 30/63",
-					Area = "ЮЗАО"
-				});
-				
-				DB.Add(new HospitalChecked
-				{
-					uuid = Guid.NewGuid().ToString(),
-					name = @"ГБУЗ ""Детская городская поликлиника № 69 ДЗМ"" Филиал № 3",
-					key = @"ГБУЗ ""ДГП № 69 ДЗМ"" Филиал № 3",
-					address = "Москва, улица Винокурова, 14",
-					area = "ЮЗАО"
-				});
-				
-				DB.Add(new HospitalInputed
-				{
-					UUID = Guid.NewGuid().ToString(),
-					Name = @"ГБУЗ ""Детская городская поликлиника № 69 ДЗМ"" Филиал № 4",
-					Key = @"ГБУЗ ""ДГП № 69 ДЗМ"" Филиал № 4",
-					Address = "Москва, улица Винокурова, 4, корпус 3",
-					Area = "ЮЗАО"
-				});
-				
-				DB.Add(new HospitalChecked
-				{
-					uuid = Guid.NewGuid().ToString(),
-					name = @"ГБУЗ ""Городская поликлиника № 22 ДЗМ"" Филиал № 3",
-					key = @"ГБУЗ ""ГП № 22 ДЗМ"" Филиал № 3",
-					address = "Большая Черемушкинская улица, 6а",
-					area = "ЮЗАО"
-				});
-			});	
-			
+
+			SDiag.Debug.WriteLine(sw.ElapsedMilliseconds, DEBUG_CATEGORY);
+			sw.Reset();
 			DoctorTable.Adapter = new DoctorAdapter(this, DBHelper.GetList<Doctor>(DB));
 			SDiag.Debug.WriteLine(sw.ElapsedMilliseconds, DEBUG_CATEGORY);
 			sw.Stop();
