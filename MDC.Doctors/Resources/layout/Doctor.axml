@@ -60,13 +60,15 @@
         android:layout_below="@id/daUpPanelRL"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+		android:layout_weight="2">
         <RelativeLayout
             android:id="@+id/daTabMainInfoRL"
-            android:layout_width="639dp"
+            android:layout_width="0dp"
+			android:layout_weight="1"
             android:layout_height="50dp"
             android:minWidth="25px"
-            android:minHeight="64px">
+            android:minHeight="25px">
             <TextView
                 android:id="@+id/daTabMainInfoTV"
                 android:text="Общая информация"
@@ -99,10 +101,11 @@
             android:layout_alignParentBottom="true" />
         <RelativeLayout
             android:id="@+id/daTabWorkPlacesRL"
-            android:layout_width="639dp"
+			android:layout_width="0dp"
+			android:layout_weight="1"
             android:layout_height="50dp"
             android:minWidth="25px"
-            android:minHeight="64px">
+            android:minHeight="25px">
             <TextView
                 android:id="@+id/daTabWorkPlacesTV"
                 android:text="Места работы"
@@ -129,6 +132,7 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/daContainerVP"
         android:layout_below="@id/daTabLL"
+		android:layout_marginTop="2dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </RelativeLayout>

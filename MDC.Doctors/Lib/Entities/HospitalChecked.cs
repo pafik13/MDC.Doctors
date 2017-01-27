@@ -22,36 +22,18 @@ namespace MDC.Doctors.Lib.Entities
 		public float? latitude { get; set;}
 
 		public float? longitude { get; set;}
-
-		public string GetUUID()
-		{
-			//throw new NotImplementedException();
-			return uuid;
-		}
 		
-		public string GetName()
-		{
-			//throw new NotImplementedException();
-			return name;
-		}
+		#region IHospital
+		public string GetUUID() { return uuid; }
+		
+		public string GetName() { return name; }
 
-		public string GetAddress()
-		{
-			//throw new NotImplementedException();
-			return address;
-		}
+		public string GetAddress() { return address; }
 
-		public string GetArea()
-		{
-			//throw new NotImplementedException();
-			return area;
-		}
+		public string GetArea() { return area; }
 
-		public string GetPhone()
-		{
-			//throw new NotImplementedException();
-			return phone;
-		}
+		public string GetPhone() { return phone; }
+		#endregion
 	}
 }
 

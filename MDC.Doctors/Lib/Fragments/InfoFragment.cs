@@ -24,7 +24,7 @@ namespace MDC.Doctors
 		Realm DB;
 		Doctor Doctor;
 
-		LinearLayout DrugBrandInfoTable;
+		LinearLayout PotentialTable;
 		LinearLayout InfoTable;
 
 		TextView Locker;
@@ -71,7 +71,15 @@ namespace MDC.Doctors
 
 			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID);
 			Doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
-
+			
+			var speciality = DBHelper.Get<Speciality>(DB, Doctor.Speciality);
+			mainView.FindViewById<TextView>(Resource.Id.ifDoctorTV).Text = string.Concat(Doctor.Name, ", ", speciality.name);
+			
+			var mainWorkPlace = DBHelper.Get<WorkPlace>(DB, Doctor.MainWorkPlace);
+			var hospital = DBHelper.GetHospital(DB, mainWorkPlace.Hospital);
+			mainView.FindViewById<TextView>(Resource.Id.ifHospitalTV).Text = string.Concat(hospital.GetName(), ", ", hospital.GetAddress(), ", ", hospital.GetPhone());
+			
+			
 			var attendanceLastOrNewUUID = Arguments.GetString(Consts.C_ATTENDANCE_UUID);
 			if (!string.IsNullOrEmpty(attendanceLastOrNewUUID))
 			{
@@ -80,32 +88,32 @@ namespace MDC.Doctors
 				var infoDatas = DBHelper.GetList<InfoData>(DB).Where(iData => iData.Attendance == Attendance.UUID);
 
 				mainView.FindViewById<EditText>(Resource.Id.ifGoalsET).Text = string.Join(", ", infoDatas.Select(iData => iData.Goal));
-			}	
-			mainView.FindViewById<TextView>(Resource.Id.ifDoctorTV).Text = Doctor.Name;
+			}
+
 			var brands = DBHelper.GetList<DrugBrand>(DB);
 
-			DrugBrandInfoTable = mainView.FindViewById<LinearLayout>(Resource.Id.aaDrugBrandInfoTable);
-			DrugBrandInfoTable.WeightSum = 3; //brands.Count();
+			PotentialTable = mainView.FindViewById<LinearLayout>(Resource.Id.aaPotentialTable);
+			PotentialTable.WeightSum = 3; //brands.Count();
 			for (int b = 0; b < brands.Count; b++)
 			{
-				var row = inflater.Inflate(Resource.Layout.DrugBrandInfoItem, DrugBrandInfoTable, false);
+				var row = inflater.Inflate(Resource.Layout.DrugBrandInfoItem, PotentialTable, false);
 				row.FindViewById<TextView>(Resource.Id.dbiiDrugBrandS).Text = brands[b].name;
-				row.LayoutParameters = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WrapContent, 1) { 
-					BottomMargin = 2, TopMargin = 2, LeftMargin = 2, RightMargin = 2 
-				};
-				DrugBrandInfoTable.AddView(row);
+				// row.LayoutParameters = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WrapContent, 1) { 
+					// BottomMargin = 2, TopMargin = 2, LeftMargin = 2, RightMargin = 2 
+				// };
+				PotentialTable.AddView(row);
 			}
 
 			mainView.FindViewById<ImageView>(Resource.Id.aaDrugBrandInfoLRigthArrow).Click += (s, e) =>
 			{
-				for (int c = 0; c < DrugBrandInfoTable.ChildCount; c++)
+				for (int c = 0; c < PotentialTable.ChildCount; c++)
 				{
-					if (DrugBrandInfoTable.GetChildAt(c).Visibility == ViewStates.Visible)
+					if (PotentialTable.GetChildAt(c).Visibility == ViewStates.Visible)
 					{
-						if ((c + 3) < DrugBrandInfoTable.ChildCount)
+						if ((c + 3) < PotentialTable.ChildCount)
 						{
-							DrugBrandInfoTable.GetChildAt(c).Visibility = ViewStates.Gone;
-							DrugBrandInfoTable.GetChildAt(c + 3).Visibility = ViewStates.Visible;
+							PotentialTable.GetChildAt(c).Visibility = ViewStates.Gone;
+							PotentialTable.GetChildAt(c + 3).Visibility = ViewStates.Visible;
 						}
 					}
 				}
@@ -113,14 +121,14 @@ namespace MDC.Doctors
 
 			mainView.FindViewById<ImageView>(Resource.Id.aaDrugBrandInfoLeftArrow).Click += (s, e) =>
 			{
-				for (int c = DrugBrandInfoTable.ChildCount - 1; c >= 0; c--)
+				for (int c = PotentialTable.ChildCount - 1; c >= 0; c--)
 				{
-					if (DrugBrandInfoTable.GetChildAt(c).Visibility == ViewStates.Visible)
+					if (PotentialTable.GetChildAt(c).Visibility == ViewStates.Visible)
 					{
 						if ((c - 3) >= 0)
 						{
-							DrugBrandInfoTable.GetChildAt(c).Visibility = ViewStates.Gone;
-							DrugBrandInfoTable.GetChildAt(c - 3).Visibility = ViewStates.Visible;
+							PotentialTable.GetChildAt(c).Visibility = ViewStates.Gone;
+							PotentialTable.GetChildAt(c - 3).Visibility = ViewStates.Visible;
 						}
 					}
 				}
@@ -162,7 +170,6 @@ namespace MDC.Doctors
 					row.FindViewById<TextView>(Resource.Id.idtiCallbackET).Enabled = true;
 					row.FindViewById<TextView>(Resource.Id.idtiResumeET).Enabled = true;
 					row.FindViewById<TextView>(Resource.Id.idtiGoalET).Enabled = true;
-					//row.FindViewById<TextView>(Resource.Id.idtiCommentET).Enabled = true;
 				}
 				infoDataTable.AddView(row);
 			}
@@ -212,7 +219,6 @@ namespace MDC.Doctors
 						row.FindViewById<TextView>(Resource.Id.idtiCallbackET).Enabled = true;
 						row.FindViewById<TextView>(Resource.Id.idtiResumeET).Enabled = true;
 						row.FindViewById<TextView>(Resource.Id.idtiGoalET).Enabled = true;
-						//row.FindViewById<TextView>(Resource.Id.idtiCommentET).Enabled = true;
 					}
 				}
 			}
@@ -236,7 +242,6 @@ namespace MDC.Doctors
 					row.FindViewById<TextView>(Resource.Id.idtiCallbackET).Enabled = false;
 					row.FindViewById<TextView>(Resource.Id.idtiResumeET).Enabled = false;
 					row.FindViewById<TextView>(Resource.Id.idtiGoalET).Enabled = false;
-					//row.FindViewById<TextView>(Resource.Id.idtiCommentET).Enabled = false;
 				}
 			}
 		}

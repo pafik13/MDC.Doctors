@@ -160,6 +160,7 @@ namespace MDC.Doctors.Lib.Entities
         /// <value>The next attendance date.</value>
         public DateTimeOffset? NextAttendanceDate { get; set; }
 
+		#region ISync
 		/// <summary>
 		/// Дата заведения сотрудника. Присваивается при сохранении.
 		/// </summary>
@@ -175,6 +176,7 @@ namespace MDC.Doctors.Lib.Entities
 		public string CreatedBy { get; set; }
 
 		public bool IsSynced { get; set; }
+		#endregion
 	}
 }
 

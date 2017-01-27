@@ -5,10 +5,10 @@ using MDC.Doctors.Lib.Interfaces;
 
 namespace MDC.Doctors.Lib.Entities
 {
-	public class InfoData: RealmObject, IEntityFromClient, IAttendanceData, ISync
+	public class PotentialData: RealmObject, IEntityFromClient, IAttendanceData, ISync
 	{
 		/// <summary>
-		/// Уникальный идентификатор презентации. Используется Guid.
+		/// Уникальный идентификатор информации о потенциале врача. Используется Guid.
 		/// </summary>
 		/// <value>The UUID.</value>
 		[PrimaryKey]
@@ -19,15 +19,15 @@ namespace MDC.Doctors.Lib.Entities
 
 		public string Brand { get; set; }
 
-		public string WorkType { get; set; }
+		public string Potential { get; set; }
 
-		public string Callback { get; set; }
+		public float PrescriptionOfOur { get; set; }
+		
+		public float PrescriptionOfOther { get; set; }
 
-		public string Resume { get; set; }
+		public float Portion { get; set; }
 
-		public string Goal { get; set; }
-
-		public string Comment { get; set; }
+		public string Category { get; set; }
 		
 		#region ISync
 		public string CreatedBy { get; set; }

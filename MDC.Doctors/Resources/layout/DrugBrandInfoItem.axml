@@ -4,10 +4,10 @@
     android:minHeight="25px"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/dbiiMainTL"
+    android:id="@+id/ptiMainTL"
     android:background="@android:color/white">
     <TableRow
-        android:id="@+id/dbiiDrugBrandTR">
+        android:id="@+id/ptiDrugBrandTR">
         <TextView
             android:text="Препарат"
             android:layout_column="0"
@@ -17,7 +17,7 @@
             android:layout_height="@dimen/row_height"
             android:layout_width="match_parent" />
         <TextView
-            android:id="@+id/dbiiDrugBrandS"
+            android:id="@+id/ptiDrugBrandS"
             android:text="Препарат"
             android:layout_column="1"
             android:background="@android:color/background_light"
@@ -26,15 +26,9 @@
             android:textSize="18sp"
             android:layout_height="@dimen/row_height"
             android:layout_width="match_parent" />
-    <!--        <Spinner
-            android:layout_column="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/dbiiDrugBrandS"
-            android:layout_marginRight="24dp" />-->
     </TableRow>
     <TableRow
-        android:id="@+id/dbiiPotentialTR"
+        android:id="@+id/ptiPotentialTR"
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
         <TextView
@@ -48,7 +42,7 @@
         <EditText
             android:textCursorDrawable="@null"
             android:layout_column="1"
-            android:id="@+id/dbiiPotentialET"
+            android:id="@+id/ptiPotentialET"
             android:background="@drawable/bottomline"
             android:textColorHint="@color/Grey_300"
             android:textColor="@android:color/black"
@@ -62,19 +56,18 @@
             android:layout_width="match_parent" />
     </TableRow>
     <TableRow
-        android:id="@+id/dbiiPrescribeOurTR">
+        android:id="@+id/ptiPrescribeOurTR">
         <TextView
-            android:text="Выписка (наш.)"
+            android:text="Выписка (наших)"
             android:layout_column="0"
             android:background="@android:color/background_light"
-            android:gravity="end|center_vertical"
             style="@style/control_label"
             android:layout_height="@dimen/row_height"
             android:layout_width="match_parent" />
         <EditText
             android:textCursorDrawable="@null"
             android:layout_column="1"
-            android:id="@+id/dbiiPrescribeOurET"
+            android:id="@+id/ptiPrescribeOurET"
             android:background="@drawable/bottomline"
             android:textColorHint="@color/Grey_300"
             android:textColor="@android:color/black"
@@ -88,19 +81,18 @@
             android:layout_width="match_parent" />
     </TableRow>
     <TableRow
-        android:id="@+id/dbiiPrescribeOtherTR">
+        android:id="@+id/ptiPrescribeOtherTR">
         <TextView
-            android:text="Выписка (конк.)"
+            android:text="Выписка (других)"
             android:layout_column="0"
             android:background="@android:color/background_light"
-            android:gravity="end|center_vertical"
             style="@style/control_label"
             android:layout_height="@dimen/row_height"
             android:layout_width="match_parent" />
         <EditText
             android:textCursorDrawable="@null"
             android:layout_column="1"
-            android:id="@+id/dbiiPrescribeOtherET"
+            android:id="@+id/ptiPrescribeOtherET"
             android:background="@drawable/bottomline"
             android:textColorHint="@color/Grey_300"
             android:textColor="@android:color/black"
@@ -114,19 +106,18 @@
             android:layout_width="match_parent" />
     </TableRow>
     <TableRow
-        android:id="@+id/dbiiProportionTR">
+        android:id="@+id/ptiProportionTR">
         <TextView
             android:text="Доля (высч.)"
             android:layout_column="0"
             android:background="@android:color/background_light"
-            android:gravity="end|center_vertical"
             style="@style/control_label"
             android:layout_height="@dimen/row_height"
             android:layout_width="match_parent" />
         <EditText
             android:textCursorDrawable="@null"
             android:layout_column="1"
-            android:id="@+id/dbiiProportionET"
+            android:id="@+id/ptiProportionET"
             android:background="@drawable/bottomline"
             android:textColorHint="@color/Grey_300"
             android:textColor="@android:color/black"
@@ -139,4 +130,21 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent" />
     </TableRow>
+	<TextView
+		android:text="Категория"
+		android:layout_column="0"
+		android:background="@android:color/background_light"
+		style="@style/control_label"
+		android:layout_height="@dimen/row_height"
+		android:layout_width="match_parent" />
+	<TextView
+		android:id="@+id/ptiCategory"
+		android:="Категория"
+		android:layout_column="1"
+		android:background="@android:color/background_light"
+		android:gravity="center_vertical"
+		android:textColor="@android:color/black"
+		android:textSize="18sp"
+		android:layout_height="@dimen/row_height"
+		android:layout_width="match_parent" />
 </TableLayout>

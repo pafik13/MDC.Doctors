@@ -28,13 +28,15 @@ namespace MDC.Doctors.Lib.Entities
 
 		public string Timetable	{ get; set; }
 
+		#region ISync
+		public string CreatedBy { get; set; }
+
 		public DateTimeOffset CreatedAt { get; set; }
 
 		public DateTimeOffset UpdatedAt { get; set; }
 
-		public string CreatedBy { get; set; }
-
 		public bool IsSynced { get; set; }
+		#endregion
 	}
 }
 

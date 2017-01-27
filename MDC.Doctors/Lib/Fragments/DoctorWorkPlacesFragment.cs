@@ -54,16 +54,58 @@ namespace MDC.Doctors
 			return mainView;
 		}
 		
-		void AddWorkPlace()
+		void AddWorkPlace(WorkPlace workPlace = null)
 		{
 			var workPlaceItem = Activity.LayoutInflater.Inflate(Resource.Layout.WorkPlaceItem, WPTable, true);
 			var hospital = workPlaceItem.FindViewById<AutoCompleteTextView>(Resource.Id.wpiHospitalACTV);
+			var cabinet = workPlaceItem.FindViewById<EditText>(Resource.Id.wpiCabinetET);
+			var timetable = workPlaceItem.FindViewById<EditText>(Resource.Id.wpiTimetableET);
+		
+			if (workPlace != null) {
+				workPlaceItem.SetTag(Resource.String.WorkPlaceUUID, workPlace.UUID);
+				workPlaceItem.SetTag(Resource.String.IsChanged, false);
+				hospital.SetTag(Resource.String.HospitalUUID, workPlace.Hospital);
+				cabinet.Text = workPlace.Cabinet;
+				timetable.Text = workPlace.Timetable;
+				var isMain = workPlaceItem.FindViewById<Switch>(Resource.Id.wpiIsMainS);
+				isMain.Checked = workPlace.IsMain;
+				isMain.CheckedChange += (s,e) => {
+					if (e.Checked) {
+						// TODO: simplify
+						var switcher = (Switch)s;
+						var parent =  (GridLayout)switcher.parent;
+						parent.SetTag(Resource.String.IsChanged, true);
+						var parent_parent =  (LinearLayout)parent;
+						for(int c = 0; c < parent_parent.ChildCount; c++){
+							var item = parent_parent.GetChildAt(c);
+							if (item.id == parent.id) continue;
+							var otherSwitcher = item.FindViewById<Switch>(Resource.Id.wpiIsMainS);
+							if (otherSwitcher.Checked) {
+								otherSwitcher.Checked = false;
+							}
+						}
+					}
+				};
+			}
+			
 			hospital.Adapter = new HospitalSuggestionAdapter(Activity);
 			hospital.ItemClick += (sender, e) => {
 				var actv = ((AutoCompleteTextView)sender);
 				var hospitalHolder = (actv.Adapter as HospitalSuggestionAdapter)[e.Position];
 				actv.SetTag(Resource.String.HospitalUUID, hospitalHolder.UUID);
+				
+				var parent =  (GridLayout)actv.parent;	
+				parent.SetTag(Resource.String.IsChanged, true);
 			};
+			cabinet.AfterChange += EditTextAfterChange;
+			timetable.AfterChange += EditTextAfterChange;
+		}
+		
+		void EditTextAfterChange(sender, args){
+			// TODO: simplify
+			var editText = (EditText)s;
+			var parent =  (GridLayout)editText.parent;	
+			parent.SetTag(Resource.String.IsChanged, true);			
 		}
 
 		public override void OnResume()
@@ -95,6 +137,8 @@ namespace MDC.Doctors
 							   .Show();
 				return;
 			}
+			
+			Save();
 		}
 
 		public void Save()

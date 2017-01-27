@@ -48,45 +48,27 @@ namespace MDC.Doctors.Lib.Entities
 		/// <value>The area.</value>
 		public string Phone { get; set; }
 
+		#region ISync
+		public string CreatedBy { get; set; }
+
 		public DateTimeOffset CreatedAt { get; set; }
 
 		public DateTimeOffset UpdatedAt { get; set; }
 
-		public string CreatedBy { get; set; }
-
 		public bool IsSynced { get; set; }
+		#endregion
 
-		public string GetUUID()
-		{
-			//throw new NotImplementedException();
-			System.Diagnostics.Debug.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId, "Thread_Name");
-			return UUID;
-		}
+		#region IHospital
+		public string GetUUID() { return UUID; }
 		
-		public string GetName()
-		{
-			//throw new NotImplementedException();
-			System.Diagnostics.Debug.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId, "Thread_Name");
-			return Key;
-		}
+		public string GetName() { return Key; }
 
-		public string GetAddress()
-		{
-			//throw new NotImplementedException();
-			return Address;
-		}
+		public string GetAddress() { return Address; }
 
-		public string GetArea()
-		{
-			//throw new NotImplementedException();
-			return Area;
-		}
+		public string GetArea() { return Area; }
 
-		public string GetPhone()
-		{
-			//throw new NotImplementedException();
-			return Phone;
-		}
+		public string GetPhone() { return Phone; }
+		#endregion
 	}
 }
 
