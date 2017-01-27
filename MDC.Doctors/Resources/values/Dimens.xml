@@ -4,5 +4,8 @@
     <dimen name="row_height_x2">100dp</dimen>
     <dimen name="drop_down_width">650dp</dimen>
     <dimen name="ball_radius">30dp</dimen>
+    <dimen name="font_size_small">8sp</dimen>
     <dimen name="font_size">16sp</dimen>
+    <dimen name="font_size_medium">24sp</dimen>
+    <dimen name="font_size_large">32sp</dimen>
 </resources>

@@ -1400,8 +1400,17 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f08004d
 			public const int drop_down_width = 2131230797;
 			
+			// aapt resource value: 0x7f080050
+			public const int font_size = 2131230800;
+			
+			// aapt resource value: 0x7f080052
+			public const int font_size_large = 2131230802;
+			
+			// aapt resource value: 0x7f080051
+			public const int font_size_medium = 2131230801;
+			
 			// aapt resource value: 0x7f08004f
-			public const int font_size = 2131230799;
+			public const int font_size_small = 2131230799;
 			
 			// aapt resource value: 0x7f080045
 			public const int highlight_alpha_material_colored = 2131230789;
@@ -1735,23 +1744,23 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c0056
 			public const int aaContainerVP = 2131492950;
 			
-			// aapt resource value: 0x7f0c00d2
-			public const int aaDrugBrandInfoLRigthArrow = 2131493074;
+			// aapt resource value: 0x7f0c00bf
+			public const int aaHospitalLL = 2131493055;
 			
-			// aapt resource value: 0x7f0c00d0
-			public const int aaDrugBrandInfoLeftArrow = 2131493072;
+			// aapt resource value: 0x7f0c00c4
+			public const int aaInfoLL = 2131493060;
 			
-			// aapt resource value: 0x7f0c00d1
-			public const int aaDrugBrandInfoTable = 2131493073;
+			// aapt resource value: 0x7f0c00c8
+			public const int aaInfoTable = 2131493064;
 			
-			// aapt resource value: 0x7f0c00ca
-			public const int aaHospitalLL = 2131493066;
+			// aapt resource value: 0x7f0c00c5
+			public const int aaPotentialLeftArrow = 2131493061;
 			
-			// aapt resource value: 0x7f0c00cf
-			public const int aaInfoLL = 2131493071;
+			// aapt resource value: 0x7f0c00c7
+			public const int aaPotentialRigthArrow = 2131493063;
 			
-			// aapt resource value: 0x7f0c00d3
-			public const int aaInfoTable = 2131493075;
+			// aapt resource value: 0x7f0c00c6
+			public const int aaPotentialTable = 2131493062;
 			
 			// aapt resource value: 0x7f0c0052
 			public const int aaResumeOrPauseAttendanceB = 2131492946;
@@ -1765,8 +1774,8 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c0051
 			public const int aaUpPanelRL = 2131492945;
 			
-			// aapt resource value: 0x7f0c00fe
-			public const int action0 = 2131493118;
+			// aapt resource value: 0x7f0c00f3
+			public const int action0 = 2131493107;
 			
 			// aapt resource value: 0x7f0c0041
 			public const int action_bar = 2131492929;
@@ -1792,8 +1801,8 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c0042
 			public const int action_context_bar = 2131492930;
 			
-			// aapt resource value: 0x7f0c0102
-			public const int action_divider = 2131493122;
+			// aapt resource value: 0x7f0c00f7
+			public const int action_divider = 2131493111;
 			
 			// aapt resource value: 0x7f0c0002
 			public const int action_menu_divider = 2131492866;
@@ -1819,8 +1828,8 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c001c
 			public const int always = 2131492892;
 			
-			// aapt resource value: 0x7f0c00d5
-			public const int arrow = 2131493077;
+			// aapt resource value: 0x7f0c00ca
+			public const int arrow = 2131493066;
 			
 			// aapt resource value: 0x7f0c0019
 			public const int beginning = 2131492889;
@@ -1828,32 +1837,32 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c002b
 			public const int buttonPanel = 2131492907;
 			
-			// aapt resource value: 0x7f0c00b4
-			public const int button_add_response = 2131493044;
+			// aapt resource value: 0x7f0c00a9
+			public const int button_add_response = 2131493033;
 			
-			// aapt resource value: 0x7f0c00af
-			public const int button_attachment = 2131493039;
+			// aapt resource value: 0x7f0c00a4
+			public const int button_attachment = 2131493028;
 			
-			// aapt resource value: 0x7f0c00b9
-			public const int button_login = 2131493049;
+			// aapt resource value: 0x7f0c00ae
+			public const int button_login = 2131493038;
 			
-			// aapt resource value: 0x7f0c00b5
-			public const int button_refresh = 2131493045;
+			// aapt resource value: 0x7f0c00aa
+			public const int button_refresh = 2131493034;
 			
-			// aapt resource value: 0x7f0c00b0
-			public const int button_send = 2131493040;
+			// aapt resource value: 0x7f0c00a5
+			public const int button_send = 2131493029;
 			
-			// aapt resource value: 0x7f0c00bd
-			public const int button_update = 2131493053;
+			// aapt resource value: 0x7f0c00b2
+			public const int button_update = 2131493042;
 			
-			// aapt resource value: 0x7f0c00ff
-			public const int cancel_action = 2131493119;
+			// aapt resource value: 0x7f0c00f4
+			public const int cancel_action = 2131493108;
 			
 			// aapt resource value: 0x7f0c0039
 			public const int checkbox = 2131492921;
 			
-			// aapt resource value: 0x7f0c0105
-			public const int chronometer = 2131493125;
+			// aapt resource value: 0x7f0c00fa
+			public const int chronometer = 2131493114;
 			
 			// aapt resource value: 0x7f0c001d
 			public const int collapseActionView = 2131492893;
@@ -1914,39 +1923,6 @@ namespace MDC.Doctors
 			
 			// aapt resource value: 0x7f0c0057
 			public const int daUpPanelRL = 2131492951;
-			
-			// aapt resource value: 0x7f0c009e
-			public const int dbiiDrugBrandS = 2131493022;
-			
-			// aapt resource value: 0x7f0c009d
-			public const int dbiiDrugBrandTR = 2131493021;
-			
-			// aapt resource value: 0x7f0c009c
-			public const int dbiiMainTL = 2131493020;
-			
-			// aapt resource value: 0x7f0c00a0
-			public const int dbiiPotentialET = 2131493024;
-			
-			// aapt resource value: 0x7f0c009f
-			public const int dbiiPotentialTR = 2131493023;
-			
-			// aapt resource value: 0x7f0c00a4
-			public const int dbiiPrescribeOtherET = 2131493028;
-			
-			// aapt resource value: 0x7f0c00a3
-			public const int dbiiPrescribeOtherTR = 2131493027;
-			
-			// aapt resource value: 0x7f0c00a2
-			public const int dbiiPrescribeOurET = 2131493026;
-			
-			// aapt resource value: 0x7f0c00a1
-			public const int dbiiPrescribeOurTR = 2131493025;
-			
-			// aapt resource value: 0x7f0c00a6
-			public const int dbiiProportionET = 2131493030;
-			
-			// aapt resource value: 0x7f0c00a5
-			public const int dbiiProportionTR = 2131493029;
 			
 			// aapt resource value: 0x7f0c003f
 			public const int decor_content_parent = 2131492927;
@@ -2125,8 +2101,8 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c001a
 			public const int end = 2131492890;
 			
-			// aapt resource value: 0x7f0c010a
-			public const int end_padder = 2131493130;
+			// aapt resource value: 0x7f0c00ff
+			public const int end_padder = 2131493119;
 			
 			// aapt resource value: 0x7f0c0025
 			public const int expand_activities_button = 2131492901;
@@ -2143,38 +2119,38 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c0029
 			public const int icon = 2131492905;
 			
+			// aapt resource value: 0x7f0c00b8
+			public const int idtiBrandTV = 2131493048;
+			
+			// aapt resource value: 0x7f0c00ba
+			public const int idtiCallbackET = 2131493050;
+			
+			// aapt resource value: 0x7f0c00bc
+			public const int idtiGoalET = 2131493052;
+			
+			// aapt resource value: 0x7f0c00bb
+			public const int idtiResumeET = 2131493051;
+			
+			// aapt resource value: 0x7f0c00b9
+			public const int idtiWorkTypesTV = 2131493049;
+			
+			// aapt resource value: 0x7f0c00bd
+			public const int ifDoctorLL = 2131493053;
+			
+			// aapt resource value: 0x7f0c00be
+			public const int ifDoctorTV = 2131493054;
+			
+			// aapt resource value: 0x7f0c00c2
+			public const int ifGoalsET = 2131493058;
+			
+			// aapt resource value: 0x7f0c00c1
+			public const int ifGoalsLL = 2131493057;
+			
+			// aapt resource value: 0x7f0c00c0
+			public const int ifHospitalTV = 2131493056;
+			
 			// aapt resource value: 0x7f0c00c3
-			public const int idtiBrandTV = 2131493059;
-			
-			// aapt resource value: 0x7f0c00c5
-			public const int idtiCallbackET = 2131493061;
-			
-			// aapt resource value: 0x7f0c00c7
-			public const int idtiGoalET = 2131493063;
-			
-			// aapt resource value: 0x7f0c00c6
-			public const int idtiResumeET = 2131493062;
-			
-			// aapt resource value: 0x7f0c00c4
-			public const int idtiWorkTypesTV = 2131493060;
-			
-			// aapt resource value: 0x7f0c00c8
-			public const int ifDoctorLL = 2131493064;
-			
-			// aapt resource value: 0x7f0c00c9
-			public const int ifDoctorTV = 2131493065;
-			
-			// aapt resource value: 0x7f0c00cd
-			public const int ifGoalsET = 2131493069;
-			
-			// aapt resource value: 0x7f0c00cc
-			public const int ifGoalsLL = 2131493068;
-			
-			// aapt resource value: 0x7f0c00cb
-			public const int ifHospitalTV = 2131493067;
-			
-			// aapt resource value: 0x7f0c00ce
-			public const int ifMessageDividerV = 2131493070;
+			public const int ifMessageDividerV = 2131493059;
 			
 			// aapt resource value: 0x7f0c001e
 			public const int ifRoom = 2131492894;
@@ -2182,131 +2158,131 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c0026
 			public const int image = 2131492902;
 			
-			// aapt resource value: 0x7f0c00fa
-			public const int imageView1 = 2131493114;
+			// aapt resource value: 0x7f0c00ef
+			public const int imageView1 = 2131493103;
 			
-			// aapt resource value: 0x7f0c0109
-			public const int info = 2131493129;
+			// aapt resource value: 0x7f0c00fe
+			public const int info = 2131493118;
 			
-			// aapt resource value: 0x7f0c00ab
-			public const int input_email = 2131493035;
+			// aapt resource value: 0x7f0c00a0
+			public const int input_email = 2131493024;
+			
+			// aapt resource value: 0x7f0c00a2
+			public const int input_message = 2131493026;
+			
+			// aapt resource value: 0x7f0c009f
+			public const int input_name = 2131493023;
 			
 			// aapt resource value: 0x7f0c00ad
-			public const int input_message = 2131493037;
+			public const int input_password = 2131493037;
 			
-			// aapt resource value: 0x7f0c00aa
-			public const int input_name = 2131493034;
+			// aapt resource value: 0x7f0c00a1
+			public const int input_subject = 2131493025;
 			
-			// aapt resource value: 0x7f0c00b8
-			public const int input_password = 2131493048;
+			// aapt resource value: 0x7f0c00cb
+			public const int itiInfoDataTable = 2131493067;
 			
-			// aapt resource value: 0x7f0c00ac
-			public const int input_subject = 2131493036;
+			// aapt resource value: 0x7f0c00b4
+			public const int label_author = 2131493044;
 			
-			// aapt resource value: 0x7f0c00d6
-			public const int itiInfoDataTable = 2131493078;
-			
-			// aapt resource value: 0x7f0c00bf
-			public const int label_author = 2131493055;
-			
-			// aapt resource value: 0x7f0c00c0
-			public const int label_date = 2131493056;
-			
-			// aapt resource value: 0x7f0c00b2
-			public const int label_last_updated = 2131493042;
+			// aapt resource value: 0x7f0c00b5
+			public const int label_date = 2131493045;
 			
 			// aapt resource value: 0x7f0c00a7
-			public const int label_message = 2131493031;
+			public const int label_last_updated = 2131493031;
 			
-			// aapt resource value: 0x7f0c00c1
-			public const int label_text = 2131493057;
+			// aapt resource value: 0x7f0c009c
+			public const int label_message = 2131493020;
 			
-			// aapt resource value: 0x7f0c00bb
-			public const int label_title = 2131493051;
+			// aapt resource value: 0x7f0c00b6
+			public const int label_text = 2131493046;
 			
-			// aapt resource value: 0x7f0c00bc
-			public const int label_version = 2131493052;
+			// aapt resource value: 0x7f0c00b0
+			public const int label_title = 2131493040;
 			
-			// aapt resource value: 0x7f0c0103
-			public const int line1 = 2131493123;
+			// aapt resource value: 0x7f0c00b1
+			public const int label_version = 2131493041;
 			
-			// aapt resource value: 0x7f0c0107
-			public const int line3 = 2131493127;
+			// aapt resource value: 0x7f0c00f8
+			public const int line1 = 2131493112;
+			
+			// aapt resource value: 0x7f0c00fc
+			public const int line3 = 2131493116;
 			
 			// aapt resource value: 0x7f0c0009
 			public const int listMode = 2131492873;
 			
-			// aapt resource value: 0x7f0c00c2
-			public const int list_attachments = 2131493058;
+			// aapt resource value: 0x7f0c00b7
+			public const int list_attachments = 2131493047;
 			
-			// aapt resource value: 0x7f0c00b6
-			public const int list_feedback_messages = 2131493046;
+			// aapt resource value: 0x7f0c00ab
+			public const int list_feedback_messages = 2131493035;
 			
 			// aapt resource value: 0x7f0c0028
 			public const int list_item = 2131492904;
 			
-			// aapt resource value: 0x7f0c00d4
-			public const int locker = 2131493076;
+			// aapt resource value: 0x7f0c00c9
+			public const int locker = 2131493065;
 			
-			// aapt resource value: 0x7f0c00ef
-			public const int maAdd = 2131493103;
-			
-			// aapt resource value: 0x7f0c00f6
-			public const int maAttendanceCountTV = 2131493110;
-			
-			// aapt resource value: 0x7f0c00f5
-			public const int maBottomPanelRL = 2131493109;
-			
-			// aapt resource value: 0x7f0c00e9
-			public const int maContentRL = 2131493097;
-			
-			// aapt resource value: 0x7f0c00f4
-			public const int maDoctorTable = 2131493108;
-			
-			// aapt resource value: 0x7f0c00ee
-			public const int maFilter = 2131493102;
-			
-			// aapt resource value: 0x7f0c00f3
-			public const int maFilterTV = 2131493107;
+			// aapt resource value: 0x7f0c00e4
+			public const int maAdd = 2131493092;
 			
 			// aapt resource value: 0x7f0c00eb
-			public const int maInfoText = 2131493099;
-			
-			// aapt resource value: 0x7f0c00f0
-			public const int maLibrary = 2131493104;
-			
-			// aapt resource value: 0x7f0c00ec
-			public const int maProfile = 2131493100;
-			
-			// aapt resource value: 0x7f0c00f2
-			public const int maRoute = 2131493106;
-			
-			// aapt resource value: 0x7f0c00ed
-			public const int maSearch = 2131493101;
-			
-			// aapt resource value: 0x7f0c00fb
-			public const int maSearchInput = 2131493115;
-			
-			// aapt resource value: 0x7f0c00f9
-			public const int maSearchInputLL = 2131493113;
-			
-			// aapt resource value: 0x7f0c00f8
-			public const int maSearchRL = 2131493112;
-			
-			// aapt resource value: 0x7f0c00fc
-			public const int maSearchSettingsIV = 2131493116;
-			
-			// aapt resource value: 0x7f0c00fd
-			public const int maSearchTable = 2131493117;
-			
-			// aapt resource value: 0x7f0c00f1
-			public const int maSync = 2131493105;
+			public const int maAttendanceCountTV = 2131493099;
 			
 			// aapt resource value: 0x7f0c00ea
-			public const int maUpPanelRL = 2131493098;
+			public const int maBottomPanelRL = 2131493098;
 			
-			// aapt resource value: 0x7f0c0101
-			public const int media_actions = 2131493121;
+			// aapt resource value: 0x7f0c00de
+			public const int maContentRL = 2131493086;
+			
+			// aapt resource value: 0x7f0c00e9
+			public const int maDoctorTable = 2131493097;
+			
+			// aapt resource value: 0x7f0c00e3
+			public const int maFilter = 2131493091;
+			
+			// aapt resource value: 0x7f0c00e8
+			public const int maFilterTV = 2131493096;
+			
+			// aapt resource value: 0x7f0c00e0
+			public const int maInfoText = 2131493088;
+			
+			// aapt resource value: 0x7f0c00e5
+			public const int maLibrary = 2131493093;
+			
+			// aapt resource value: 0x7f0c00e1
+			public const int maProfile = 2131493089;
+			
+			// aapt resource value: 0x7f0c00e7
+			public const int maRoute = 2131493095;
+			
+			// aapt resource value: 0x7f0c00e2
+			public const int maSearch = 2131493090;
+			
+			// aapt resource value: 0x7f0c00f0
+			public const int maSearchInput = 2131493104;
+			
+			// aapt resource value: 0x7f0c00ee
+			public const int maSearchInputLL = 2131493102;
+			
+			// aapt resource value: 0x7f0c00ed
+			public const int maSearchRL = 2131493101;
+			
+			// aapt resource value: 0x7f0c00f1
+			public const int maSearchSettingsIV = 2131493105;
+			
+			// aapt resource value: 0x7f0c00f2
+			public const int maSearchTable = 2131493106;
+			
+			// aapt resource value: 0x7f0c00e6
+			public const int maSync = 2131493094;
+			
+			// aapt resource value: 0x7f0c00df
+			public const int maUpPanelRL = 2131493087;
+			
+			// aapt resource value: 0x7f0c00f6
+			public const int media_actions = 2131493110;
 			
 			// aapt resource value: 0x7f0c001b
 			public const int middle = 2131492891;
@@ -2314,8 +2290,8 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c0014
 			public const int multiply = 2131492884;
 			
-			// aapt resource value: 0x7f0c00f7
-			public const int myButton = 2131493111;
+			// aapt resource value: 0x7f0c00ec
+			public const int myButton = 2131493100;
 			
 			// aapt resource value: 0x7f0c001f
 			public const int never = 2131492895;
@@ -2335,62 +2311,101 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c0006
 			public const int progress_horizontal = 2131492870;
 			
+			// aapt resource value: 0x7f0c010c
+			public const int ptiCategory = 2131493132;
+			
+			// aapt resource value: 0x7f0c010b
+			public const int ptiCategoryTR = 2131493131;
+			
+			// aapt resource value: 0x7f0c0101
+			public const int ptiDrugBrandTR = 2131493121;
+			
+			// aapt resource value: 0x7f0c0102
+			public const int ptiDrugBrandTV = 2131493122;
+			
+			// aapt resource value: 0x7f0c0100
+			public const int ptiMainTL = 2131493120;
+			
+			// aapt resource value: 0x7f0c0104
+			public const int ptiPotentialET = 2131493124;
+			
+			// aapt resource value: 0x7f0c0103
+			public const int ptiPotentialTR = 2131493123;
+			
+			// aapt resource value: 0x7f0c0108
+			public const int ptiPrescribeOtherET = 2131493128;
+			
+			// aapt resource value: 0x7f0c0107
+			public const int ptiPrescribeOtherTR = 2131493127;
+			
+			// aapt resource value: 0x7f0c0106
+			public const int ptiPrescribeOurET = 2131493126;
+			
+			// aapt resource value: 0x7f0c0105
+			public const int ptiPrescribeOurTR = 2131493125;
+			
+			// aapt resource value: 0x7f0c010a
+			public const int ptiProportionET = 2131493130;
+			
+			// aapt resource value: 0x7f0c0109
+			public const int ptiProportionTR = 2131493129;
+			
 			// aapt resource value: 0x7f0c003b
 			public const int radio = 2131492923;
 			
-			// aapt resource value: 0x7f0c00e8
-			public const int saCheckAll = 2131493096;
-			
-			// aapt resource value: 0x7f0c00e3
-			public const int saContractsCB = 2131493091;
-			
-			// aapt resource value: 0x7f0c00e7
-			public const int saGetDataB = 2131493095;
-			
-			// aapt resource value: 0x7f0c00e6
-			public const int saListedHospitalsCB = 2131493094;
-			
 			// aapt resource value: 0x7f0c00dd
-			public const int saLoadCategoriesCB = 2131493085;
-			
-			// aapt resource value: 0x7f0c00df
-			public const int saLoadDrugBrandsCB = 2131493087;
-			
-			// aapt resource value: 0x7f0c00de
-			public const int saLoadDrugSKUsCB = 2131493086;
-			
-			// aapt resource value: 0x7f0c00e1
-			public const int saLoadMessageTypesCB = 2131493089;
-			
-			// aapt resource value: 0x7f0c00d9
-			public const int saLoadNetsCB = 2131493081;
-			
-			// aapt resource value: 0x7f0c00e2
-			public const int saLoadPhotoTypesCB = 2131493090;
-			
-			// aapt resource value: 0x7f0c00dc
-			public const int saLoadPlacesCB = 2131493084;
+			public const int saCheckAll = 2131493085;
 			
 			// aapt resource value: 0x7f0c00d8
-			public const int saLoadPositionsCB = 2131493080;
+			public const int saContractsCB = 2131493080;
 			
-			// aapt resource value: 0x7f0c00e0
-			public const int saLoadPromotionsCB = 2131493088;
+			// aapt resource value: 0x7f0c00dc
+			public const int saGetDataB = 2131493084;
 			
 			// aapt resource value: 0x7f0c00db
-			public const int saLoadRegionsCB = 2131493083;
+			public const int saListedHospitalsCB = 2131493083;
 			
-			// aapt resource value: 0x7f0c00da
-			public const int saLoadSubwaysCB = 2131493082;
+			// aapt resource value: 0x7f0c00d2
+			public const int saLoadCategoriesCB = 2131493074;
+			
+			// aapt resource value: 0x7f0c00d4
+			public const int saLoadDrugBrandsCB = 2131493076;
+			
+			// aapt resource value: 0x7f0c00d3
+			public const int saLoadDrugSKUsCB = 2131493075;
+			
+			// aapt resource value: 0x7f0c00d6
+			public const int saLoadMessageTypesCB = 2131493078;
+			
+			// aapt resource value: 0x7f0c00ce
+			public const int saLoadNetsCB = 2131493070;
 			
 			// aapt resource value: 0x7f0c00d7
-			public const int saMainLL = 2131493079;
+			public const int saLoadPhotoTypesCB = 2131493079;
 			
-			// aapt resource value: 0x7f0c00e5
-			public const int saMaterialsCB = 2131493093;
+			// aapt resource value: 0x7f0c00d1
+			public const int saLoadPlacesCB = 2131493073;
 			
-			// aapt resource value: 0x7f0c00e4
-			public const int saWorkTypesCB = 2131493092;
+			// aapt resource value: 0x7f0c00cd
+			public const int saLoadPositionsCB = 2131493069;
+			
+			// aapt resource value: 0x7f0c00d5
+			public const int saLoadPromotionsCB = 2131493077;
+			
+			// aapt resource value: 0x7f0c00d0
+			public const int saLoadRegionsCB = 2131493072;
+			
+			// aapt resource value: 0x7f0c00cf
+			public const int saLoadSubwaysCB = 2131493071;
+			
+			// aapt resource value: 0x7f0c00cc
+			public const int saMainLL = 2131493068;
+			
+			// aapt resource value: 0x7f0c00da
+			public const int saMaterialsCB = 2131493082;
+			
+			// aapt resource value: 0x7f0c00d9
+			public const int saWorkTypesCB = 2131493081;
 			
 			// aapt resource value: 0x7f0c0015
 			public const int screen = 2131492885;
@@ -2464,8 +2479,8 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c0018
 			public const int src_over = 2131492888;
 			
-			// aapt resource value: 0x7f0c0100
-			public const int status_bar_latest_event_content = 2131493120;
+			// aapt resource value: 0x7f0c00f5
+			public const int status_bar_latest_event_content = 2131493109;
 			
 			// aapt resource value: 0x7f0c004c
 			public const int submit_area = 2131492940;
@@ -2473,20 +2488,20 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c000b
 			public const int tabMode = 2131492875;
 			
-			// aapt resource value: 0x7f0c0108
-			public const int text = 2131493128;
+			// aapt resource value: 0x7f0c00fd
+			public const int text = 2131493117;
 			
-			// aapt resource value: 0x7f0c0106
-			public const int text2 = 2131493126;
+			// aapt resource value: 0x7f0c00fb
+			public const int text2 = 2131493115;
 			
 			// aapt resource value: 0x7f0c0034
 			public const int textSpacerNoButtons = 2131492916;
 			
-			// aapt resource value: 0x7f0c00b7
-			public const int text_headline = 2131493047;
+			// aapt resource value: 0x7f0c00ac
+			public const int text_headline = 2131493036;
 			
-			// aapt resource value: 0x7f0c0104
-			public const int time = 2131493124;
+			// aapt resource value: 0x7f0c00f9
+			public const int time = 2131493113;
 			
 			// aapt resource value: 0x7f0c002a
 			public const int title = 2131492906;
@@ -2503,47 +2518,47 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c0012
 			public const int useLogo = 2131492882;
 			
-			// aapt resource value: 0x7f0c00ba
-			public const int view_header = 2131493050;
+			// aapt resource value: 0x7f0c00af
+			public const int view_header = 2131493039;
 			
-			// aapt resource value: 0x7f0c00be
-			public const int web_update_details = 2131493054;
+			// aapt resource value: 0x7f0c00b3
+			public const int web_update_details = 2131493043;
 			
 			// aapt resource value: 0x7f0c0020
 			public const int withText = 2131492896;
 			
-			// aapt resource value: 0x7f0c010d
-			public const int wpiCabinetET = 2131493133;
-			
-			// aapt resource value: 0x7f0c010b
-			public const int wpiContentGL = 2131493131;
-			
-			// aapt resource value: 0x7f0c010c
-			public const int wpiHospitalACTV = 2131493132;
-			
 			// aapt resource value: 0x7f0c010f
-			public const int wpiIsMainS = 2131493135;
+			public const int wpiCabinetET = 2131493135;
+			
+			// aapt resource value: 0x7f0c010d
+			public const int wpiContentGL = 2131493133;
 			
 			// aapt resource value: 0x7f0c010e
-			public const int wpiTimetableET = 2131493134;
+			public const int wpiHospitalACTV = 2131493134;
+			
+			// aapt resource value: 0x7f0c0111
+			public const int wpiIsMainS = 2131493137;
+			
+			// aapt resource value: 0x7f0c0110
+			public const int wpiTimetableET = 2131493136;
 			
 			// aapt resource value: 0x7f0c0013
 			public const int wrap_content = 2131492883;
 			
-			// aapt resource value: 0x7f0c00ae
-			public const int wrapper_attachments = 2131493038;
+			// aapt resource value: 0x7f0c00a3
+			public const int wrapper_attachments = 2131493027;
 			
-			// aapt resource value: 0x7f0c00a9
-			public const int wrapper_feedback = 2131493033;
+			// aapt resource value: 0x7f0c009e
+			public const int wrapper_feedback = 2131493022;
+			
+			// aapt resource value: 0x7f0c009d
+			public const int wrapper_feedback_scroll = 2131493021;
+			
+			// aapt resource value: 0x7f0c00a6
+			public const int wrapper_messages = 2131493030;
 			
 			// aapt resource value: 0x7f0c00a8
-			public const int wrapper_feedback_scroll = 2131493032;
-			
-			// aapt resource value: 0x7f0c00b1
-			public const int wrapper_messages = 2131493041;
-			
-			// aapt resource value: 0x7f0c00b3
-			public const int wrapper_messages_buttons = 2131493043;
+			public const int wrapper_messages_buttons = 2131493032;
 			
 			static Id()
 			{
@@ -2680,67 +2695,67 @@ namespace MDC.Doctors
 			public const int DoctorWorkPlacesFragment = 2130968606;
 			
 			// aapt resource value: 0x7f04001f
-			public const int DrugBrandInfoItem = 2130968607;
+			public const int hockeyapp_activity_expiry_info = 2130968607;
 			
 			// aapt resource value: 0x7f040020
-			public const int hockeyapp_activity_expiry_info = 2130968608;
+			public const int hockeyapp_activity_feedback = 2130968608;
 			
 			// aapt resource value: 0x7f040021
-			public const int hockeyapp_activity_feedback = 2130968609;
+			public const int hockeyapp_activity_login = 2130968609;
 			
 			// aapt resource value: 0x7f040022
-			public const int hockeyapp_activity_login = 2130968610;
+			public const int hockeyapp_activity_update = 2130968610;
 			
 			// aapt resource value: 0x7f040023
-			public const int hockeyapp_activity_update = 2130968611;
+			public const int hockeyapp_fragment_update = 2130968611;
 			
 			// aapt resource value: 0x7f040024
-			public const int hockeyapp_fragment_update = 2130968612;
+			public const int hockeyapp_view_feedback_message = 2130968612;
 			
 			// aapt resource value: 0x7f040025
-			public const int hockeyapp_view_feedback_message = 2130968613;
+			public const int InfoDataTableItem = 2130968613;
 			
 			// aapt resource value: 0x7f040026
-			public const int InfoDataTableItem = 2130968614;
+			public const int InfoFragment = 2130968614;
 			
 			// aapt resource value: 0x7f040027
-			public const int InfoFragment = 2130968615;
+			public const int InfoTableHeader = 2130968615;
 			
 			// aapt resource value: 0x7f040028
-			public const int InfoTableHeader = 2130968616;
+			public const int InfoTableItem = 2130968616;
 			
 			// aapt resource value: 0x7f040029
-			public const int InfoTableItem = 2130968617;
+			public const int LoadData = 2130968617;
 			
 			// aapt resource value: 0x7f04002a
-			public const int LoadData = 2130968618;
+			public const int Main = 2130968618;
 			
 			// aapt resource value: 0x7f04002b
-			public const int Main = 2130968619;
+			public const int notification_media_action = 2130968619;
 			
 			// aapt resource value: 0x7f04002c
-			public const int notification_media_action = 2130968620;
+			public const int notification_media_cancel_action = 2130968620;
 			
 			// aapt resource value: 0x7f04002d
-			public const int notification_media_cancel_action = 2130968621;
+			public const int notification_template_big_media = 2130968621;
 			
 			// aapt resource value: 0x7f04002e
-			public const int notification_template_big_media = 2130968622;
+			public const int notification_template_big_media_narrow = 2130968622;
 			
 			// aapt resource value: 0x7f04002f
-			public const int notification_template_big_media_narrow = 2130968623;
+			public const int notification_template_lines = 2130968623;
 			
 			// aapt resource value: 0x7f040030
-			public const int notification_template_lines = 2130968624;
+			public const int notification_template_media = 2130968624;
 			
 			// aapt resource value: 0x7f040031
-			public const int notification_template_media = 2130968625;
+			public const int notification_template_part_chronometer = 2130968625;
 			
 			// aapt resource value: 0x7f040032
-			public const int notification_template_part_chronometer = 2130968626;
+			public const int notification_template_part_time = 2130968626;
 			
 			// aapt resource value: 0x7f040033
-			public const int notification_template_part_time = 2130968627;
+			public const int PotentialTableItem = 2130968627;
 			
 			// aapt resource value: 0x7f040034
 			public const int select_dialog_item_material = 2130968628;

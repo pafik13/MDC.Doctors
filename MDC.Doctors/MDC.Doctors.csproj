@@ -104,6 +104,8 @@
     <Compile Include="Lib\Fragments\DoctorWorkPlacesFragment.cs" />
     <Compile Include="Lib\Interfaces\ISave.cs" />
     <Compile Include="Lib\Adapters\HospitalSuggestionAdapter.cs" />
+    <Compile Include="Lib\Entities\PotentialData.cs" />
+    <Compile Include="Lib\Entities\Specialty.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -142,7 +144,7 @@
     <AndroidResource Include="Resources\layout\DoctorTableItem.axml" />
     <AndroidResource Include="Resources\layout\LoadData.axml" />
     <AndroidResource Include="Resources\layout\Attendance.axml" />
-    <AndroidResource Include="Resources\layout\DrugBrandInfoItem.axml" />
+    <AndroidResource Include="Resources\layout\PotentialTableItem.axml" />
     <AndroidResource Include="Resources\layout\InfoTableHeader.axml" />
     <AndroidResource Include="Resources\layout\InfoTableItem.axml" />
     <AndroidResource Include="Resources\layout\InfoDataTableItem.axml" />

@@ -1,59 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:minWidth="25px"
-	android:minHeight="25px"
-	android:layout_marginLeft="20dp"
-	android:layout_marginRight="20dp"
-	android:layout_width="760dp"
-	android:layout_height="wrap_content"
-	android:id="@+id/wpiContentGL"
-	android:columnCount="4">
-	<TextView
-		android:text="#1"
-		android:layout_rowSpan="3"
-		android:layout_height="0dp"
-		android:layout_gravity="fill_vertical"
-		android:layout_width="40dp"
-		android:gravity="center"
-		android:textColor="@android:color/black" />
-	<AutoCompleteTextView
-		android:id="@+id/wpiHospitalACTV"
-		android:layout_columnSpan="2"
-		android:layout_width="0dp"
-		android:layout_gravity="fill_horizontal"
-		android:layout_height="50dp"
-		android:hint="Лечебно-Профилактическое Учреждение" />
-	<Button
-		android:layout_width="50dp"
-		android:layout_height="50dp"
-		android:text="@string/ok_button" />
-	<EditText
-		android:id="@+id/wpiCabinetET"
-		android:inputType="textMultiLine"
-		android:hint="Кабинет"
-		android:layout_column="1"
-		android:layout_width="200dp"
-		android:layout_height="140dp"
-		android:layout_margin="10dp"
-		android:gravity="top"
-		android:textColor="@android:color/black" />
-	<EditText
-		android:id="@+id/wpiTimetableET"
-		android:inputType="textMultiLine"
-		android:hint="Расписание"
-		android:layout_column="2"
-		android:layout_columnSpan="2"
-		android:layout_width="480dp"
-		android:layout_height="140dp"
-		android:layout_margin="10dp"
-		android:gravity="top"
-		android:textColor="@android:color/black" />
-	<Switch
-		android:id="@+id/wpiIsMainS"
-		android:text="IsMain"
-		android:gravity="center"
-		android:layout_columnSpan="4"
-		android:layout_width="0dp"
-		android:layout_gravity="fill_horizontal"
-		android:textColor="@android:color/black" />
+    android:minWidth="25px"
+    android:minHeight="25px"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginBottom="10dp"
+    android:layout_width="760dp"
+    android:layout_height="wrap_content"
+    android:id="@+id/wpiContentGL"
+    android:columnCount="4">
+    <TextView
+        android:text="#1"
+        android:layout_rowSpan="3"
+        android:layout_height="0dp"
+        android:layout_gravity="fill_vertical"
+        android:layout_width="40dp"
+        android:gravity="center"
+        android:textColor="@android:color/black" />
+    <AutoCompleteTextView
+        android:id="@+id/wpiHospitalACTV"
+        android:layout_columnSpan="2"
+        android:layout_width="0dp"
+        android:layout_gravity="fill_horizontal"
+        android:layout_height="50dp"
+        android:hint="Лечебно-Профилактическое Учреждение" />
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="@string/ok_button" />
+    <EditText
+        android:id="@+id/wpiCabinetET"
+        android:inputType="textMultiLine"
+        android:hint="Кабинет"
+        android:layout_column="1"
+        android:layout_width="200dp"
+        android:layout_height="140dp"
+        android:layout_margin="10dp"
+        android:gravity="top"
+        android:textColor="@android:color/black" />
+    <EditText
+        android:id="@+id/wpiTimetableET"
+        android:inputType="textMultiLine"
+        android:hint="Расписание"
+        android:layout_column="2"
+        android:layout_columnSpan="2"
+        android:layout_width="480dp"
+        android:layout_height="140dp"
+        android:layout_margin="10dp"
+        android:gravity="top"
+        android:textColor="@android:color/black" />
+    <Switch
+        android:id="@+id/wpiIsMainS"
+        android:text="IsMain"
+        android:gravity="center"
+        android:layout_columnSpan="4"
+        android:layout_width="0dp"
+        android:layout_gravity="fill_horizontal"
+        android:textColor="@android:color/black" />
 </GridLayout>

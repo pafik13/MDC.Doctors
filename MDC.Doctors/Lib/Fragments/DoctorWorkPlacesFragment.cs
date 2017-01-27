@@ -11,14 +11,13 @@ using MDC.Doctors.Lib.Adapters;
 using MDC.Doctors.Lib.Entities;
 using MDC.Doctors.Lib.Interfaces;
 using MDC.Doctors.Lib;
-using System.Collections.Generic;
 
 namespace MDC.Doctors
 {
 	public class DoctorWorkPlacesFragment : V4App.Fragment, ISave
 	{
 		Realm DB;
-		Doctor Doctor;
+		string DoctorUUID;
 		LinearLayout WPTable;
 		
 		public static DoctorWorkPlacesFragment Create(string doctorUUID)
@@ -35,6 +34,7 @@ namespace MDC.Doctors
 			base.OnCreate(savedInstanceState);
 
 			DB = Realm.GetInstance();
+			DoctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID, string.Empty);
 		}
 
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -56,55 +56,64 @@ namespace MDC.Doctors
 		
 		void AddWorkPlace(WorkPlace workPlace = null)
 		{
-			var workPlaceItem = Activity.LayoutInflater.Inflate(Resource.Layout.WorkPlaceItem, WPTable, true);
+			var workPlaceItem = Activity.LayoutInflater.Inflate(Resource.Layout.WorkPlaceItem, WPTable, false);
 			var hospital = workPlaceItem.FindViewById<AutoCompleteTextView>(Resource.Id.wpiHospitalACTV);
 			var cabinet = workPlaceItem.FindViewById<EditText>(Resource.Id.wpiCabinetET);
 			var timetable = workPlaceItem.FindViewById<EditText>(Resource.Id.wpiTimetableET);
-		
+			var isMain = workPlaceItem.FindViewById<Switch>(Resource.Id.wpiIsMainS);
+
 			if (workPlace != null) {
 				workPlaceItem.SetTag(Resource.String.WorkPlaceUUID, workPlace.UUID);
 				workPlaceItem.SetTag(Resource.String.IsChanged, false);
 				hospital.SetTag(Resource.String.HospitalUUID, workPlace.Hospital);
 				cabinet.Text = workPlace.Cabinet;
 				timetable.Text = workPlace.Timetable;
-				var isMain = workPlaceItem.FindViewById<Switch>(Resource.Id.wpiIsMainS);
 				isMain.Checked = workPlace.IsMain;
-				isMain.CheckedChange += (s,e) => {
-					if (e.Checked) {
-						// TODO: simplify
-						var switcher = (Switch)s;
-						var parent =  (GridLayout)switcher.parent;
-						parent.SetTag(Resource.String.IsChanged, true);
-						var parent_parent =  (LinearLayout)parent;
-						for(int c = 0; c < parent_parent.ChildCount; c++){
-							var item = parent_parent.GetChildAt(c);
-							if (item.id == parent.id) continue;
-							var otherSwitcher = item.FindViewById<Switch>(Resource.Id.wpiIsMainS);
-							if (otherSwitcher.Checked) {
-								otherSwitcher.Checked = false;
-							}
+			}
+
+			isMain.CheckedChange += (s, e) =>
+			{
+				if (e.IsChecked)
+				{
+					// TODO: simplify
+					var switcher = (Switch)s;
+					var parent = switcher.Parent as GridLayout;
+					parent.SetTag(Resource.String.IsChanged, true);
+					var parent_parent = parent.Parent as LinearLayout;
+					int index = parent_parent.IndexOfChild(parent);
+					for (int c = 0; c < parent_parent.ChildCount; c++)
+					{
+						var item = parent_parent.GetChildAt(c);
+						if (parent_parent.IndexOfChild(item) == index) continue;
+						var otherSwitcher = item.FindViewById<Switch>(Resource.Id.wpiIsMainS);
+						if (otherSwitcher.Checked)
+						{
+							otherSwitcher.Checked = false;
 						}
 					}
-				};
-			}
-			
+				}
+			};
+
 			hospital.Adapter = new HospitalSuggestionAdapter(Activity);
 			hospital.ItemClick += (sender, e) => {
 				var actv = ((AutoCompleteTextView)sender);
 				var hospitalHolder = (actv.Adapter as HospitalSuggestionAdapter)[e.Position];
 				actv.SetTag(Resource.String.HospitalUUID, hospitalHolder.UUID);
 				
-				var parent =  (GridLayout)actv.parent;	
+				var parent =  (GridLayout)actv.Parent;	
 				parent.SetTag(Resource.String.IsChanged, true);
 			};
-			cabinet.AfterChange += EditTextAfterChange;
-			timetable.AfterChange += EditTextAfterChange;
+			cabinet.AfterTextChanged += EditTextAfterTextChanged;
+			timetable.AfterTextChanged += EditTextAfterTextChanged;
+
+			WPTable.AddView(workPlaceItem);
 		}
-		
-		void EditTextAfterChange(sender, args){
+
+		void EditTextAfterTextChanged(object sender, Android.Text.AfterTextChangedEventArgs e)
+		{
 			// TODO: simplify
-			var editText = (EditText)s;
-			var parent =  (GridLayout)editText.parent;	
+			var editText = (EditText)sender;
+			var parent =  (GridLayout)editText.Parent;	
 			parent.SetTag(Resource.String.IsChanged, true);			
 		}
 
@@ -142,7 +151,9 @@ namespace MDC.Doctors
 		}
 
 		public void Save()
-		{	
+		{
+			//if (string.IsNullOrEmpty(DoctorUUID) && string.IsNullOrEmpty(doctorUUID)) return;
+
 			if (WPTable.ChildCount > 0)
 			{
 				using(var trans = DB.BeginWrite())
@@ -171,15 +182,15 @@ namespace MDC.Doctors
 							
 							if (wp == null) continue;
 							
-							wp.Doctor = Doctor.UUID;
+							//wp.Doctor = string.IsNullOrEmpty(DoctorUUID) ? doctorUUID : DoctorUUID ;
 							wp.Hospital = hospitalUUID;
 							wp.IsMain = item.FindViewById<Switch>(Resource.Id.wpiIsMainS).Checked;
 							wp.Cabinet = item.FindViewById<EditText>(Resource.Id.wpiCabinetET).Text;
 							wp.Timetable = item.FindViewById<EditText>(Resource.Id.wpiTimetableET).Text;
 							
-							if (wp.IsMain) {
-								Doctor.MainWorkPlace = wp.UUID;
-							}
+							//if (wp.IsMain) {
+							//	Doctor.MainWorkPlace = wp.UUID;
+							//}
 						}
 					}
 					

@@ -72,7 +72,7 @@ namespace MDC.Doctors
 			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID);
 			Doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
 			
-			var speciality = DBHelper.Get<Speciality>(DB, Doctor.Speciality);
+			var speciality = DBHelper.Get<Specialty>(DB, Doctor.Specialty);
 			mainView.FindViewById<TextView>(Resource.Id.ifDoctorTV).Text = string.Concat(Doctor.Name, ", ", speciality.name);
 			
 			var mainWorkPlace = DBHelper.Get<WorkPlace>(DB, Doctor.MainWorkPlace);
@@ -96,15 +96,15 @@ namespace MDC.Doctors
 			PotentialTable.WeightSum = 3; //brands.Count();
 			for (int b = 0; b < brands.Count; b++)
 			{
-				var row = inflater.Inflate(Resource.Layout.DrugBrandInfoItem, PotentialTable, false);
-				row.FindViewById<TextView>(Resource.Id.dbiiDrugBrandS).Text = brands[b].name;
+				var row = inflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
+				row.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = brands[b].name;
 				// row.LayoutParameters = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WrapContent, 1) { 
 					// BottomMargin = 2, TopMargin = 2, LeftMargin = 2, RightMargin = 2 
 				// };
 				PotentialTable.AddView(row);
 			}
 
-			mainView.FindViewById<ImageView>(Resource.Id.aaDrugBrandInfoLRigthArrow).Click += (s, e) =>
+			mainView.FindViewById<ImageView>(Resource.Id.aaPotentialRigthArrow).Click += (s, e) =>
 			{
 				for (int c = 0; c < PotentialTable.ChildCount; c++)
 				{
@@ -119,7 +119,7 @@ namespace MDC.Doctors
 				}
 			};
 
-			mainView.FindViewById<ImageView>(Resource.Id.aaDrugBrandInfoLeftArrow).Click += (s, e) =>
+			mainView.FindViewById<ImageView>(Resource.Id.aaPotentialLeftArrow).Click += (s, e) =>
 			{
 				for (int c = PotentialTable.ChildCount - 1; c >= 0; c--)
 				{

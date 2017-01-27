@@ -133,7 +133,7 @@ namespace MDC.Doctors.Lib
 			return db.All<T>();
 		}
 
-		public static T Get<T>(Realm db, string UUID) where T : RealmObject, IEntityFromClient
+		public static T Get<T>(Realm db, string UUID) where T : RealmObject
 		{
 			if (db == null)
 			{
