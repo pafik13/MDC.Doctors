@@ -39,8 +39,50 @@ namespace MDC.Doctors.Fragments
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
 			base.OnCreateView(inflater, container, savedInstanceState);
+			var view = inflater.Inflate(Resource.Layout.DoctorMainInfoFragment, container, false);
+			
+			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID);
+			if (string.IsNullOrEmpty(doctorUUID)) return view;
 
-			return inflater.Inflate(Resource.Layout.DoctorMainInfoFragment, container, false);
+			// Doctor = MainDatabase.Get<Doctor>(doctorUUID);
+
+			// var shared = Activity.GetSharedPreferences(MainActivity.C_MAIN_PREFS, FileCreationMode.Private);
+
+			// var agentUUID = shared.GetString(SigninDialog.C_AGENT_UUID, string.Empty);
+			// try {
+				// Agent = MainDatabase.GetItem<Agent>(agentUUID);
+			// } catch (Exception ex) {
+				// Console.WriteLine(ex.Message);
+				// Agent = null;
+			// }
+
+			#region State
+			State = view.FindViewById<Spinner>(Resource.Id.dmifStateS);
+			var stateAdapter = new ArrayAdapter(Activity, Android.Resource.Layout.SimpleSpinnerItem, Doctor.GetStates());
+			stateAdapter.SetDropDownViewResource(Resource.Layout.SpinnerItem);
+			State.Adapter = stateAdapter;
+			State.SetSelection((int)Doctor.GetState());
+			#endregion
+
+			view.FindViewById<EditText>(Resource.Id.dmifNameET).Text = Doctor.Name;
+			
+			#region Specialty
+			view.FindViewById<AutoCompleteTextView>(Resource.Id.dmifSpecialtyACTV).Text = Doctor.Specialty;
+			#endregion
+			
+			view.FindViewById<EditText>(Resource.Id.dmifSpecialismET).Text = Doctor.Specialism;
+
+			#region Position
+			view.FindViewById<AutoCompleteTextView>(Resource.Id.dmifPositionACTV).Text = Doctor.Position;
+			#endregion
+			
+			view.FindViewById<EditText>(Resource.Id.dmifPhoneET).Text = Doctor.Phone;
+			view.FindViewById<EditText>(Resource.Id.dmifEmailET).Text = Doctor.Email;
+			view.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInActionsCB).Checked = Doctor.CanParticipateInActions;
+			view.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInConferenceCB).Checked = Doctor.CanParticipateInConference;
+			view.FindViewById<EditText>(Resource.Id.dmifCommentET).Text = Doctor.Comment;
+			
+			return 
 		}
 
 		public override void OnResume()
@@ -91,12 +133,11 @@ namespace MDC.Doctors.Fragments
 				else
 				{
 					item = Doctor;
+					item.SetState((DoctorState)State.SelectedItemPosition);
 				}
 
 				item.UpdatedAt = DateTimeOffset.Now;
 				item.IsSynced = false;
-				item.SetState(DoctorState.dsActive);
-				//item.SetState((PharmacyState)State.SelectedItemPosition);
 				item.Name = View.FindViewById<EditText>(Resource.Id.dmifNameET).Text;
 				item.Specialty = View.FindViewById<AutoCompleteTextView>(Resource.Id.dmifSpecialtyACTV).Text;
 				item.Specialism = View.FindViewById<EditText>(Resource.Id.dmifSpecialismET).Text;

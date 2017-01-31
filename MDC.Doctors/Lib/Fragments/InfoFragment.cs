@@ -149,7 +149,107 @@ namespace MDC.Doctors
 			Locker = mainView.FindViewById<TextView>(Resource.Id.locker);
 			Arrow = mainView.FindViewById<ImageView>(Resource.Id.arrow);
 
+			aaPotentialBrandsB
+			
 			return mainView;
+		}
+		
+		void Brand_Click(object sender, EventArgs e)
+		{
+			var button = (Button)sender;
+			var parent = button.Parent as LinearLayout;
+			var potentialTable = parent.FindViewById<LinearLayout>(Resource.Id.aaPotentialTable);
+			
+			
+			var cacheBrands = new List<string>();
+			for (int c = 0; c < potentialTable.ChildCount; c++) {
+				var row = potentialTable.GetChildAt(c) as LinearLayout;
+				var brandUUID = (string)row.GetTag(Resource.String.PDBrand);
+				if (string.IsNullOrEmpty(brandUUID)) continue;
+				cacheBrands.Add(brandUUID);
+			}
+
+			bool isCacheBrandsWasEmpty = cacheBrands.Count == 0;
+			bool[] checkedItems = new bool[Brands.Count];
+			if (!isCacheBrandsWasEmpty) {
+				for (int i = 0; i < Brands.Count; i++) {
+					checkedItems[i] = cacheBrands.Contains(Brands[i].uuid);
+				}
+			}
+
+			new Android.App.AlertDialog.Builder(Activity)
+					   .SetTitle("Выберите бренды:")
+					   .SetCancelable(false)
+					   .SetMultiChoiceItems(
+				           Brands.Select(item => item.name).ToArray(),
+						   checkedItems,
+						   (caller, arguments) => {
+							   if (arguments.IsChecked) {
+								   cacheBrands.Add(Brands[arguments.Which].uuid);
+							   } else {
+								   cacheBrands.Remove(Brands[arguments.Which].uuid);
+							   }
+						   }
+					   )
+						.SetPositiveButton(
+						   "Сохранить",
+						   (caller, arguments) => {
+							   if (cacheBrands.Count == 0){
+								   	brandTable.RemoveAllViews();
+									var emptyRow = Inflater.Inflate(Resource.Layout.InfoPresentationSubItem, brandTable, false);
+									emptyRow.FindViewById<TextView>(Resource.Id.ipsiBrandTV).Click += Brand_Click;
+									emptyRow.FindViewById<TextView>(Resource.Id.ipsiWorkTypesTV).Click += WorkTypes_Click;
+									brandTable.AddView(emptyRow);
+							   }
+							   
+							   if (isCacheBrandsWasEmpty) {
+								   potentialTable.RemoveAllViews();
+								   
+								   foreach (var brandUUID in cacheBrands) {
+									   var row = Inflater.Inflate(Resource.Layout.PotentialTableItem, potentialTable, false);
+									   row.SetTag(Resource.String.PDBrand, brandUUID);
+									   row.FindViewById<TextView>(Resource.Id.ipsiBrandTV).Text = Brands.Single(b => b.uuid == brandUUID).name;
+									   //row.FindViewById<TextView>(Resource.Id.ipsiBrandTV).Click += Brand_Click;
+									   //row.FindViewById<TextView>(Resource.Id.ipsiWorkTypesTV).Click += WorkTypes_Click;
+									   potentialTable.AddView(row);
+								   }
+							   } else {
+								    var viewsWhichDelete = new List<View>();
+									for (int c = 0; c < brandTable.ChildCount; c++) {
+										var row = brandTable.GetChildAt(c);
+										var brandUUID = (string)row.GetTag(Resource.String.PDBrand);
+										if (string.IsNullOrEmpty(brandUUID)) continue;
+										bool isExists = false;
+										foreach (var item in cacheBrands) {
+											if (brandUUID == item) {
+												cacheBrands.Remove(item);
+												isExists = true;
+												break;
+											}
+										}
+									   if (!isExists) {
+										   viewsWhichDelete.Add(row);
+									   }
+									}
+									
+									foreach (var view in viewsWhichDelete) {
+										brandTable.RemoveView(view);
+									}
+
+									foreach (var brandUUID in cacheBrands) {
+										var row = Inflater.Inflate(Resource.Layout.InfoPresentationSubItem, brandTable, false);
+										row.SetTag(Resource.String.PDBrand, brandUUID);
+										row.FindViewById<TextView>(Resource.Id.ipsiBrandTV).Text = Brands.Single(b => b.uuid == brandUUID).name;
+										row.FindViewById<TextView>(Resource.Id.ipsiBrandTV).Click += Brand_Click;
+										row.FindViewById<TextView>(Resource.Id.ipsiWorkTypesTV).Click += WorkTypes_Click;
+										brandTable.AddView(row);
+									}
+							   }
+								(caller as Android.App.Dialog).Dispose();
+						   }
+						)
+						.SetNegativeButton(@"Отмена", (caller, arguments) => { (caller as Android.App.Dialog).Dispose(); })
+						.Show();
 		}
 
 		void AddInfoItem(Attendance attendance, bool atTop = false, bool isEditable = false)

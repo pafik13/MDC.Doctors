@@ -21,7 +21,16 @@ namespace MDC.Doctors.Lib.Entities
 	{
 		dsActive, dsReserve, dsFired
 	}
-
+	
+	public static string[] GetStates()
+	{
+		var states = new string[3];
+		states[0] = "Актив";
+		states[1] = "Резерв";
+		states[2] = "Уволен";
+		return states;
+	}
+	
 	/// <summary>
 	/// Врач/медработник.
 	/// </summary>
