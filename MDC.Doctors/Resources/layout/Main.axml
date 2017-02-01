@@ -128,12 +128,6 @@
                 android:paddingLeft="24dp"
                 android:layout_alignParentLeft="true" />
         </RelativeLayout>
-        <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/maUpPanelRL"
-            android:id="@+id/myButton" />
     </RelativeLayout>
     <RelativeLayout
         android:visibility="gone"

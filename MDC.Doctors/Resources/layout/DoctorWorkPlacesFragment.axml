@@ -24,8 +24,7 @@
                 android:minHeight="100dp"
                 android:layout_width="800dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/dwpfMainLL"
-                android:background="@android:color/white" />
+                android:id="@+id/dwpfMainLL" />
             <Button
                 android:id="@+id/dwpfAddB"
                 android:text="ДОБАВИТЬ"

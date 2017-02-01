@@ -151,7 +151,7 @@
                         android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
                         android:layout_width="56dp"
                         android:layout_height="match_parent"
-                        android:id="@+id/aaPotentialRigthArrow" />
+                        android:id="@+id/aaPotentialBrandsB" />
                 </LinearLayout>
                 <Button
                     android:text="Выбрать препараты для определения потенциала врача"
