@@ -11,6 +11,7 @@ using V4App = Android.Support.V4.App;
 
 using MDC.Doctors.Lib.Adapters;
 using MDC.Doctors.Lib.Entities;
+using System.Linq;
 
 namespace MDC.Doctors.Lib.Fragments
 {
@@ -44,13 +45,23 @@ namespace MDC.Doctors.Lib.Fragments
 			var mainView = inflater.Inflate(Resource.Layout.DoctorWorkPlacesFragment, container, false);
 			
 			WPTable = mainView.FindViewById<LinearLayout>(Resource.Id.dwpfMainLL);
-			AddWorkPlace();
 
 			mainView.FindViewById<Button>(Resource.Id.dwpfAddB).Click += (s, e) =>
 			{
 				AddWorkPlace();
 			};
+			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID);
+			if (string.IsNullOrEmpty(doctorUUID))
+			{
+				AddWorkPlace();
+				return mainView;
+			}
 
+			var workPlaces = DBHelper.GetAll<WorkPlace>(DB).Where(wp => wp.Doctor == doctorUUID);
+			foreach (var place in workPlaces)
+			{
+				AddWorkPlace(place);
+			}
 			return mainView;
 		}
 		

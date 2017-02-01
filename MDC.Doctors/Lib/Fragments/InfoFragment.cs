@@ -12,6 +12,7 @@ using Realms;
 
 using MDC.Doctors.Lib.Entities;
 using MDC.Doctors.Lib.Interfaces;
+using System.Collections.Generic;
 
 namespace MDC.Doctors.Lib.Fragments
 {
@@ -21,6 +22,8 @@ namespace MDC.Doctors.Lib.Fragments
 		SD.Stopwatch Chrono;
 		Realm DB;
 		Doctor Doctor;
+
+		List<DrugBrand> Brands;
 
 		LinearLayout PotentialTable;
 		LinearLayout InfoTable;
@@ -77,8 +80,9 @@ namespace MDC.Doctors.Lib.Fragments
 			var mainWorkPlace = DBHelper.Get<WorkPlace>(DB, Doctor.MainWorkPlace);
 			var hospital = DBHelper.GetHospital(DB, mainWorkPlace.Hospital);
 			mainView.FindViewById<TextView>(Resource.Id.ifHospitalTV).Text = string.Concat(hospital.GetName(), ", ", hospital.GetAddress(), ", ", hospital.GetPhone());
-			
-			
+
+			Brands = DBHelper.GetList<DrugBrand>(DB);
+
 			var attendanceLastOrNewUUID = Arguments.GetString(Consts.C_ATTENDANCE_UUID);
 			if (!string.IsNullOrEmpty(attendanceLastOrNewUUID))
 			{
@@ -89,19 +93,8 @@ namespace MDC.Doctors.Lib.Fragments
 				mainView.FindViewById<EditText>(Resource.Id.ifGoalsET).Text = string.Join(", ", infoDatas.Select(iData => iData.Goal));
 			}
 
-			var brands = DBHelper.GetList<DrugBrand>(DB);
-
 			PotentialTable = mainView.FindViewById<LinearLayout>(Resource.Id.aaPotentialTable);
 			PotentialTable.WeightSum = 3; //brands.Count();
-			for (int b = 0; b < brands.Count; b++)
-			{
-				var row = inflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
-				row.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = brands[b].name;
-				// row.LayoutParameters = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WrapContent, 1) { 
-					// BottomMargin = 2, TopMargin = 2, LeftMargin = 2, RightMargin = 2 
-				// };
-				PotentialTable.AddView(row);
-			}
 
 			mainView.FindViewById<ImageView>(Resource.Id.aaPotentialRigthArrow).Click += (s, e) =>
 			{
@@ -148,106 +141,78 @@ namespace MDC.Doctors.Lib.Fragments
 			Locker = mainView.FindViewById<TextView>(Resource.Id.locker);
 			Arrow = mainView.FindViewById<ImageView>(Resource.Id.arrow);
 
-			aaPotentialBrandsB
+			mainView.FindViewById<Button>(Resource.Id.aaPotentialBrandsB).Click += PotentialBrands_Click;
 			
 			return mainView;
 		}
-		
-		void Brand_Click(object sender, EventArgs e)
+
+		void AddPotentialItem(DrugBrand brand)
 		{
-			var button = (Button)sender;
-			var parent = button.Parent as LinearLayout;
-			var potentialTable = parent.FindViewById<LinearLayout>(Resource.Id.aaPotentialTable);
-			
-			
-			var cacheBrands = new List<string>();
-			for (int c = 0; c < potentialTable.ChildCount; c++) {
-				var row = potentialTable.GetChildAt(c) as LinearLayout;
-				var brandUUID = (string)row.GetTag(Resource.String.PDBrand);
+			var row = Activity.LayoutInflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
+			row.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = brand.name;
+			row.SetTag(Resource.String.DrugBrandUUID, brand.uuid);
+			PotentialTable.AddView(row);
+		}
+
+		void AddPotentialItem(PotentialData potential)
+		{
+			var row = Activity.LayoutInflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
+			row.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = potential.UUID;
+			row.SetTag(Resource.String.DrugBrandUUID, potential.Brand);
+			PotentialTable.AddView(row);
+		}
+
+		void PotentialBrands_Click(object sender, EventArgs e)
+		{
+			//var button = (Button)sender;
+			//var parent = button.Parent as LinearLayout;
+			//var potentialTable = parent.FindViewById<LinearLayout>(Resource.Id.aaPotentialTable);
+
+			var cacheBrands = new Dictionary<string, bool>(Brands.Count);
+			for (int b = 0; b < Brands.Count; b++)
+			{
+				cacheBrands.Add(Brands[b].uuid, false);
+			}
+
+			var cacheViews = new Dictionary<string, View>(Brands.Count);
+			for (int c = 0; c < PotentialTable.ChildCount; c++) {
+				var row = PotentialTable.GetChildAt(c) as TableLayout;
+				var brandUUID = (string)row.GetTag(Resource.String.DrugBrandUUID);
 				if (string.IsNullOrEmpty(brandUUID)) continue;
-				cacheBrands.Add(brandUUID);
+				cacheBrands[brandUUID] = true;
+				cacheViews.Add(brandUUID, row);
 			}
-
-			bool isCacheBrandsWasEmpty = cacheBrands.Count == 0;
-			bool[] checkedItems = new bool[Brands.Count];
-			if (!isCacheBrandsWasEmpty) {
-				for (int i = 0; i < Brands.Count; i++) {
-					checkedItems[i] = cacheBrands.Contains(Brands[i].uuid);
-				}
-			}
-
+			
 			new Android.App.AlertDialog.Builder(Activity)
 					   .SetTitle("Выберите бренды:")
 					   .SetCancelable(false)
 					   .SetMultiChoiceItems(
 				           Brands.Select(item => item.name).ToArray(),
-						   checkedItems,
+				           cacheBrands.Values.ToArray(),
 						   (caller, arguments) => {
-							   if (arguments.IsChecked) {
-								   cacheBrands.Add(Brands[arguments.Which].uuid);
-							   } else {
-								   cacheBrands.Remove(Brands[arguments.Which].uuid);
-							   }
+								cacheBrands[Brands[arguments.Which].uuid] = arguments.IsChecked;
 						   }
 					   )
 						.SetPositiveButton(
 						   "Сохранить",
 						   (caller, arguments) => {
-							   if (cacheBrands.Count == 0){
-								   	brandTable.RemoveAllViews();
-									var emptyRow = Inflater.Inflate(Resource.Layout.InfoPresentationSubItem, brandTable, false);
-									emptyRow.FindViewById<TextView>(Resource.Id.ipsiBrandTV).Click += Brand_Click;
-									emptyRow.FindViewById<TextView>(Resource.Id.ipsiWorkTypesTV).Click += WorkTypes_Click;
-									brandTable.AddView(emptyRow);
-							   }
-							   
-							   if (isCacheBrandsWasEmpty) {
-								   potentialTable.RemoveAllViews();
-								   
-								   foreach (var brandUUID in cacheBrands) {
-									   var row = Inflater.Inflate(Resource.Layout.PotentialTableItem, potentialTable, false);
-									   row.SetTag(Resource.String.PDBrand, brandUUID);
-									   row.FindViewById<TextView>(Resource.Id.ipsiBrandTV).Text = Brands.Single(b => b.uuid == brandUUID).name;
-									   //row.FindViewById<TextView>(Resource.Id.ipsiBrandTV).Click += Brand_Click;
-									   //row.FindViewById<TextView>(Resource.Id.ipsiWorkTypesTV).Click += WorkTypes_Click;
-									   potentialTable.AddView(row);
+								foreach (var brand in Brands)
+								{
+								   if (cacheViews.ContainsKey(brand.uuid))
+								   {
+									   if (cacheBrands[brand.uuid]) continue;
+									   PotentialTable.RemoveView(cacheViews[brand.uuid]);
+									   continue;
+									}
+								   if (cacheBrands[brand.uuid])
+								   {
+									   AddPotentialItem(brand);
 								   }
-							   } else {
-								    var viewsWhichDelete = new List<View>();
-									for (int c = 0; c < brandTable.ChildCount; c++) {
-										var row = brandTable.GetChildAt(c);
-										var brandUUID = (string)row.GetTag(Resource.String.PDBrand);
-										if (string.IsNullOrEmpty(brandUUID)) continue;
-										bool isExists = false;
-										foreach (var item in cacheBrands) {
-											if (brandUUID == item) {
-												cacheBrands.Remove(item);
-												isExists = true;
-												break;
-											}
-										}
-									   if (!isExists) {
-										   viewsWhichDelete.Add(row);
-									   }
-									}
-									
-									foreach (var view in viewsWhichDelete) {
-										brandTable.RemoveView(view);
-									}
-
-									foreach (var brandUUID in cacheBrands) {
-										var row = Inflater.Inflate(Resource.Layout.InfoPresentationSubItem, brandTable, false);
-										row.SetTag(Resource.String.PDBrand, brandUUID);
-										row.FindViewById<TextView>(Resource.Id.ipsiBrandTV).Text = Brands.Single(b => b.uuid == brandUUID).name;
-										row.FindViewById<TextView>(Resource.Id.ipsiBrandTV).Click += Brand_Click;
-										row.FindViewById<TextView>(Resource.Id.ipsiWorkTypesTV).Click += WorkTypes_Click;
-										brandTable.AddView(row);
-									}
-							   }
+								}
 								(caller as Android.App.Dialog).Dispose();
 						   }
 						)
-						.SetNegativeButton(@"Отмена", (caller, arguments) => { (caller as Android.App.Dialog).Dispose(); })
+						.SetNegativeButton("Отмена", (caller, arguments) => { (caller as Android.App.Dialog).Dispose(); })
 						.Show();
 		}
 

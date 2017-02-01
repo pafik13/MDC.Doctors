@@ -38,6 +38,16 @@ namespace MDC.Doctors
 			SetContentView(Resource.Layout.Main);
 
             DoctorTable = FindViewById<ListView>(Resource.Id.maDoctorTable);
+			DoctorTable.ItemClick += (sender, e) =>
+			{
+				var table = sender as ListView;
+				var adapter = table.Adapter as DoctorAdapter;
+				var doctor = adapter[e.Position];
+				var intent = new Intent(this, typeof(DoctorActivity));
+				intent.PutExtra(Consts.C_DOCTOR_UUID, doctor.UUID);
+				StartActivity(intent);
+			};
+
 
 			var add = FindViewById<ImageView>(Resource.Id.maAdd);
 			add.Click += (sender, e) =>

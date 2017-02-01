@@ -27,7 +27,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height" />
                 <TextView
@@ -37,7 +37,8 @@
                     android:layout_gravity="center_vertical"
                     style="@style/form_control_static"
                     android:layout_width="416dp"
-                    android:layout_height="@dimen/row_height" />
+                    android:layout_height="@dimen/row_height"
+                    android:gravity="center_vertical" />
             </TableRow>
             <TableRow
                 android:id="@+id/dmifRowState">
@@ -46,7 +47,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height" />
                 <Spinner
@@ -62,7 +63,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height" />
                 <EditText
@@ -84,7 +85,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height" />
                 <AutoCompleteTextView
@@ -106,7 +107,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height" />
                 <EditText
@@ -127,7 +128,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height" />
                 <AutoCompleteTextView
@@ -149,7 +150,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height" />
                 <EditText
@@ -170,7 +171,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height" />
                 <EditText
@@ -191,7 +192,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height" />
                 <CheckBox
@@ -209,7 +210,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height" />
                 <CheckBox
@@ -227,7 +228,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height" />
                 <TextView
@@ -246,7 +247,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height" />
                 <TextView
@@ -265,7 +266,7 @@
                     android:layout_column="0"
                     android:background="@android:color/background_light"
                     style="@style/control_label"
-					android:gravity="end|center_vertical"
+                    android:gravity="end|center_vertical"
                     android:layout_width="272dp"
                     android:layout_height="@dimen/row_height_x2"
                     android:layout_marginBottom="10dp" />

@@ -18,6 +18,9 @@ namespace MDC.Doctors.Lib.Fragments
 		Realm DB;
 		Doctor Doctor;
 
+		Spinner State;
+
+
 		public static DoctorMainInfoFragment Create(string doctorUUID)
 		{
 			var fragment = new DoctorMainInfoFragment();
@@ -39,11 +42,16 @@ namespace MDC.Doctors.Lib.Fragments
 			base.OnCreateView(inflater, container, savedInstanceState);
 
 			var view = inflater.Inflate(Resource.Layout.DoctorMainInfoFragment, container, false);
-			
+
+			State = view.FindViewById<Spinner>(Resource.Id.dmifStateS);
+			var stateAdapter = new ArrayAdapter(Activity, Android.Resource.Layout.SimpleSpinnerItem, Doctor.GetStates());
+			stateAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerItem);
+			State.Adapter = stateAdapter;
+
 			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID);
 			if (string.IsNullOrEmpty(doctorUUID)) return view;
 
-			// Doctor = MainDatabase.Get<Doctor>(doctorUUID);
+			Doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
 
 			// var shared = Activity.GetSharedPreferences(MainActivity.C_MAIN_PREFS, FileCreationMode.Private);
 
@@ -56,10 +64,6 @@ namespace MDC.Doctors.Lib.Fragments
 			// }
 
 			#region State
-			State = view.FindViewById<Spinner>(Resource.Id.dmifStateS);
-			var stateAdapter = new ArrayAdapter(Activity, Android.Resource.Layout.SimpleSpinnerItem, Doctor.GetStates());
-			stateAdapter.SetDropDownViewResource(Resource.Layout.SpinnerItem);
-			State.Adapter = stateAdapter;
 			State.SetSelection((int)Doctor.GetState());
 			#endregion
 
@@ -124,47 +128,22 @@ namespace MDC.Doctors.Lib.Fragments
 			}
 
 
-			// TIP: save section
-			Doctor item;
+			// TIP: save sectio
+			Doctor item = null;
+
 			if (Doctor == null)
 			{
-				Doctor item;
-				if (Doctor == null)
-				{
-					item = DBHelper.Create<Doctor>(DB, transaction);
-					item.SetState(DoctorState.dsActive);
-				}
-				else
-				{
-					item = Doctor;
-					item.SetState((DoctorState)State.SelectedItemPosition);
-				}
-
-				item.UpdatedAt = DateTimeOffset.Now;
-				item.IsSynced = false;
-				item.Name = View.FindViewById<EditText>(Resource.Id.dmifNameET).Text;
-				item.Specialty = View.FindViewById<AutoCompleteTextView>(Resource.Id.dmifSpecialtyACTV).Text;
-				item.Specialism = View.FindViewById<EditText>(Resource.Id.dmifSpecialismET).Text;
-				item.Position = View.FindViewById<AutoCompleteTextView>(Resource.Id.dmifPositionACTV).Text;
-				item.Phone = View.FindViewById<EditText>(Resource.Id.dmifPhoneET).Text;
-				item.Email = View.FindViewById<EditText>(Resource.Id.dmifEmailET).Text;
-				item.CanParticipateInActions = View.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInActionsCB).Checked;
-				item.CanParticipateInConference = View.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInConferenceCB).Checked;
-				item.Comment = View.FindViewById<EditText>(Resource.Id.dmifCommentET).Text;
-
-				if (!item.IsManaged) DBHelper.Save(DB, transaction, item);
-
-				transaction.Commit();
+				item = DBHelper.Create<Doctor>(DB, openedTransaction);
+				item.SetState(DoctorState.dsActive);
 			}
 			else
 			{
 				item = Doctor;
+				item.SetState((DoctorState)State.SelectedItemPosition);
 			}
 
 			item.UpdatedAt = DateTimeOffset.Now;
 			item.IsSynced = false;
-			item.SetState(DoctorState.dsActive);
-			//item.SetState((PharmacyState)State.SelectedItemPosition);
 			item.Name = View.FindViewById<EditText>(Resource.Id.dmifNameET).Text;
 			item.Specialty = View.FindViewById<AutoCompleteTextView>(Resource.Id.dmifSpecialtyACTV).Text;
 			item.Specialism = View.FindViewById<EditText>(Resource.Id.dmifSpecialismET).Text;
