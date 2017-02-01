@@ -18,6 +18,7 @@ using V4App = Android.Support.V4.App;
 using Android.Support.V4.View;
 using Android.Views.InputMethods;
 using MDC.Doctors.Lib.Interfaces;
+using MDC.Doctors.Lib.Fragments;
 
 namespace MDC.Doctors
 {

@@ -4,12 +4,16 @@
 	<string name="app_name">ОФ:Врачи</string>
 
 	<string name="IsChanged">IsChanged</string>
-	
+	<string name="RouteItemOrder">RouteItemOrder</string>
+
 	<string name="DoctorUUID">DoctorUUID</string>
 	<string name="AttendanceUUID">AttendanceUUID</string>
 	<string name="HospitalUUID">HospitalUUID</string>
 	<string name="WorkPlaceUUID">WorkPlaceUUID</string>
-
+	<string name="InfoDataUUID">InfoDataUUID</string>
+	<string name="DrugBrandUUID">DrugBrandUUID</string>
+	
+	<string name="doctor_not_found"><![CDATA[<врач не найден>]]></string>
 
 	<string name="error_caption">Ошибка!</string>
 	<string name="warning_caption">Внимание!</string>

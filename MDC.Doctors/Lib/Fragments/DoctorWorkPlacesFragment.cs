@@ -1,4 +1,6 @@
-﻿using Android.App;
+﻿using System;
+
+using Android.App;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
@@ -9,15 +11,13 @@ using V4App = Android.Support.V4.App;
 
 using MDC.Doctors.Lib.Adapters;
 using MDC.Doctors.Lib.Entities;
-using MDC.Doctors.Lib.Interfaces;
-using MDC.Doctors.Lib;
 
-namespace MDC.Doctors
+namespace MDC.Doctors.Lib.Fragments
 {
-	public class DoctorWorkPlacesFragment : V4App.Fragment, ISave
+	public class DoctorWorkPlacesFragment : V4App.Fragment
 	{
 		Realm DB;
-		string DoctorUUID;
+		//string DoctorUUID;
 		LinearLayout WPTable;
 		
 		public static DoctorWorkPlacesFragment Create(string doctorUUID)
@@ -34,7 +34,7 @@ namespace MDC.Doctors
 			base.OnCreate(savedInstanceState);
 
 			DB = Realm.GetInstance();
-			DoctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID, string.Empty);
+			//DoctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID, string.Empty);
 		}
 
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -146,55 +146,59 @@ namespace MDC.Doctors
 							   .Show();
 				return;
 			}
-			
-			Save();
 		}
 
-		public void Save()
+		public void Save(Transaction openedTransaction, Doctor doctor)
 		{
 			//if (string.IsNullOrEmpty(DoctorUUID) && string.IsNullOrEmpty(doctorUUID)) return;
+			if (openedTransaction == null)
+			{
+				throw new ArgumentNullException(nameof(openedTransaction));
+			}
+
+			if (doctor == null)
+			{
+				throw new ArgumentNullException(nameof(doctor));
+			}
 
 			if (WPTable.ChildCount > 0)
 			{
-				using(var trans = DB.BeginWrite())
+				var list = DBHelper.GetList<WorkPlace>(DB);
+				for(int c = 0; c < WPTable.ChildCount; c++)
 				{
-					var list = DBHelper.GetList<WorkPlace>(DB);
-					for(int c = 0; c < WPTable.ChildCount; c++)
+					var item = WPTable.GetChildAt(c);
+					var workPlaceUUID = (string)item.GetTag(Resource.String.WorkPlaceUUID);
+					var hospital = item.FindViewById<AutoCompleteTextView>(Resource.Id.wpiHospitalACTV);
+					var hospitalUUID = (string)hospital.GetTag(Resource.String.HospitalUUID);
+					if (!string.IsNullOrEmpty(hospitalUUID))
 					{
-						var item = WPTable.GetChildAt(c);
-						var workPlaceUUID = (string)item.GetTag(Resource.String.WorkPlaceUUID);
-						var hospital = item.FindViewById<AutoCompleteTextView>(Resource.Id.wpiHospitalACTV);
-						var hospitalUUID = (string)hospital.GetTag(Resource.String.HospitalUUID);
-						if (!string.IsNullOrEmpty(hospitalUUID))
+						WorkPlace wp = null;
+						if (string.IsNullOrEmpty(workPlaceUUID))
 						{
-							WorkPlace wp = null;
-							if (string.IsNullOrEmpty(workPlaceUUID))
-							{
-								wp = DBHelper.Create<WorkPlace>(DB, trans);
-							}
-							else
-							{
-								bool isChanged = (bool)item.GetTag(Resource.String.IsChanged);
-								if (isChanged) {
-									wp = DBHelper.Get<WorkPlace>(DB, workPlaceUUID);
-								}
-							}
-							
-							if (wp == null) continue;
-							
-							//wp.Doctor = string.IsNullOrEmpty(DoctorUUID) ? doctorUUID : DoctorUUID ;
-							wp.Hospital = hospitalUUID;
-							wp.IsMain = item.FindViewById<Switch>(Resource.Id.wpiIsMainS).Checked;
-							wp.Cabinet = item.FindViewById<EditText>(Resource.Id.wpiCabinetET).Text;
-							wp.Timetable = item.FindViewById<EditText>(Resource.Id.wpiTimetableET).Text;
-							
-							//if (wp.IsMain) {
-							//	Doctor.MainWorkPlace = wp.UUID;
-							//}
+							wp = DBHelper.Create<WorkPlace>(DB, openedTransaction);
 						}
+						else
+						{
+							bool isChanged = (bool)item.GetTag(Resource.String.IsChanged);
+							if (isChanged) {
+								wp = DBHelper.Get<WorkPlace>(DB, workPlaceUUID);
+							}
+						}
+						
+						if (wp == null) continue;
+
+						wp.Doctor = doctor.UUID;
+						wp.Hospital = hospitalUUID;
+						wp.IsMain = item.FindViewById<Switch>(Resource.Id.wpiIsMainS).Checked;
+						wp.Cabinet = item.FindViewById<EditText>(Resource.Id.wpiCabinetET).Text;
+						wp.Timetable = item.FindViewById<EditText>(Resource.Id.wpiTimetableET).Text;
+						
+						if (wp.IsMain) {
+							doctor.MainWorkPlace = wp.UUID;
+						}
+
+						if (!wp.IsManaged) DBHelper.Save(DB, openedTransaction, wp);
 					}
-					
-					trans.Commit();
 				}
 			}
 			return;

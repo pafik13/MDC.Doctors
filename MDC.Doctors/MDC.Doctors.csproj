@@ -106,6 +106,13 @@
     <Compile Include="Lib\Adapters\HospitalSuggestionAdapter.cs" />
     <Compile Include="Lib\Entities\PotentialData.cs" />
     <Compile Include="Lib\Entities\Specialty.cs" />
+    <Compile Include="RouteActivity.cs" />
+    <Compile Include="Lib\Fragments\RouteFragment.cs" />
+    <Compile Include="Lib\Adapters\RouteDayInWeekAdapter.cs" />
+    <Compile Include="Lib\Entities\RouteItem.cs" />
+    <Compile Include="Lib\Entities\RouteSearchItem.cs" />
+    <Compile Include="Lib\Adapters\RouteAdapter.cs" />
+    <Compile Include="Lib\Dialogs\MyDatePickerDialog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -154,6 +161,13 @@
     <AndroidResource Include="Resources\layout\DoctorMainInfoFragment.axml" />
     <AndroidResource Include="Resources\layout\DoctorWorkPlacesFragment.axml" />
     <AndroidResource Include="Resources\layout\InfoFragment.axml" />
+    <AndroidResource Include="Resources\layout\RouteWeek.axml" />
+    <AndroidResource Include="Resources\layout\RouteWeekTableItem.axml" />
+    <AndroidResource Include="Resources\layout\Route.axml" />
+    <AndroidResource Include="Resources\layout\RouteWeekTableHeader.axml" />
+    <AndroidResource Include="Resources\drawable\rightline.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_sync_black_48dp.png" />
+    <AndroidResource Include="Resources\layout\RouteDoctorTableItem.axml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

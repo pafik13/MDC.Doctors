@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using Android.App;
 using Android.Views;
 using Android.Widget;
-using MDC.Doctors.Lib.Interfaces;
+
 using Java.Lang;
+
 using Realms;
+
 using MDC.Doctors.Lib.Entities;
 
 namespace MDC.Doctors.Lib.Adapters
@@ -73,7 +75,7 @@ namespace MDC.Doctors.Lib.Adapters
 
 		public override int Count {
 			get {
-				return ForDisplay == null ? IHospitals.Count() : ForDisplay.Count();
+				return ForDisplay == null ? IHospitals.Length : ForDisplay.Count;
 			}
 		}
 
@@ -119,7 +121,7 @@ namespace MDC.Doctors.Lib.Adapters
 
 				var list = new List<IHospitalHolder>();
 				var search = constraint.ToString();
-				for (int i = 0; i < IHospitals.Count(); i++)
+				for (int i = 0; i < IHospitals.Length; i++)
 				{
 					var item = IHospitals[i];
 					if (item.Name.Contains(search))
@@ -144,7 +146,7 @@ namespace MDC.Doctors.Lib.Adapters
 				}
 
 				results.Values = matchObjects;
-				results.Count = matchObjects.Count();
+				results.Count = list.Count;
 
 				Adapter.SetHospitalsForDisplay(list);
 

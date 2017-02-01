@@ -153,6 +153,26 @@ namespace MDC.Doctors.Lib
 			}
 			return hInputed;
 		}
+
+		public static IList<RouteItem> GetRouteItems(Realm db, DateTimeOffset selectedDate)
+		{
+			if (db == null)
+			{
+				throw new ArgumentNullException(nameof(db));
+			}
+
+			var date = selectedDate.UtcDateTime.Date;
+			var list = new List<RouteItem>();
+			foreach (var routeItem in db.All<RouteItem>())
+			{
+				if (routeItem.Date.Date == date)
+				{
+					list.Add(routeItem);
+				}
+			}
+
+			return list;		
+		}
 	}
 }
 

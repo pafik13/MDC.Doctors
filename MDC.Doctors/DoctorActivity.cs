@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SD = System.Diagnostics;
+﻿using SD = System.Diagnostics;
 
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
 using V4App = Android.Support.V4.App;
 using Android.Support.V4.View;
 
-using MDC.Doctors.Fragments;
-using MDC.Doctors.Lib.Interfaces;
+using Realms;
+
+using MDC.Doctors.Lib.Fragments;
+using MDC.Doctors.Lib.Entities;
 
 namespace MDC.Doctors
 {
@@ -23,6 +20,8 @@ namespace MDC.Doctors
 	public class DoctorActivity : V4App.FragmentActivity, ViewPager.IOnPageChangeListener
 	{
 		public const int C_NUM_PAGES = 2;
+
+		Realm DB;
 
 
 		public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
@@ -88,16 +87,11 @@ namespace MDC.Doctors
 			Pager.AddOnPageChangeListener(this);
 			Pager.Adapter = new DoctorPagerAdapter(SupportFragmentManager, doctorUUID, this);
 
+			DB = Realm.GetInstance();
+
 			FindViewById<Button>(Resource.Id.daSaveB).Click += (s, e) =>
 			{
-				for (int f = 0; f < C_NUM_PAGES; f++)
-				{
-					var fragment = GetFragment(f);
-					if (fragment is ISave)
-					{
-						(fragment as ISave).Save();
-					}
-				}
+				SaveData();
 
 				Finish();
 			};
@@ -106,6 +100,43 @@ namespace MDC.Doctors
 			(TabMainInfoView.Parent as RelativeLayout).Click += (sender, e) => { Pager.CurrentItem = 0;/*SelectMainInfo();*/ };
 			TabWorkPlacesView = FindViewById<View>(Resource.Id.daTabWorkPlacesV);
 			(TabWorkPlacesView.Parent as RelativeLayout).Click += (sender, e) => { Pager.CurrentItem = 1;/*SelectWorkPlaces();*/ };
+		}
+
+		void SaveData()
+		{
+			Doctor doctor = null;
+			using (var transaction = DB.BeginWrite())
+			{
+				for (int f = 0; f < C_NUM_PAGES; f++)
+				{
+					var fragment = GetFragment(f);
+					if (fragment is DoctorMainInfoFragment)
+					{
+						doctor = (fragment as DoctorMainInfoFragment).Save(transaction);
+						break;
+					}
+				}
+
+				if (doctor == null) return;
+
+				for (int f = 0; f < C_NUM_PAGES; f++)
+				{
+					var fragment = GetFragment(f);
+					if (fragment is DoctorWorkPlacesFragment)
+					{
+						(fragment as DoctorWorkPlacesFragment).Save(transaction, doctor);
+						break;
+					}
+				}
+
+				transaction.Commit();
+			}
+		}
+
+		protected override void OnPause()
+		{
+			base.OnPause();
+			//SaveData();
 		}
 
 		V4App.Fragment GetFragment(int position)

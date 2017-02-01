@@ -15,13 +15,13 @@ namespace MDC.Doctors.Lib.Adapters
 	{
 		readonly Activity Context;
 		readonly IList<Doctor> Doctors;
-		readonly string[] PharmaciesInRoute;
+		readonly string[] DoctorsInRoute;
 
 		public DoctorAdapter(Activity context, IList<Doctor> doctors, string[] doctorsInRoute = null) : base()
 		{
 			Context = context;
 			Doctors = doctors;
-			PharmaciesInRoute = doctorsInRoute;
+			DoctorsInRoute = doctorsInRoute;
 		}
 
 		public override Doctor this[int position]
@@ -89,8 +89,8 @@ namespace MDC.Doctors.Lib.Adapters
 					string.IsNullOrEmpty(workPlace.Timetable) ? @"<нет расписания>" : workPlace.Timetable;
 			}
 				
-			if (PharmaciesInRoute == null) return view;
-			if (PharmaciesInRoute.Length == 0) return view;
+			if (DoctorsInRoute == null) return view;
+			if (DoctorsInRoute.Length == 0) return view;
 
 			//// wmOnlyRoute, wmRouteAndRecommendations, wmOnlyRecommendations
 			//switch (Helper.WorkMode) {

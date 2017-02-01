@@ -27,8 +27,6 @@ namespace MDC.Doctors.Lib.Entities
 
 		public string Goal { get; set; }
 
-		public string Comment { get; set; }
-		
 		#region ISync
 		public string CreatedBy { get; set; }
 

@@ -9,13 +9,11 @@ using Realms;
 
 using V4App = Android.Support.V4.App;
 
-using MDC.Doctors.Lib;
 using MDC.Doctors.Lib.Entities;
-using MDC.Doctors.Lib.Interfaces;
 
-namespace MDC.Doctors.Fragments
+namespace MDC.Doctors.Lib.Fragments
 {
-	public class DoctorMainInfoFragment : V4App.Fragment, ISave
+	public class DoctorMainInfoFragment : V4App.Fragment
 	{
 		Realm DB;
 		Doctor Doctor;
@@ -40,7 +38,28 @@ namespace MDC.Doctors.Fragments
 		{
 			base.OnCreateView(inflater, container, savedInstanceState);
 
-			return inflater.Inflate(Resource.Layout.DoctorMainInfoFragment, container, false);
+			var mainView = inflater.Inflate(Resource.Layout.DoctorMainInfoFragment, container, false);
+
+			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID, string.Empty);
+			if (string.IsNullOrEmpty(doctorUUID))
+			{
+				return mainView;
+			}
+
+			Doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
+
+			//item.SetState((PharmacyState)State.SelectedItemPosition);
+			mainView.FindViewById<EditText>(Resource.Id.dmifNameET).Text = Doctor.Name;
+			mainView.FindViewById<AutoCompleteTextView>(Resource.Id.dmifSpecialtyACTV).Text = Doctor.Specialty;
+			mainView.FindViewById<EditText>(Resource.Id.dmifSpecialismET).Text = Doctor.Specialism;
+			mainView.FindViewById<AutoCompleteTextView>(Resource.Id.dmifPositionACTV).Text = Doctor.Position;
+			mainView.FindViewById<EditText>(Resource.Id.dmifPhoneET).Text = Doctor.Phone;
+			mainView.FindViewById<EditText>(Resource.Id.dmifEmailET).Text = Doctor.Email;
+			mainView.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInActionsCB).Checked = Doctor.CanParticipateInActions;
+			mainView.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInConferenceCB).Checked = Doctor.CanParticipateInConference;
+			mainView.FindViewById<EditText>(Resource.Id.dmifCommentET).Text = Doctor.Comment;
+
+			return mainView;
 		}
 
 		public override void OnResume()
@@ -53,8 +72,13 @@ namespace MDC.Doctors.Fragments
 			base.OnPause();
 		}
 
-		public void Save()
+		public Doctor Save(Transaction openedTransaction)
 		{
+			if (openedTransaction == null)
+			{
+				throw new ArgumentNullException(nameof(openedTransaction));
+			}
+
 			// TIP: check section
 			var errors = string.Empty;
 			// TODO: state fired and comment not empty
@@ -74,43 +98,39 @@ namespace MDC.Doctors.Fragments
 								   }
 							   })
 							   .Show();
-				return;
+				return null;
 			}
 
 
 			// TIP: save section
-			using (var transaction = DB.BeginWrite())
+			Doctor item;
+			if (Doctor == null)
 			{
-
-				Doctor item;
-				if (Doctor == null)
-				{
-					item = DBHelper.Create<Doctor>(DB, transaction);
-					item.SetState(DoctorState.dsActive);
-				}
-				else
-				{
-					item = Doctor;
-				}
-
-				item.UpdatedAt = DateTimeOffset.Now;
-				item.IsSynced = false;
+				item = DBHelper.Create<Doctor>(DB, openedTransaction);
 				item.SetState(DoctorState.dsActive);
-				//item.SetState((PharmacyState)State.SelectedItemPosition);
-				item.Name = View.FindViewById<EditText>(Resource.Id.dmifNameET).Text;
-				item.Specialty = View.FindViewById<AutoCompleteTextView>(Resource.Id.dmifSpecialtyACTV).Text;
-				item.Specialism = View.FindViewById<EditText>(Resource.Id.dmifSpecialismET).Text;
-				item.Position = View.FindViewById<AutoCompleteTextView>(Resource.Id.dmifPositionACTV).Text;
-				item.Phone = View.FindViewById<EditText>(Resource.Id.dmifPhoneET).Text;
-				item.Email = View.FindViewById<EditText>(Resource.Id.dmifEmailET).Text;
-				item.CanParticipateInActions = View.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInActionsCB).Checked;
-				item.CanParticipateInConference = View.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInConferenceCB).Checked;
-				item.Comment = View.FindViewById<EditText>(Resource.Id.dmifCommentET).Text;
-
-				if (!item.IsManaged) DBHelper.Save(DB, transaction, item);
-
-				transaction.Commit();
 			}
+			else
+			{
+				item = Doctor;
+			}
+
+			item.UpdatedAt = DateTimeOffset.Now;
+			item.IsSynced = false;
+			item.SetState(DoctorState.dsActive);
+			//item.SetState((PharmacyState)State.SelectedItemPosition);
+			item.Name = View.FindViewById<EditText>(Resource.Id.dmifNameET).Text;
+			item.Specialty = View.FindViewById<AutoCompleteTextView>(Resource.Id.dmifSpecialtyACTV).Text;
+			item.Specialism = View.FindViewById<EditText>(Resource.Id.dmifSpecialismET).Text;
+			item.Position = View.FindViewById<AutoCompleteTextView>(Resource.Id.dmifPositionACTV).Text;
+			item.Phone = View.FindViewById<EditText>(Resource.Id.dmifPhoneET).Text;
+			item.Email = View.FindViewById<EditText>(Resource.Id.dmifEmailET).Text;
+			item.CanParticipateInActions = View.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInActionsCB).Checked;
+			item.CanParticipateInConference = View.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInConferenceCB).Checked;
+			item.Comment = View.FindViewById<EditText>(Resource.Id.dmifCommentET).Text;
+
+			if (!item.IsManaged) DBHelper.Save(DB, openedTransaction, item);
+
+			return item;
 		}
 	}
 }

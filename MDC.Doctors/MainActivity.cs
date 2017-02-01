@@ -54,7 +54,12 @@ namespace MDC.Doctors
 			{
 				StartActivity(new Intent(this, typeof(LoadDataActivity)));
 			};
-			
+
+			var route = FindViewById<ImageView>(Resource.Id.maRoute);
+			route.Click += (sender, e) =>
+			{
+				StartActivity(new Intent(this, typeof(RouteActivity)));
+			};
 		}
 
         protected override void OnResume()
