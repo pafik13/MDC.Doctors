@@ -37,31 +37,7 @@ namespace MDC.Doctors.Lib.Fragments
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
 			base.OnCreateView(inflater, container, savedInstanceState);
-<<<<<<< HEAD
 
-			var mainView = inflater.Inflate(Resource.Layout.DoctorMainInfoFragment, container, false);
-
-			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID, string.Empty);
-			if (string.IsNullOrEmpty(doctorUUID))
-			{
-				return mainView;
-			}
-
-			Doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
-
-			//item.SetState((PharmacyState)State.SelectedItemPosition);
-			mainView.FindViewById<EditText>(Resource.Id.dmifNameET).Text = Doctor.Name;
-			mainView.FindViewById<AutoCompleteTextView>(Resource.Id.dmifSpecialtyACTV).Text = Doctor.Specialty;
-			mainView.FindViewById<EditText>(Resource.Id.dmifSpecialismET).Text = Doctor.Specialism;
-			mainView.FindViewById<AutoCompleteTextView>(Resource.Id.dmifPositionACTV).Text = Doctor.Position;
-			mainView.FindViewById<EditText>(Resource.Id.dmifPhoneET).Text = Doctor.Phone;
-			mainView.FindViewById<EditText>(Resource.Id.dmifEmailET).Text = Doctor.Email;
-			mainView.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInActionsCB).Checked = Doctor.CanParticipateInActions;
-			mainView.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInConferenceCB).Checked = Doctor.CanParticipateInConference;
-			mainView.FindViewById<EditText>(Resource.Id.dmifCommentET).Text = Doctor.Comment;
-
-			return mainView;
-=======
 			var view = inflater.Inflate(Resource.Layout.DoctorMainInfoFragment, container, false);
 			
 			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID);
@@ -105,8 +81,7 @@ namespace MDC.Doctors.Lib.Fragments
 			view.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInConferenceCB).Checked = Doctor.CanParticipateInConference;
 			view.FindViewById<EditText>(Resource.Id.dmifCommentET).Text = Doctor.Comment;
 			
-			return 
->>>>>>> origin/master
+			return view;
 		}
 
 		public override void OnResume()
@@ -153,11 +128,6 @@ namespace MDC.Doctors.Lib.Fragments
 			Doctor item;
 			if (Doctor == null)
 			{
-<<<<<<< HEAD
-				item = DBHelper.Create<Doctor>(DB, openedTransaction);
-				item.SetState(DoctorState.dsActive);
-=======
-
 				Doctor item;
 				if (Doctor == null)
 				{
@@ -185,7 +155,6 @@ namespace MDC.Doctors.Lib.Fragments
 				if (!item.IsManaged) DBHelper.Save(DB, transaction, item);
 
 				transaction.Commit();
->>>>>>> origin/master
 			}
 			else
 			{

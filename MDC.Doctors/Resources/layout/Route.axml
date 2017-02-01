@@ -51,13 +51,13 @@
         android:minWidth="25px"
         android:minHeight="25px"
         android:layout_width="1280dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/raSwitchViewVS"
         android:layout_below="@id/raUpPanelRL">
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="1280dp"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="638dp"
