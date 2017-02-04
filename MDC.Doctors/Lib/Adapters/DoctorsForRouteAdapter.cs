@@ -8,7 +8,8 @@ using Android.Widget;
 using Realms;
 
 using MDC.Doctors.Lib.Entities;
- 
+using System.Globalization;
+
 namespace MDC.Doctors.Lib.Adapters
 {
 	public struct DoctorHolder
@@ -21,15 +22,19 @@ namespace MDC.Doctors.Lib.Adapters
 		public bool IsVisible;
 	}
 
-	public class RouteAdapter : BaseAdapter<DoctorHolder>
+	// TODO: ForDisplay -> from List to Dictionary, because need change visibility
+	public class DoctorsForRouteAdapter : BaseAdapter<DoctorHolder>
 	{
 		readonly Activity Context;
 		readonly public DoctorHolder[] Doctors;
 		List<DoctorHolder> ForDisplay;
 		Dictionary<string, bool> DoneItems;
+		readonly CultureInfo Culture;
 
-		public RouteAdapter(Activity context)
+		public DoctorsForRouteAdapter(Activity context)
 		{
+			Culture = CultureInfo.GetCultureInfo("ru-RU");
+
 			Context = context;
 
 			var DB = Realm.GetInstance();
@@ -146,6 +151,42 @@ namespace MDC.Doctors.Lib.Adapters
 			{
 				ForDisplay = null;
 				return;
+			}
+
+			if (item.IsVisible)
+			{
+				//item.Subway = null;
+				if (culture.CompareInfo.IndexOf(item.Subway, text, CompareOptions.IgnoreCase) >= 0)
+				{
+					item.Match = string.Format(matchFormat, @"метро=" + item.Subway);
+					SearchedItems.Add(item);
+					//if (SearchedItems.Count > C_ITEMS_IN_RESULT) break;
+					continue;
+				}
+
+				if (culture.CompareInfo.IndexOf(item.Region, text, CompareOptions.IgnoreCase) >= 0)
+				{
+					item.Match = string.Format(matchFormat, @"район=" + item.Region);
+					SearchedItems.Add(item);
+					//if (SearchedItems.Count > C_ITEMS_IN_RESULT) break;
+					continue;
+				}
+
+				if (culture.CompareInfo.IndexOf(item.Brand, text, CompareOptions.IgnoreCase) >= 0)
+				{
+					item.Match = string.Format(matchFormat, @"бренд=" + item.Brand);
+					SearchedItems.Add(item);
+					//if (SearchedItems.Count > C_ITEMS_IN_RESULT) break;
+					continue;
+				}
+
+				if (culture.CompareInfo.IndexOf(item.Address, text, CompareOptions.IgnoreCase) >= 0)
+				{
+					item.Match = string.Format(matchFormat, @"адрес");
+					SearchedItems.Add(item);
+					//if (SearchedItems.Count > C_ITEMS_IN_RESULT) break;
+					continue;
+				}
 			}
 
 			var list = new List<DoctorHolder>();

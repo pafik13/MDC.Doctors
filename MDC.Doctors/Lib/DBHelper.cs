@@ -56,11 +56,39 @@ namespace MDC.Doctors.Lib
 			}
 			var item = new T();
 			item.UUID = Guid.NewGuid().ToString();
+			item.DataType = DataType.doctor.ToString("G");
 			item.CreatedBy = string.IsNullOrEmpty(Helper.AgentUUID) ? @"AgentUUID is Empty" : Helper.AgentUUID;
 			item.CreatedAt = DateTimeOffset.Now;
 			item.UpdatedAt = DateTimeOffset.Now;
 
 			return item;		
+		}
+
+		public static void Delete<T>(Realm db, Transaction trans, T toDelete) where T : RealmObject, IEntityFromClient, ISync, new()
+		{
+			if (db == null)
+			{
+				throw new ArgumentNullException(nameof(db));
+			}
+			if (trans == null)
+			{
+				throw new ArgumentNullException(nameof(trans));
+			}
+			if (toDelete == null)
+			{
+				throw new ArgumentNullException(nameof(toDelete));
+			}
+
+			var item = new EntityDelete();
+			item.UUID = toDelete.UUID;
+			item.Entity = typeof(T).Name;
+			item.DataType = DataType.doctor.ToString("G");
+			item.CreatedBy = string.IsNullOrEmpty(Helper.AgentUUID) ? @"AgentUUID is Empty" : Helper.AgentUUID;
+			item.CreatedAt = DateTimeOffset.Now;
+			item.UpdatedAt = DateTimeOffset.Now;
+			Save(db, trans, item);
+
+			db.Remove(toDelete);
 		}
 
         public static void Save<T>(Realm db, Transaction trans, T item) where T : RealmObject, IEntityFromClient, ISync

@@ -2405,31 +2405,46 @@ namespace MDC.Doctors
 			public const int rdtiHospitalNameTV = 2131493146;
 			
 			// aapt resource value: 0x7f0c0120
-			public const int rwFridayTable = 2131493152;
-			
-			// aapt resource value: 0x7f0c011c
-			public const int rwMondayTable = 2131493148;
-			
-			// aapt resource value: 0x7f0c011f
-			public const int rwThursdayTable = 2131493151;
+			public const int rtiDeleteIV = 2131493152;
 			
 			// aapt resource value: 0x7f0c011d
-			public const int rwTuesdayTable = 2131493149;
+			public const int rtiDoctorNameTV = 2131493149;
+			
+			// aapt resource value: 0x7f0c011f
+			public const int rtiHospitalAddressTV = 2131493151;
 			
 			// aapt resource value: 0x7f0c011e
-			public const int rwWednesdayTable = 2131493150;
+			public const int rtiHospitalNameTV = 2131493150;
+			
+			// aapt resource value: 0x7f0c011c
+			public const int rtiOrderTV = 2131493148;
+			
+			// aapt resource value: 0x7f0c0125
+			public const int rwFridayTable = 2131493157;
 			
 			// aapt resource value: 0x7f0c0121
-			public const int rwthDateTV = 2131493153;
-			
-			// aapt resource value: 0x7f0c0122
-			public const int rwtiDoctorNameTV = 2131493154;
+			public const int rwMondayTable = 2131493153;
 			
 			// aapt resource value: 0x7f0c0124
-			public const int rwtiHospitalAddressTV = 2131493156;
+			public const int rwThursdayTable = 2131493156;
+			
+			// aapt resource value: 0x7f0c0122
+			public const int rwTuesdayTable = 2131493154;
 			
 			// aapt resource value: 0x7f0c0123
-			public const int rwtiHospitalNameTV = 2131493155;
+			public const int rwWednesdayTable = 2131493155;
+			
+			// aapt resource value: 0x7f0c0126
+			public const int rwthDateTV = 2131493158;
+			
+			// aapt resource value: 0x7f0c0127
+			public const int rwtiDoctorNameTV = 2131493159;
+			
+			// aapt resource value: 0x7f0c0129
+			public const int rwtiHospitalAddressTV = 2131493161;
+			
+			// aapt resource value: 0x7f0c0128
+			public const int rwtiHospitalNameTV = 2131493160;
 			
 			// aapt resource value: 0x7f0c00de
 			public const int saCheckAll = 2131493086;
@@ -2605,20 +2620,20 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c0020
 			public const int withText = 2131492896;
 			
-			// aapt resource value: 0x7f0c0127
-			public const int wpiCabinetET = 2131493159;
+			// aapt resource value: 0x7f0c012c
+			public const int wpiCabinetET = 2131493164;
 			
-			// aapt resource value: 0x7f0c0125
-			public const int wpiContentGL = 2131493157;
+			// aapt resource value: 0x7f0c012a
+			public const int wpiContentGL = 2131493162;
 			
-			// aapt resource value: 0x7f0c0126
-			public const int wpiHospitalACTV = 2131493158;
+			// aapt resource value: 0x7f0c012b
+			public const int wpiHospitalACTV = 2131493163;
 			
-			// aapt resource value: 0x7f0c0129
-			public const int wpiIsMainS = 2131493161;
+			// aapt resource value: 0x7f0c012e
+			public const int wpiIsMainS = 2131493166;
 			
-			// aapt resource value: 0x7f0c0128
-			public const int wpiTimetableET = 2131493160;
+			// aapt resource value: 0x7f0c012d
+			public const int wpiTimetableET = 2131493165;
 			
 			// aapt resource value: 0x7f0c0013
 			public const int wrap_content = 2131492883;
@@ -2842,28 +2857,31 @@ namespace MDC.Doctors
 			public const int RouteDoctorTableItem = 2130968629;
 			
 			// aapt resource value: 0x7f040036
-			public const int RouteWeek = 2130968630;
+			public const int RouteTableItem = 2130968630;
 			
 			// aapt resource value: 0x7f040037
-			public const int RouteWeekTableHeader = 2130968631;
+			public const int RouteWeek = 2130968631;
 			
 			// aapt resource value: 0x7f040038
-			public const int RouteWeekTableItem = 2130968632;
+			public const int RouteWeekTableHeader = 2130968632;
 			
 			// aapt resource value: 0x7f040039
-			public const int select_dialog_item_material = 2130968633;
+			public const int RouteWeekTableItem = 2130968633;
 			
 			// aapt resource value: 0x7f04003a
-			public const int select_dialog_multichoice_material = 2130968634;
+			public const int select_dialog_item_material = 2130968634;
 			
 			// aapt resource value: 0x7f04003b
-			public const int select_dialog_singlechoice_material = 2130968635;
+			public const int select_dialog_multichoice_material = 2130968635;
 			
 			// aapt resource value: 0x7f04003c
-			public const int support_simple_spinner_dropdown_item = 2130968636;
+			public const int select_dialog_singlechoice_material = 2130968636;
 			
 			// aapt resource value: 0x7f04003d
-			public const int WorkPlaceItem = 2130968637;
+			public const int support_simple_spinner_dropdown_item = 2130968637;
+			
+			// aapt resource value: 0x7f04003e
+			public const int WorkPlaceItem = 2130968638;
 			
 			static Layout()
 			{

@@ -111,8 +111,9 @@
     <Compile Include="Lib\Adapters\RouteDayInWeekAdapter.cs" />
     <Compile Include="Lib\Entities\RouteItem.cs" />
     <Compile Include="Lib\Entities\RouteSearchItem.cs" />
-    <Compile Include="Lib\Adapters\RouteAdapter.cs" />
+    <Compile Include="Lib\Adapters\DoctorsForRouteAdapter.cs" />
     <Compile Include="Lib\Dialogs\MyDatePickerDialog.cs" />
+    <Compile Include="Lib\Entities\EntityDelete.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -168,6 +169,7 @@
     <AndroidResource Include="Resources\drawable\rightline.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\ic_sync_black_48dp.png" />
     <AndroidResource Include="Resources\layout\RouteDoctorTableItem.axml" />
+    <AndroidResource Include="Resources\layout\RouteTableItem.axml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -177,6 +179,7 @@
     <Folder Include="Lib\Interfaces\" />
     <Folder Include="Lib\Dialogs\" />
     <Folder Include="Lib\Fragments\" />
+    <Folder Include="Lib\Sync\" />
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="hockeyappandroid">
