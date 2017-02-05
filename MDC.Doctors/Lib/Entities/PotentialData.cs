@@ -28,8 +28,10 @@ namespace MDC.Doctors.Lib.Entities
 		public float Portion { get; set; }
 
 		public string Category { get; set; }
-		
+
 		#region ISync
+		public string DataType { get; set; }
+
 		public string CreatedBy { get; set; }
 
 		public DateTimeOffset CreatedAt { get; set; }

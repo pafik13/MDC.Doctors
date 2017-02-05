@@ -11,7 +11,7 @@ namespace MDC.Doctors.Lib
 {
 	public static class DBHelper
 	{
-		internal static void GetDB(ref Realm db)
+		public static void GetDB(ref Realm db)
 		{
 			if (db == null) {
 				db = Realm.GetInstance();

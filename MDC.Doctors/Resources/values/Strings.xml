@@ -5,13 +5,17 @@
 
 	<string name="IsChanged">IsChanged</string>
 	<string name="RouteItemOrder">RouteItemOrder</string>
-
+	<string name="RouteItemUUID">ContractDataUUID</string>
+	<string name="RouteItemOrder">RouteItemOrder</string>
+	<string name="Position">Position</string>
+	
 	<string name="DoctorUUID">DoctorUUID</string>
 	<string name="AttendanceUUID">AttendanceUUID</string>
 	<string name="HospitalUUID">HospitalUUID</string>
 	<string name="WorkPlaceUUID">WorkPlaceUUID</string>
 	<string name="InfoDataUUID">InfoDataUUID</string>
 	<string name="DrugBrandUUID">DrugBrandUUID</string>
+
 	
 	<string name="doctor_not_found"><![CDATA[<врач не найден>]]></string>
 

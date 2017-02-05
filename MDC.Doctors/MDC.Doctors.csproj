@@ -71,6 +71,9 @@
     <Reference Include="Realm">
       <HintPath>..\packages\Realm.0.82.0\lib\MonoAndroid44\Realm.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -114,6 +117,12 @@
     <Compile Include="Lib\Adapters\DoctorsForRouteAdapter.cs" />
     <Compile Include="Lib\Dialogs\MyDatePickerDialog.cs" />
     <Compile Include="Lib\Entities\EntityDelete.cs" />
+    <Compile Include="SyncActivity.cs" />
+    <Compile Include="ProfileActivity.cs" />
+    <Compile Include="HospitalActivity.cs" />
+    <Compile Include="Lib\DBSpec.cs" />
+    <Compile Include="Lib\Other\JSONSerializer.cs" />
+    <Compile Include="Lib\Adapters\AttendanceByWeekAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -170,6 +179,10 @@
     <AndroidResource Include="Resources\drawable-hdpi\ic_sync_black_48dp.png" />
     <AndroidResource Include="Resources\layout\RouteDoctorTableItem.axml" />
     <AndroidResource Include="Resources\layout\RouteTableItem.axml" />
+    <AndroidResource Include="Resources\layout\Profile.axml" />
+    <AndroidResource Include="Resources\layout\Sync.axml" />
+    <AndroidResource Include="Resources\layout\AttendanceByWeekTableHeader.axml" />
+    <AndroidResource Include="Resources\layout\AttendanceByWeekTableItem.axml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -180,6 +193,7 @@
     <Folder Include="Lib\Dialogs\" />
     <Folder Include="Lib\Fragments\" />
     <Folder Include="Lib\Sync\" />
+    <Folder Include="Lib\Other\" />
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="hockeyappandroid">
@@ -196,6 +210,10 @@
     </XamarinComponentReference>
     <XamarinComponentReference Include="restsharp">
       <Version>105.2.3</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="json.net">
+      <Version>7.0.1</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>

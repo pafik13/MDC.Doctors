@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Indigo_50">
+    <RelativeLayout
+        android:id="@+id/saUpPanelRL"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="25px"
+        android:minHeight="64px"
+        android:background="@drawable/bottomline">
+        <TextView
+            android:text="СИНХРОНИЗАЦИЯ ДАННЫХ"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/saInfoTV"
+            android:gravity="center"
+            android:textColor="@color/Light_Blue_500"
+            android:height="64dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp" />
+        <Button
+            android:text="ЗАКРЫТЬ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+id/saCloseB"
+            android:background="@color/Deep_Orange_500"
+            android:typeface="monospace"
+            android:width="150dp"
+            android:height="62dp"
+            android:textColor="@android:color/white"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:minHeight="62dp"
+            android:layout_marginBottom="2dp" />
+    </RelativeLayout>
+    <TextView
+        android:text="Необходимо синхронизировать {0} объектов"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/saSyncEntitiesCount"
+        android:layout_below="@id/saUpPanelRL"
+        android:layout_centerInParent="true" />
+    <TextView
+        android:text="Необходимо обновить {0} объектов"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/saUpdateEntitiesCount"
+        android:layout_below="@id/saSyncEntitiesCount"
+        android:layout_centerInParent="true" />
+    <Button
+        android:text="СИНХРОНИЗИРОВАТЬ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/saUpdateEntitiesCount"
+        android:id="@+id/saSyncB"
+        android:layout_centerHorizontal="true" />
+    <TextView
+        android:layout_marginTop="20dp"
+        android:text="Необходимо выгрузить {0} фото"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/saSyncPhotosCount"
+        android:layout_below="@id/saSyncB"
+        android:layout_centerInParent="true" />
+    <Button
+        android:text="ЗАГРУЗИТЬ ФОТО"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/saSyncPhotosCount"
+        android:id="@+id/saUploadPhotoB"
+        android:layout_centerHorizontal="true" />
+    <Button
+        android:text="[ДОЛГО] - ВЫГРУЗИТЬ ФАЙЛ БАЗЫ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/saUploadPhotoB"
+        android:id="@+id/saUploadRealmB"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/row_height"
+        android:background="@color/Deep_Orange_500"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp" />
+</RelativeLayout>

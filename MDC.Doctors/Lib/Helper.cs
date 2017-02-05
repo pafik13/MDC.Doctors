@@ -135,6 +135,12 @@ namespace MDC.Doctors
 			return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
 		}
 
+		public static int GetWeekKey(DateTimeOffset dateTimeOffset)
+		{
+			var date = dateTimeOffset.UtcDateTime.Date;
+			return date.Year * 100 + GetIso8601WeekOfYear(date);
+		}
+
 		public static int? ToInt(string value, int divider = 1)
 		{
 			if (string.IsNullOrEmpty(value)) return null;

@@ -9,6 +9,7 @@ using Realms;
 
 using MDC.Doctors.Lib.Entities;
 using System.Globalization;
+using System;
 
 namespace MDC.Doctors.Lib.Adapters
 {
@@ -28,6 +29,11 @@ namespace MDC.Doctors.Lib.Adapters
 		readonly Activity Context;
 		readonly public DoctorHolder[] Doctors;
 		List<DoctorHolder> ForDisplay;
+
+		string SearchText;
+
+		DateTimeOffset? SelectedDate;
+
 		Dictionary<string, bool> DoneItems;
 		readonly CultureInfo Culture;
 
@@ -145,65 +151,63 @@ namespace MDC.Doctors.Lib.Adapters
 			NotifyDataSetChanged();
 		}
 
-		public void Search(string text)
+		public void SetSearchText(string text)
 		{
 			if (string.IsNullOrEmpty(text))
 			{
 				ForDisplay = null;
+				SearchText = null;
 				return;
 			}
 
-			if (item.IsVisible)
+			var list = new List<DoctorHolder>();
+			if (DoneItems == null)
 			{
-				//item.Subway = null;
-				if (culture.CompareInfo.IndexOf(item.Subway, text, CompareOptions.IgnoreCase) >= 0)
+				for (int i = 0; i < Doctors.Length; i++)
 				{
-					item.Match = string.Format(matchFormat, @"метро=" + item.Subway);
-					SearchedItems.Add(item);
-					//if (SearchedItems.Count > C_ITEMS_IN_RESULT) break;
-					continue;
-				}
+					var item = Doctors[i];
 
-				if (culture.CompareInfo.IndexOf(item.Region, text, CompareOptions.IgnoreCase) >= 0)
-				{
-					item.Match = string.Format(matchFormat, @"район=" + item.Region);
-					SearchedItems.Add(item);
-					//if (SearchedItems.Count > C_ITEMS_IN_RESULT) break;
-					continue;
-				}
+					if (Culture.CompareInfo.IndexOf(item.Name, text, CompareOptions.IgnoreCase) >= 0)
+					{
+						list.Add(item);
+						continue;
+					}
 
-				if (culture.CompareInfo.IndexOf(item.Brand, text, CompareOptions.IgnoreCase) >= 0)
-				{
-					item.Match = string.Format(matchFormat, @"бренд=" + item.Brand);
-					SearchedItems.Add(item);
-					//if (SearchedItems.Count > C_ITEMS_IN_RESULT) break;
-					continue;
-				}
+					if (Culture.CompareInfo.IndexOf(item.HospitalAddress, text, CompareOptions.IgnoreCase) >= 0)
+					{
+						list.Add(item);
+						continue;
+					}
 
-				if (culture.CompareInfo.IndexOf(item.Address, text, CompareOptions.IgnoreCase) >= 0)
-				{
-					item.Match = string.Format(matchFormat, @"адрес");
-					SearchedItems.Add(item);
-					//if (SearchedItems.Count > C_ITEMS_IN_RESULT) break;
-					continue;
+					if (Culture.CompareInfo.IndexOf(item.HospitalName, text, CompareOptions.IgnoreCase) >= 0)
+					{
+						list.Add(item);
+						continue;
+					}
 				}
 			}
-
-			var list = new List<DoctorHolder>();
-			for (int i = 0; i < Doctors.Length; i++)
+			else 
 			{
-				var item = Doctors[i];
-				if (item.Name.Contains(text))
+				for (int i = 0; i < Doctors.Length; i++)
 				{
-					list.Add(item);
-				}
-				else if (item.HospitalAddress.Contains(text))
-				{
-					list.Add(item);
-				}
-				else if (item.HospitalName.Contains(text))
-				{
-					list.Add(item);
+					var item = Doctors[i];
+					if (Culture.CompareInfo.IndexOf(item.Name, text, CompareOptions.IgnoreCase) >= 0)
+					{
+						list.Add(item);
+						continue;
+					}
+
+					if (Culture.CompareInfo.IndexOf(item.HospitalAddress, text, CompareOptions.IgnoreCase) >= 0)
+					{
+						list.Add(item);
+						continue;
+					}
+
+					if (Culture.CompareInfo.IndexOf(item.HospitalName, text, CompareOptions.IgnoreCase) >= 0)
+					{
+						list.Add(item);
+						continue;
+					}
 				}
 			}
 
@@ -211,12 +215,35 @@ namespace MDC.Doctors.Lib.Adapters
 			NotifyDataSetChanged();
 		}
 
-		void SetDoneItems(List<RouteItem> doneItems)
+		public void SetSelectedDate(DateTimeOffset selectedDate)
 		{
-			DoneItems = new Dictionary<string, bool>(doneItems.Count);
-			for (int i = 0; i < doneItems.Count; i++)
+			SelectedDate = selectedDate;
+
+			if (Helper.WeeksInRoute < 2)
 			{
-				DoneItems.Add(doneItems[i].WorkPlace, true);
+				DoneItems = null;
+			}
+
+			var db = Realm.GetInstance();
+			var doneItems = new Dictionary<string, bool>();
+
+			var lowDate = selectedDate.AddDays(-7 * Helper.WeeksInRoute + 8).UtcDateTime.Date;
+			var highDate = selectedDate.AddDays(-1).UtcDateTime.Date;
+			foreach (var item in db.All<RouteItem>())
+			{
+				if (highDate >= item.Date.Date && item.Date.Date >= lowDate && item.IsDone)
+				{
+					DoneItems.Add(item.WorkPlace, true);
+				}
+			}
+
+			if (doneItems.Count > 0)
+			{
+				DoneItems = doneItems;
+			}
+			else
+			{
+				DoneItems = null;
 			}
 		}
 	}

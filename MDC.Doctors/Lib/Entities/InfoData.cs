@@ -28,6 +28,8 @@ namespace MDC.Doctors.Lib.Entities
 		public string Goal { get; set; }
 
 		#region ISync
+		public string DataType { get; set; }
+
 		public string CreatedBy { get; set; }
 
 		public DateTimeOffset CreatedAt { get; set; }

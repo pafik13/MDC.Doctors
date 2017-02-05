@@ -143,7 +143,7 @@ namespace MDC.Doctors
 				var text = e.Editable.ToString();
 
 				var adapter = RouteDoctorTable.Adapter as DoctorsForRouteAdapter;
-				adapter.Search(text);
+				adapter.SetSearchText(text);
 			};
 
 			RouteTable = FindViewById<LinearLayout>(Resource.Id.raRouteTable);
@@ -193,7 +193,8 @@ namespace MDC.Doctors
 			RouteTable.RemoveView(rowForDelete);
 
 			using (var trans = DB.BeginWrite()) {
-				DBHelper.Delete<RouteItem>(DB, trans, routeItemUUID);
+				var routeItem = DBHelper.Get<RouteItem>(DB, routeItemUUID);
+				DBHelper.Delete(DB, trans, routeItem);
 
 				for (int c = index; c < RouteTable.ChildCount; c++) {
 					var rowForUpdate = (LinearLayout)RouteTable.GetChildAt(c);
@@ -203,7 +204,7 @@ namespace MDC.Doctors
 					updRouteItem.IsSynced = false;
 					updRouteItem.UpdatedAt = DateTimeOffset.Now;
 					rowForUpdate.SetTag(Resource.String.RouteItemOrder, c);
-					rowForUpdate.FindViewById<TextView>(Resource.Id.riOrderTV).Text = (c + 1).ToString();
+					rowForUpdate.FindViewById<TextView>(Resource.Id.rtiOrderTV).Text = (c + 1).ToString();
 					if (!updRouteItem.IsManaged) DBHelper.Save(DB, trans, updRouteItem);
 				}
 				trans.Commit();
@@ -264,7 +265,7 @@ namespace MDC.Doctors
 									updRouteItem.IsSynced = false;
 									updRouteItem.UpdatedAt = DateTimeOffset.Now;
 									rowForUpdate.SetTag(Resource.String.RouteItemOrder, c);
-									rowForUpdate.FindViewById<TextView>(Resource.Id.riOrderTV).Text = (c + 1).ToString();
+									rowForUpdate.FindViewById<TextView>(Resource.Id.rtiOrderTV).Text = (c + 1).ToString();
 									if (!updRouteItem.IsManaged) DBHelper.Save(DB, trans, updRouteItem);
 								}
 								trans.Commit();

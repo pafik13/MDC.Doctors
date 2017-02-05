@@ -17,6 +17,8 @@ namespace MDC.Doctors.Lib.Entities
 
 		public string Doctor { get; set; }
 
+		public string WorkPlace { get; set; }
+
 		public DateTimeOffset When { get; set; }
 
 		public double Duration { get; set; }
@@ -24,6 +26,8 @@ namespace MDC.Doctors.Lib.Entities
 		public bool IsFinished { get; set; }
 
 		#region ISync
+		public string DataType { get; set; }
+
 		public string CreatedBy { get; set; }
 
 		public DateTimeOffset CreatedAt { get; set; }

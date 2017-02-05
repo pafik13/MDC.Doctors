@@ -185,6 +185,8 @@ namespace MDC.Doctors.Lib.Entities
 		public string CreatedBy { get; set; }
 
 		public bool IsSynced { get; set; }
+
+		public string DataType { get; set; }
 		#endregion
 	}
 }
