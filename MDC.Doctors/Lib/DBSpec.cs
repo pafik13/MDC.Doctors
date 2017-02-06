@@ -59,6 +59,49 @@ namespace MDC.Doctors
 
 			return result;
 		}
+		
+		public static List<RouteItem> GetRouteItems(Realm db, DateTimeOffset selectedDate)
+		{
+			var date = selectedDate.UtcDateTime.Date;
+			var result = new List<RouteItem>();
+			foreach(var item in db.All<RouteItem>())
+			{
+				if (item.Date.Date == date)
+				{
+					result.Add(item);
+				}
+			}
+			
+			return result;
+		}
+		
+		public static Dictionary<string, Dictionary<int, int>> GetProfileReportData(Realm db, int[] weekKeys)
+		{			
+			var result = new Dictionary<string, Dictionary<int, int>>();
+			foreach (var doctor in db.All<Doctor>())
+			{
+				result.Add(doctor.UUID, new Dictionary<int, int>());
+				for (int i = 0; i < ProfileActivity.WeeksCount; i++)
+				{
+					result[doctor.UUID].Add(weekKeys[i], 0);
+				}
+			}
+
+
+			foreach (var attendance in db.All<Attendance>())
+			{
+				if (result.ContainsKey(attendance.Doctor))
+				{
+					int key = Helper.GetWeekKey(attendance.When);
+					if (result[attendance.Doctor].ContainsKey(key))
+					{
+						result[attendance.Doctor][key]++;
+					}
+				}
+			}
+
+			return result;
+		}
 	}
 }
 

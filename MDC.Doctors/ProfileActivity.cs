@@ -123,11 +123,21 @@ namespace MDC.Doctors
 			};
 
 			SearchEditor = FindViewById<EditText>(Resource.Id.paSearchET);
+			SearchProgress = FindViewById<Progress>(Resource.Id.paSearchP);
 
-			SearchEditor.AfterTextChanged += (sender, e) => {
+			SearchEditor.AfterTextChanged += async (sender, e) => {
+				Table.Visibility = ViewStates.Invisible;
+				SearchProgress.Start();
+				
 				var text = e.Editable.ToString();
-
-				(Table.Adapter as AttendanceByWeekAdapter).SetSearchText(text);
+				var adapter = (Table.Adapter as AttendanceByWeekAdapter);
+				await adapter.SetSearchText(text);
+				
+				RunOnUIThread(() => {
+					if ((SearchProgress != null) && SearchProgress.IsShown) SearchProgress.Dismiss();
+					adapter.NotifyDataChanged();
+					Table.Visibility = ViewStates.Visible;
+				});
 			};
 
 		}

@@ -21,6 +21,16 @@ namespace MDC.Doctors.Lib.Adapters
 		public string HospitalName;
 		public string HospitalAddress;
 		public bool IsVisible;
+		
+		public override int GetHashCode()
+		{
+			return UUID.GetHashCode();
+		}
+
+		public override bool Equals(object other)
+		{
+			return Equals(other);
+		}
 	}
 
 	// TODO: ForDisplay -> from List to Dictionary, because need change visibility
@@ -35,6 +45,7 @@ namespace MDC.Doctors.Lib.Adapters
 		DateTimeOffset? SelectedDate;
 
 		Dictionary<string, bool> DoneItems;
+		Dictionary<string, bool> CurrItems;
 		readonly CultureInfo Culture;
 
 		public DoctorsForRouteAdapter(Activity context)
@@ -85,6 +96,7 @@ namespace MDC.Doctors.Lib.Adapters
 
 			ForDisplay = null;
 			DoneItems = null;
+			CurrItems = new Dictionary<string, bool>();
 		}
 
 		public override DoctorHolder this[int position] {
@@ -111,7 +123,7 @@ namespace MDC.Doctors.Lib.Adapters
 			// Get our object for position
 			var item = ForDisplay == null ? Doctors[position] : ForDisplay[position];
 
-			if (DoneItems != null && !string.IsNullOrEmpty(item.MainWorkPlace) && DoneItems[item.MainWorkPlace]) {
+			if (string.IsNullOrEmpty(item.MainWorkPlace) || CurrItems[item.MainWorkPlace] || (DoneItems != null && DoneItems[item.MainWorkPlace])) {
 				return new View(Context);
 			}
 
@@ -121,7 +133,8 @@ namespace MDC.Doctors.Lib.Adapters
 			{
 				view = convertView as LinearLayout;
 			}
-			else {
+			else 
+			{
 				view = Context.LayoutInflater.Inflate(Resource.Layout.RouteDoctorTableItem, parent, false);
 			}
 
@@ -132,21 +145,29 @@ namespace MDC.Doctors.Lib.Adapters
 			//Finally return the view
 			return view;
 		}
-
-		public void SwitchVisibility(int position)
+		
+		public DoctorHolder Get(string workPlace)
 		{
-			var item = Doctors[position];
-
-			item.IsVisible = !item.IsVisible;
+			Doctors.FirstOrDefault(d => d.MainWorkPlace == workPlace);
+		}
+		
+		public void ClearCurrentRoute()
+		{
+			CurrItems = new Dictionary<string, bool>();
+			
+			NotifyDataSetChanged();
+		}
+		
+		public void AddCurrentRouteItem(RoiteItem routeItem)
+		{
+			CurrItems.Add(routeItem.WorkPlace, true);
 
 			NotifyDataSetChanged();
 		}
 
-		public void ChangeVisibility(int position, bool isVisible)
+		public void RemoveCurrentRouteItem(RoiteItem routeItem)
 		{
-			var item = Doctors[position];
-
-			item.IsVisible = isVisible;
+			CurrItems.Remove(routeItem.WorkPlace);
 
 			NotifyDataSetChanged();
 		}

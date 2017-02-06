@@ -5,12 +5,10 @@
     android:background="@color/Grey_300">
     <RelativeLayout
         android:id="@+id/paUpPanelRL"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
         android:minWidth="25px"
-        android:minHeight="64px"
-        android:background="@drawable/bottomline">
+        android:minHeight="64px">
         <TextView
             android:text="ПРОФИЛЬ"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -92,8 +90,7 @@
             android:background="@android:color/black" />
         <LinearLayout
             android:orientation="vertical"
-            android:layout_weight="1"
-            android:layout_width="0dp"
+            android:layout_width="1018dp"
             android:layout_height="match_parent"
             android:id="@+id/paAttendanceByWeekLL"
             android:minWidth="25px"
@@ -103,8 +100,8 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/paSearchIV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:src="@drawable/ic_search_black_48dp"
                     android:background="@android:color/white" />
                 <ViewSwitcher
@@ -126,8 +123,6 @@
                         android:textCursorDrawable="@null"
                         android:id="@+id/paSearchET"
                         android:textSize="16sp"
-                        android:background="@drawable/bottomline"
-                        android:textColorHint="@color/Grey_300"
                         android:textColor="@android:color/black"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
@@ -144,7 +139,7 @@
                 android:minWidth="25px"
                 android:minHeight="25px"
                 android:orientation="vertical"
-                android:divider="@color/Grey_300"
+                android:divider="@color/Indigo_500"
                 android:dividerHeight="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

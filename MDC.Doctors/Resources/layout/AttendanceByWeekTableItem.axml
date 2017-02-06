@@ -6,153 +6,146 @@
     android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:weightSum="100">
-<!--    <TextView
-        android:text="Pharmacy"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:id="@+id/abwtiPharmacyTV"
-        android:layout_weight="30"
-        android:gravity="center"
-        android:textAppearance="@style/rowTextForPharmacy" />-->
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_weight="30"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/white">
-        <TextView
-            android:layout_marginTop="6dp"
-            android:id="@+id/abwtiPharmacyTV"
-            android:layout_marginLeft="12dp"
-            android:text="Аптека"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textAppearance="@style/searchName"
-            android:focusable="false"
-            android:focusableInTouchMode="false" />
-        <TextView
-            android:layout_marginBottom="6dp"
-            android:id="@+id/abwtiMatchTV"
-            android:layout_marginLeft="12dp"
-            android:text="Совпадние:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textAppearance="@style/searchMatch"
-            android:focusable="false"
-            android:focusableInTouchMode="false" />
-    </LinearLayout>
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="318dp"
+		android:layout_height="wrap_content"
+		android:minHeight="48dp"
+		android:background="@android:color/white">
+		<TextView
+			android:layout_marginLeft="8dp"
+			android:layout_marginTop="8dp"
+			android:layout_marginRight="8dp"
+			android:id="@+id/abwtiDoctorNameTV"
+			android:text="Врач"
+			android:layout_width="224dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:textAppearance="@style/rwtiPharmacy"
+			android:ellipsize="end"
+			android:focusable="false"
+			android:focusableInTouchMode="false" />
+		<TextView
+			android:layout_marginLeft="8dp"
+			android:layout_marginTop="8dp"
+			android:layout_marginRight="8dp"
+			android:id="@+id/abwtiHospitalNameTV"
+			android:text="Название ЛПУ:"
+			android:layout_width="224dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:textAppearance="@style/rwtiSubwayOrRegion"
+			android:ellipsize="end"
+			android:focusable="false"
+			android:focusableInTouchMode="false" />
+		<TextView
+			android:layout_margin="8dp"
+			android:id="@+id/abwtiHospitalAddressTV"
+			android:text="Адрес ЛПУ:"
+			android:layout_width="224dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:textAppearance="@style/rwtiSubwayOrRegion"
+			android:ellipsize="end"
+			android:focusable="false"
+			android:focusableInTouchMode="false" />
+	</LinearLayout>
     <TextView
-        android:text="Week1"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek1"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week2"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek2"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week3"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek3"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week4"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek4"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week5"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek5"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week6"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek6"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week7"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek7"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week8"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek8"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week9"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek9"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week10"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek10"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week11"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek11"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week12"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek12"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week13"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek13"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
     <TextView
-        android:text="Week14"
-        android:layout_width="0dp"
+        android:text="-"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/abwtiWeek14"
-        android:layout_weight="5"
         android:gravity="center"
         android:textAppearance="@style/rowTextForPharmacy" />
 </LinearLayout>

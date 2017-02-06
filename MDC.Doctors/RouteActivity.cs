@@ -294,47 +294,36 @@ namespace MDC.Doctors
 		void RefreshTables()
 		{
 			FindViewById<Button>(Resource.Id.raSelectDateB).Text = SelectedDate.Date.ToLongDateString();
-
-			if (SelectedDate.Date <= DateTimeOffset.Now.Date) {
-				RouteSearchItems = new List<RouteSearchItem>();
-				RoutePharmacyAdapter = new RoutePharmacyAdapter(this, RouteSearchItems);
-				PharmacyTable.Adapter = RoutePharmacyAdapter;
+			
+			var adapter = (PharmacyTable.Adapter as DoctorsForRouteAdapter);
+			if (SelectedDate.Date <= DateTimeOffset.Now.Date) {		
+				PharmacyTable.Visibility = ViewStates.Gone;
 			} else {
-				var routeItemsPharmacies = MainDatabase.GetEarlyRouteItems(SelectedDate).Select(ri => ri.Pharmacy);
-				RouteSearchItems = RouteSearchItemsSource.Where(rsi => !routeItemsPharmacies.Contains(rsi.UUID)).ToList();
-
-				RoutePharmacyAdapter = new RoutePharmacyAdapter(this, RouteSearchItems);
-				PharmacyTable.Adapter = RoutePharmacyAdapter;
-
-				for (int i = 0; i < RouteSearchItems.Count; i++) {
-					RoutePharmacyAdapter.ChangeVisibility(i, true);
-				}
+				PharmacyTable.Visibility = ViewStates.Visible;
+				adapter.SetSelectedDate(SelectedDate);
+				adapter.SetSearchText(SearchEditor.Text);
 			}
 
 			RouteTable.RemoveAllViews();
-			foreach (var item in MainDatabase.GetRouteItems(SelectedDate).OrderBy(ri => ri.Order)) {
+			foreach (var routeItem in DBSpec.GetRouteItems(DB, SelectedDate).OrderBy(ri => ri.Order)) {
 				var row = LayoutInflater.Inflate(Resource.Layout.RouteItem, RouteTable, false);
-				var pharmacy = MainDatabase.GetEntityOrNull<Pharmacy>(item.Pharmacy);
-				if (pharmacy == null) {
-					row.FindViewById<TextView>(Resource.Id.riPharmacyTV).Text = "<аптека не найдена>";
+				var doctor = MainDatabase.Get<WorkPlace>(routeItem.Pharmacy);
+				if (doctor == null) {
+					row.FindViewById<TextView>(Resource.Id.rtiDoctorNameTV).Text = "<аптека не найдена>";
 				} else {
-					row.FindViewById<TextView>(Resource.Id.riPharmacyTV).Text = pharmacy.GetName();
+					row.FindViewById<TextView>(Resource.Id.rtiDoctorNameTV).Text = doctor.Name;
+					row.FindViewById<TextView>(Resource.Id.rtiHospitalNameTV).Text = doctor.HospitalName;
+					row.FindViewById<TextView>(Resource.Id.rtiHospitalAddressTV).Text = doctor.HospitalAddress;
 				}
 
-				int position = RouteSearchItems.FindIndex(rsi => string.Compare(rsi.UUID, item.Pharmacy) == 0);
-				if (position != -1) {
-					RoutePharmacyAdapter.ChangeVisibility(position, false);
-				}
-
-				//row.FindViewById<TextView>(Resource.Id.riPharmacyTV).Text 
-				//   = string.Format("({0}) {1}", position, MainDatabase.GetEntity<Pharmacy>(item.Pharmacy).GetName());
-
+				adapter.AddCurrentRouteItem(routeItem);
+				
 				row.SetTag(Resource.String.Position, position);
-				row.SetTag(Resource.String.RouteItemUUID, item.UUID);
-				row.SetTag(Resource.String.PharmacyUUID, item.Pharmacy);
+				row.SetTag(Resource.String.RouteItemUUID, routeItem.UUID);
+				row.SetTag(Resource.String.PharmacyUUID, routeItem.Pharmacy);
 
-				row.SetTag(Resource.String.RouteItemOrder, item.Order);
-				row.FindViewById<TextView>(Resource.Id.riOrderTV).Text = (item.Order + 1).ToString();
+				row.SetTag(Resource.String.RouteItemOrder, routeItem.Order);
+				row.FindViewById<TextView>(Resource.Id.riOrderTV).Text = (routeItem.Order + 1).ToString();
 
 				var delImage = row.FindViewById<ImageView>(Resource.Id.rtiDeleteIV);
 				var now = DateTime.Now;

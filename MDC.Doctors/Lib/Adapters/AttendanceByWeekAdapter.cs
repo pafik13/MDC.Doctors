@@ -20,7 +20,10 @@ namespace MDC.Doctors.Lib.Adapters
 		readonly Activity Context;
         readonly int[] WeekKeys;
 		readonly Dictionary<string, Dictionary<int, int>> Items;
-
+		
+		readonly public DoctorHolder[] Doctors;
+		List<DoctorHolder> ForDisplay;
+		
 		string Text;
 
 		public AttendanceByWeekAdapter(Activity context, Dictionary<string, Dictionary<int, int>> data, int[] weekKeys)
@@ -32,11 +35,54 @@ namespace MDC.Doctors.Lib.Adapters
 			WeekKeys = weekKeys;
 
 			Items = data;
+			
+			Doctors = new DoctorHolder[data.Keys.Count)];
+
+			foreach (var doctorUUID in data.Keys)
+			{
+				var doctor = DBHelper.Get<WorkPlace>(DB, doctorUUID);
+				
+				DoctorHolder holder;
+				
+				if (string.IsNullOrEmpty(doctor.MainWorkPlace))
+				{
+					holder = new DoctorHolder
+					{
+						UUID = string.Copy(doctor.UUID),
+						Name = string.Copy(doctor.Name),
+						MainWorkPlace = string.Copy(doctor.MainWorkPlace),
+						HospitalName = string.Empty,
+						HospitalAddress = string.Empty
+					};
+				}
+				else
+				{
+					var workPlace = DBHelper.Get<WorkPlace>(DB, doctor.MainWorkPlace);
+					var hospital = DBHelper.GetHospital(DB, workPlace.Hospital);
+					holder = new DoctorHolder
+					{
+						UUID = string.Copy(doctor.UUID),
+						Name = string.Copy(doctor.Name),
+						MainWorkPlace = string.Copy(doctor.MainWorkPlace),
+						HospitalName = string.Copy(hospital.GetName()),
+						HospitalAddress = string.Copy(hospital.GetAddress()),
+					};
+				}
+
+				Doctors[i] = holder;
+
+				i++;
+			}
+
+			ForDisplay = null;
+			
 		}
 
 		public override Dictionary<int, int> this[int position] {
 			get {
-				return Items[Items.Keys.ElementAt(position)];
+				if (ForDisplay == null) return Items[Items.Keys.ElementAt(position)];
+				
+				return Items[ForDisplay[position].UUID];
 			}
 		}
 
@@ -47,26 +93,28 @@ namespace MDC.Doctors.Lib.Adapters
 
 		public override int Count {
 			get {
-				return Items.Keys.Count;
+				return ForDisplay == null ? Items.Keys.Count : ForDisplay.Count;
 			}
 		}
 
 		public override View GetView(int position, View convertView, ViewGroup parent)
 		{
 			// Get our object for position
-			var key = Items.Keys.ElementAt(position);
-			var item = Items[key];
-			var workPlace = DBHelper.Get<WorkPlace>(DB, key);
-			var doctor = DBHelper.Get<Doctor>(DB, workPlace.Doctor);
-			var hospital = DBHelper.GetHospital(DB, workPlace.Hospital);
+			var doctorUUID = ForDisplay == null ? Items.Keys.ElementAt(position) : ForDisplay[position];
+			var item = Items[doctorUUID];
+			var doctor = Doctors.First(d => d.UUID == doctorUUID);
 
             var view = (convertView ?? Context.LayoutInflater.Inflate(Resource.Layout.AttendanceByWeekTableItem, parent, false)
 			           ) as LinearLayout;
 
-			view.FindViewById<TextView>(Resource.Id.rdtiDoctorNameTV).Text = item.Name;
-			view.FindViewById<TextView>(Resource.Id.rdtiHospitalNameTV).Text = item.HospitalName;
-			view.FindViewById<TextView>(Resource.Id.rdtiHospitalAddressTV).Text = item.HospitalAddress;
-
+			view.FindViewById<TextView>(Resource.Id.abwtiDoctorNameTV).Text = doctor.Name;
+			view.FindViewById<TextView>(Resource.Id.abwtiHospitalNameTV).Text = doctor.HospitalName;
+			view.FindViewById<TextView>(Resource.Id.abwtiHospitalAddressTV).Text = doctor.HospitalAddress;
+			
+			if (string.IsNullOrEmpty(doctor.MainWorkPlace)) {
+				return view;
+			}
+			
 			view.FindViewById<TextView>(Resource.Id.abwtiWeek1).Text = item[WeekKeys[0]].ToString();
             view.FindViewById<TextView>(Resource.Id.abwtiWeek2).Text = item[WeekKeys[1]].ToString();
             view.FindViewById<TextView>(Resource.Id.abwtiWeek3).Text = item[WeekKeys[2]].ToString();
@@ -84,10 +132,42 @@ namespace MDC.Doctors.Lib.Adapters
 
             return view;
 		}
-
-		public void SetSearchText(string text)
+		// http://ru.stackoverflow.com/questions/316990/%D0%9A%D0%B0%D0%BA-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D1%8E%D1%82-await-async
+		public Task SetSearchTextAsync(string text)
 		{
-			Text = text;
+			return Task.Run(() => {
+				if (string.IsNullOrEmpty(text)) {
+					ForDisplay = null;
+					Text = text;
+					return;
+				}
+				
+				var list = new List<DoctorHolder>();
+				for (int i = 0; i < Doctors.Length; i++)
+				{
+					var item = Doctors[i];
+
+					if (Culture.CompareInfo.IndexOf(item.Name, text, CompareOptions.IgnoreCase) >= 0)
+					{
+						list.Add(item);
+						continue;
+					}
+
+					if (Culture.CompareInfo.IndexOf(item.HospitalAddress, text, CompareOptions.IgnoreCase) >= 0)
+					{
+						list.Add(item);
+						continue;
+					}
+
+					if (Culture.CompareInfo.IndexOf(item.HospitalName, text, CompareOptions.IgnoreCase) >= 0)
+					{
+						list.Add(item);
+						continue;
+					}
+				}
+				
+				ForDisplay = list;
+			});
 		}
 	}
 }
