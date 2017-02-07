@@ -94,8 +94,6 @@ namespace MDC.Doctors
 					return;
 				}
 
-				adapter.SwitchVisibility(e.Position);
-
 				var row = LayoutInflater.Inflate(Resource.Layout.RouteTableItem, RouteTable, false);
 				row.SetTag(Resource.String.Position, e.Position);
 
@@ -106,7 +104,9 @@ namespace MDC.Doctors
 					newRouteItem.Date = SelectedDate;
 					transaction.Commit();
 					row.SetTag(Resource.String.RouteItemUUID, newRouteItem.UUID);
+					adapter.AddCurrentRouteItem(newRouteItem);
 				}
+
 				row.SetTag(Resource.String.DoctorUUID, item.UUID);
 				row.SetTag(Resource.String.WorkPlaceUUID, item.MainWorkPlace);
 
@@ -195,6 +195,7 @@ namespace MDC.Doctors
 			using (var trans = DB.BeginWrite()) {
 				var routeItem = DBHelper.Get<RouteItem>(DB, routeItemUUID);
 				DBHelper.Delete(DB, trans, routeItem);
+				adapter.RemoveCurrentRouteItem(routeItem);
 
 				for (int c = index; c < RouteTable.ChildCount; c++) {
 					var rowForUpdate = (LinearLayout)RouteTable.GetChildAt(c);
@@ -209,8 +210,6 @@ namespace MDC.Doctors
 				}
 				trans.Commit();
 			}
-
-			if (pos != -1) adapter.ChangeVisibility(pos, true);
 		}
 
 		void Row_LongClick(object sender, View.LongClickEventArgs e)
@@ -295,19 +294,19 @@ namespace MDC.Doctors
 		{
 			FindViewById<Button>(Resource.Id.raSelectDateB).Text = SelectedDate.Date.ToLongDateString();
 			
-			var adapter = (PharmacyTable.Adapter as DoctorsForRouteAdapter);
+			var adapter = (RouteDoctorTable.Adapter as DoctorsForRouteAdapter);
 			if (SelectedDate.Date <= DateTimeOffset.Now.Date) {		
-				PharmacyTable.Visibility = ViewStates.Gone;
+				RouteDoctorTable.Visibility = ViewStates.Gone;
 			} else {
-				PharmacyTable.Visibility = ViewStates.Visible;
+				RouteDoctorTable.Visibility = ViewStates.Visible;
 				adapter.SetSelectedDate(SelectedDate);
 				adapter.SetSearchText(SearchEditor.Text);
 			}
 
 			RouteTable.RemoveAllViews();
 			foreach (var routeItem in DBSpec.GetRouteItems(DB, SelectedDate).OrderBy(ri => ri.Order)) {
-				var row = LayoutInflater.Inflate(Resource.Layout.RouteItem, RouteTable, false);
-				var doctor = MainDatabase.Get<WorkPlace>(routeItem.Pharmacy);
+				var row = LayoutInflater.Inflate(Resource.Layout.RouteTableItem, RouteTable, false);
+				var doctor = adapter.Get(routeItem.WorkPlace);
 				if (doctor == null) {
 					row.FindViewById<TextView>(Resource.Id.rtiDoctorNameTV).Text = "<аптека не найдена>";
 				} else {

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Globalization;
 using System.Collections.Generic;
 
 using Android.App;
@@ -8,8 +10,6 @@ using Android.Widget;
 using Realms;
 
 using MDC.Doctors.Lib.Entities;
-using System.Globalization;
-using System;
 
 namespace MDC.Doctors.Lib.Adapters
 {
@@ -27,10 +27,11 @@ namespace MDC.Doctors.Lib.Adapters
 			return UUID.GetHashCode();
 		}
 
-		public override bool Equals(object other)
-		{
-			return Equals(other);
-		}
+		//public override bool Equals(object other)
+		//{
+			
+		//	return UUID.Equals();
+		//}
 	}
 
 	// TODO: ForDisplay -> from List to Dictionary, because need change visibility
@@ -148,7 +149,7 @@ namespace MDC.Doctors.Lib.Adapters
 		
 		public DoctorHolder Get(string workPlace)
 		{
-			Doctors.FirstOrDefault(d => d.MainWorkPlace == workPlace);
+			return Doctors.FirstOrDefault(d => d.MainWorkPlace == workPlace);
 		}
 		
 		public void ClearCurrentRoute()
@@ -158,14 +159,14 @@ namespace MDC.Doctors.Lib.Adapters
 			NotifyDataSetChanged();
 		}
 		
-		public void AddCurrentRouteItem(RoiteItem routeItem)
+		public void AddCurrentRouteItem(RouteItem routeItem)
 		{
 			CurrItems.Add(routeItem.WorkPlace, true);
 
 			NotifyDataSetChanged();
 		}
 
-		public void RemoveCurrentRouteItem(RoiteItem routeItem)
+		public void RemoveCurrentRouteItem(RouteItem routeItem)
 		{
 			CurrItems.Remove(routeItem.WorkPlace);
 

@@ -37,6 +37,9 @@ namespace MDC.Doctors
 
 		public const int WeeksCount = 14;
 
+		ProgressBar SearchProgress;
+
+
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			DB = Realm.GetInstance();
@@ -123,19 +126,22 @@ namespace MDC.Doctors
 			};
 
 			SearchEditor = FindViewById<EditText>(Resource.Id.paSearchET);
-			SearchProgress = FindViewById<Progress>(Resource.Id.paSearchP);
+			SearchProgress = FindViewById<ProgressBar>(Resource.Id.paSearchPB);
 
 			SearchEditor.AfterTextChanged += async (sender, e) => {
 				Table.Visibility = ViewStates.Invisible;
-				SearchProgress.Start();
+				SearchProgress.Visibility = ViewStates.Visible;
 				
 				var text = e.Editable.ToString();
 				var adapter = (Table.Adapter as AttendanceByWeekAdapter);
-				await adapter.SetSearchText(text);
-				
-				RunOnUIThread(() => {
-					if ((SearchProgress != null) && SearchProgress.IsShown) SearchProgress.Dismiss();
-					adapter.NotifyDataChanged();
+				await adapter.SetSearchTextAsync(text);
+
+				var textView = sender as TextView;
+
+				RunOnUiThread(() => {
+					//if ((SearchProgress != null) && SearchProgress.IsShown) SearchProgress.D
+					SearchProgress.Visibility = ViewStates.Gone;
+					adapter.NotifyDataSetChanged();
 					Table.Visibility = ViewStates.Visible;
 				});
 			};

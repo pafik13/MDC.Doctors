@@ -33,32 +33,32 @@ namespace MDC.Doctors
 			return result;
 		}
 
-		public static Dictionary<string, Dictionary<int, int>> GetProfileReportData(Realm db, int[] weekKeys)
-		{
-			var result = new Dictionary<string, Dictionary<int, int>>();
-			foreach (var workPlace in db.All<WorkPlace>())
-			{
-				result.Add(workPlace.UUID, new Dictionary<int, int>());
-				for (int i = 0; i < ProfileActivity.WeeksCount; i++)
-				{
-					result[workPlace.UUID].Add(weekKeys[i], 0);
-				}
-			}
+		//public static Dictionary<string, Dictionary<int, int>> GetProfileReportData(Realm db, int[] weekKeys)
+		//{
+		//	var result = new Dictionary<string, Dictionary<int, int>>();
+		//	foreach (var workPlace in db.All<WorkPlace>())
+		//	{
+		//		result.Add(workPlace.UUID, new Dictionary<int, int>());
+		//		for (int i = 0; i < ProfileActivity.WeeksCount; i++)
+		//		{
+		//			result[workPlace.UUID].Add(weekKeys[i], 0);
+		//		}
+		//	}
 
-			foreach (var attendance in db.All<Attendance>())
-			{
-				int key = Helper.GetWeekKey(attendance.When);
-				if (result.ContainsKey(attendance.WorkPlace))
-				{
-					if (result[attendance.WorkPlace].ContainsKey(key))
-					{
-						result[attendance.WorkPlace][key]++;
-					}
-				}
-			}
+		//	foreach (var attendance in db.All<Attendance>())
+		//	{
+		//		int key = Helper.GetWeekKey(attendance.When);
+		//		if (result.ContainsKey(attendance.WorkPlace))
+		//		{
+		//			if (result[attendance.WorkPlace].ContainsKey(key))
+		//			{
+		//				result[attendance.WorkPlace][key]++;
+		//			}
+		//		}
+		//	}
 
-			return result;
-		}
+		//	return result;
+		//}
 		
 		public static List<RouteItem> GetRouteItems(Realm db, DateTimeOffset selectedDate)
 		{

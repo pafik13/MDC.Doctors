@@ -119,7 +119,6 @@
     <Compile Include="Lib\Entities\EntityDelete.cs" />
     <Compile Include="SyncActivity.cs" />
     <Compile Include="ProfileActivity.cs" />
-    <Compile Include="HospitalActivity.cs" />
     <Compile Include="Lib\DBSpec.cs" />
     <Compile Include="Lib\Other\JSONSerializer.cs" />
     <Compile Include="Lib\Adapters\AttendanceByWeekAdapter.cs" />

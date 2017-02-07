@@ -11,6 +11,7 @@ using Android.Widget;
 using Realms;
 
 using MDC.Doctors.Lib.Entities;
+using System.Threading.Tasks;
 
 namespace MDC.Doctors.Lib.Adapters
 {
@@ -26,8 +27,13 @@ namespace MDC.Doctors.Lib.Adapters
 		
 		string Text;
 
+		readonly CultureInfo Culture;
+
+
 		public AttendanceByWeekAdapter(Activity context, Dictionary<string, Dictionary<int, int>> data, int[] weekKeys)
 		{
+			Culture = CultureInfo.GetCultureInfo("ru-RU");
+
 			DB = Realm.GetInstance();
 
 			Context = context;
@@ -36,11 +42,11 @@ namespace MDC.Doctors.Lib.Adapters
 
 			Items = data;
 			
-			Doctors = new DoctorHolder[data.Keys.Count)];
-
+			Doctors = new DoctorHolder[data.Keys.Count];
+			int i = 0;
 			foreach (var doctorUUID in data.Keys)
 			{
-				var doctor = DBHelper.Get<WorkPlace>(DB, doctorUUID);
+				var doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
 				
 				DoctorHolder holder;
 				
@@ -100,7 +106,7 @@ namespace MDC.Doctors.Lib.Adapters
 		public override View GetView(int position, View convertView, ViewGroup parent)
 		{
 			// Get our object for position
-			var doctorUUID = ForDisplay == null ? Items.Keys.ElementAt(position) : ForDisplay[position];
+			var doctorUUID = ForDisplay == null ? Items.Keys.ElementAt(position) : ForDisplay[position].UUID;
 			var item = Items[doctorUUID];
 			var doctor = Doctors.First(d => d.UUID == doctorUUID);
 
