@@ -2,11 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Grey_300">
+    android:background="@color/Indigo_50">
     <RelativeLayout
         android:id="@+id/paUpPanelRL"
         android:layout_width="match_parent"
         android:layout_height="64dp"
+        android:background="@android:color/white"
         android:minWidth="25px"
         android:minHeight="64px">
         <TextView
@@ -95,34 +96,35 @@
             android:id="@+id/paAttendanceByWeekLL"
             android:minWidth="25px"
             android:minHeight="25px">
-            <RelativeLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/paSearchIV"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_search_black_48dp"
-                    android:background="@android:color/white" />
                 <ProgressBar
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
                     android:id="@+id/paSearchPB"
                     android:visibility="visible"
                     android:fitsSystemWindows="false"
                     style="@style/alert_info" />
+                <ImageView
+                    android:id="@+id/paSearchIV"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_search_black_48dp"
+                    android:background="@android:color/white" />
                 <ViewSwitcher
-                    android:layout_marginRight="2dp"
+                    android:layout_marginLeft="56dp"
                     android:id="@+id/paSearchVS"
                     android:layout_toRightOf="@id/paSearchIV"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="56dp"
                     android:background="@android:color/white">
                     <TextView
                         android:text="СТАТИСТИКА ПОСЕЩЕНИЙ"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="56dp"
                         android:gravity="center"
                         android:textColor="@color/Light_Blue_500"
                         android:background="@android:color/white" />
@@ -141,7 +143,7 @@
                         android:layout_height="match_parent"
                         android:layout_width="match_parent" />
                 </ViewSwitcher>
-            </RelativeLayout>
+            </FrameLayout>
             <ListView
                 android:minWidth="25px"
                 android:minHeight="25px"

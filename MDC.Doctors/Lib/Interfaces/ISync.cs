@@ -2,9 +2,9 @@
 
 namespace MDC.Doctors.Lib.Interfaces
 {
-	public enum DataType
+	public enum DataSource
 	{
-		pharmacy, doctor	
+		dsPharmacyApp, dsDoctorApp	
 	}
 
 	public interface ISync
@@ -13,7 +13,7 @@ namespace MDC.Doctors.Lib.Interfaces
 		/// Gets or sets the data type = ['pharmacy', 'doctor']
 		/// </summary>
 		/// <value>The data type.</value>
-		string DataType { get; set; }
+		string DataSource { get; set; }
 
 		/// <summary>
 		/// Gets or sets the created by. Link to Agent UUID

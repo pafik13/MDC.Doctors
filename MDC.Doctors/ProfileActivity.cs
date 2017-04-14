@@ -87,6 +87,7 @@ namespace MDC.Doctors
 			Table = FindViewById<ListView>(Resource.Id.paAttendanceByWeekTable);
 
 			Dates = new DateTimeOffset[WeeksCount];
+			Keys = new int[WeeksCount];
 			var header = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.AttendanceByWeekTableHeader, Table, false);
 			(header.GetChildAt(0) as TextView).Text = @"Недели";
 			for (int w = 0; w < WeeksCount; w++) {
@@ -129,6 +130,7 @@ namespace MDC.Doctors
 			SearchProgress = FindViewById<ProgressBar>(Resource.Id.paSearchPB);
 
 			SearchEditor.AfterTextChanged += async (sender, e) => {
+				SearchImage.Visibility = ViewStates.Invisible;
 				Table.Visibility = ViewStates.Invisible;
 				SearchProgress.Visibility = ViewStates.Visible;
 				
@@ -140,9 +142,10 @@ namespace MDC.Doctors
 
 				RunOnUiThread(() => {
 					//if ((SearchProgress != null) && SearchProgress.IsShown) SearchProgress.D
-					SearchProgress.Visibility = ViewStates.Gone;
+					SearchProgress.Visibility = ViewStates.Invisible;
 					adapter.NotifyDataSetChanged();
 					Table.Visibility = ViewStates.Visible;
+					SearchImage.Visibility = ViewStates.Visible;
 				});
 			};
 

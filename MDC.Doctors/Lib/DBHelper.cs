@@ -56,7 +56,7 @@ namespace MDC.Doctors.Lib
 			}
 			var item = new T();
 			item.UUID = Guid.NewGuid().ToString();
-			item.DataType = DataType.doctor.ToString("G");
+			item.DataSource = DataSource.dsDoctorApp.ToString("G");
 			item.CreatedBy = string.IsNullOrEmpty(Helper.AgentUUID) ? @"AgentUUID is Empty" : Helper.AgentUUID;
 			item.CreatedAt = DateTimeOffset.Now;
 			item.UpdatedAt = DateTimeOffset.Now;
@@ -82,7 +82,7 @@ namespace MDC.Doctors.Lib
 			var item = new EntityDelete();
 			item.UUID = toDelete.UUID;
 			item.Entity = typeof(T).Name;
-			item.DataType = DataType.doctor.ToString("G");
+			item.DataSource = DataSource.dsDoctorApp.ToString("G");
 			item.CreatedBy = string.IsNullOrEmpty(Helper.AgentUUID) ? @"AgentUUID is Empty" : Helper.AgentUUID;
 			item.CreatedAt = DateTimeOffset.Now;
 			item.UpdatedAt = DateTimeOffset.Now;

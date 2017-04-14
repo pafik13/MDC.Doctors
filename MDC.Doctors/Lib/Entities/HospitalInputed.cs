@@ -49,7 +49,7 @@ namespace MDC.Doctors.Lib.Entities
 		public string Phone { get; set; }
 
 		#region ISync
-		public string DataType { get; set; }
+		public string DataSource { get; set; }
 
 		public string CreatedBy { get; set; }
 

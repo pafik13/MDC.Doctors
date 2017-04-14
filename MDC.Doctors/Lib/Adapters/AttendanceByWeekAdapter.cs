@@ -49,14 +49,14 @@ namespace MDC.Doctors.Lib.Adapters
 				var doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
 				
 				DoctorHolder holder;
-				
+
 				if (string.IsNullOrEmpty(doctor.MainWorkPlace))
 				{
 					holder = new DoctorHolder
 					{
 						UUID = string.Copy(doctor.UUID),
-						Name = string.Copy(doctor.Name),
-						MainWorkPlace = string.Copy(doctor.MainWorkPlace),
+						Name = doctor.Name == null ? string.Empty : string.Copy(doctor.Name),
+						MainWorkPlace = doctor.MainWorkPlace == null ? string.Empty : string.Copy(doctor.MainWorkPlace),
 						HospitalName = string.Empty,
 						HospitalAddress = string.Empty
 					};
@@ -68,10 +68,10 @@ namespace MDC.Doctors.Lib.Adapters
 					holder = new DoctorHolder
 					{
 						UUID = string.Copy(doctor.UUID),
-						Name = string.Copy(doctor.Name),
-						MainWorkPlace = string.Copy(doctor.MainWorkPlace),
-						HospitalName = string.Copy(hospital.GetName()),
-						HospitalAddress = string.Copy(hospital.GetAddress()),
+						Name = doctor.Name == null ? string.Empty : string.Copy(doctor.Name),
+						MainWorkPlace = doctor.MainWorkPlace == null ? string.Empty : string.Copy(doctor.MainWorkPlace),
+						HospitalName = hospital.GetName() == null ? string.Empty : string.Copy(hospital.GetName()),
+						HospitalAddress = hospital.GetAddress() == null ? string.Empty : string.Copy(hospital.GetAddress()),
 					};
 				}
 

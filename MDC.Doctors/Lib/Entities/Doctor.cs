@@ -19,7 +19,7 @@ namespace MDC.Doctors.Lib.Entities
 	/// </summary>
 	public enum DoctorState
 	{
-		dsActive, dsReserve, dsFired
+		dsActive, dsReserve, dsFired, dsOnVacation
 	}
 
 	/// <summary>
@@ -54,6 +54,8 @@ namespace MDC.Doctors.Lib.Entities
 					return "Резерв";
 				case DoctorState.dsFired:
 					return "Уволен";
+				case DoctorState.dsOnVacation:
+					return "В отпуске";
 				default:
 					return "<UnknownDoctorState>";
 			}
@@ -61,10 +63,11 @@ namespace MDC.Doctors.Lib.Entities
 
 		public static string[] GetStates()
 		{
-			var states = new string[3];
+			var states = new string[4];
 			states[0] = "Актив";
 			states[1] = "Резерв";
 			states[2] = "Уволен";
+			states[3] = "В отпуске";
 			return states;
 		}
 
@@ -186,7 +189,7 @@ namespace MDC.Doctors.Lib.Entities
 
 		public bool IsSynced { get; set; }
 
-		public string DataType { get; set; }
+		public string DataSource { get; set; }
 		#endregion
 	}
 }

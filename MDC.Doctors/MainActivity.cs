@@ -48,6 +48,11 @@ namespace MDC.Doctors
 				StartActivity(intent);
 			};
 
+			var profile = FindViewById<ImageView>(Resource.Id.maProfile);
+			profile.Click += (sender, e) =>
+			{
+				StartActivity(new Intent(this, typeof(ProfileActivity)));
+			};
 
 			var add = FindViewById<ImageView>(Resource.Id.maAdd);
 			add.Click += (sender, e) =>
@@ -56,10 +61,10 @@ namespace MDC.Doctors
 			};
 
 			var sync = FindViewById<ImageView>(Resource.Id.maSync);
-			//sync.Click += (sender, e) =>
-			//{
-			//	StartActivity(new Intent(this, typeof(SyncActivity)));
-			//};
+			sync.Click += (sender, e) =>
+			{
+				StartActivity(new Intent(this, typeof(SyncActivity)));
+			};
 			sync.LongClick += (sender, e) =>
 			{
 				StartActivity(new Intent(this, typeof(LoadDataActivity)));
@@ -77,7 +82,7 @@ namespace MDC.Doctors
             base.OnResume();
 			var sw = new SDiag.Stopwatch();
 			sw.Start();
-			Realm.DeleteRealm(RealmConfiguration.DefaultConfiguration);
+			//Realm.DeleteRealm(RealmConfiguration.DefaultConfiguration);
 			DBHelper.GetDB(ref DB);
 
 			var inputedHospitals = DBHelper.GetAll<HospitalInputed>(DB);

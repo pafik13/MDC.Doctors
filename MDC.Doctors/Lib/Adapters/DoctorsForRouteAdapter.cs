@@ -70,8 +70,8 @@ namespace MDC.Doctors.Lib.Adapters
 					holder = new DoctorHolder
 					{
 						UUID = string.Copy(doctor.UUID),
-						Name = string.Copy(doctor.Name),
-						MainWorkPlace = string.Copy(doctor.MainWorkPlace),
+						Name = doctor.Name == null ? string.Empty : string.Copy(doctor.Name),
+						MainWorkPlace = doctor.MainWorkPlace == null ? string.Empty : string.Copy(doctor.MainWorkPlace),
 						HospitalName = string.Empty,
 						HospitalAddress = string.Empty
 					};
@@ -83,10 +83,10 @@ namespace MDC.Doctors.Lib.Adapters
 					holder = new DoctorHolder
 					{
 						UUID = string.Copy(doctor.UUID),
-						Name = string.Copy(doctor.Name),
-						MainWorkPlace = string.Copy(doctor.MainWorkPlace),
-						HospitalName = string.Copy(hospital.GetName()),
-						HospitalAddress = string.Copy(hospital.GetAddress()),
+						Name = doctor.Name == null ? string.Empty : string.Copy(doctor.Name),
+						MainWorkPlace = doctor.MainWorkPlace == null ? string.Empty : string.Copy(doctor.MainWorkPlace),
+						HospitalName = hospital.GetName() == null ? string.Empty : string.Copy(hospital.GetName()),
+						HospitalAddress = hospital.GetAddress() == null ? string.Empty : string.Copy(hospital.GetAddress()),
 					};
 				}
 
@@ -124,7 +124,8 @@ namespace MDC.Doctors.Lib.Adapters
 			// Get our object for position
 			var item = ForDisplay == null ? Doctors[position] : ForDisplay[position];
 
-			if (string.IsNullOrEmpty(item.MainWorkPlace) || CurrItems[item.MainWorkPlace] || (DoneItems != null && DoneItems[item.MainWorkPlace])) {
+			if (!string.IsNullOrEmpty(item.MainWorkPlace) && (CurrItems.ContainsKey(item.MainWorkPlace) || (DoneItems != null && DoneItems.ContainsKey(item.MainWorkPlace))))
+			{
 				return new View(Context);
 			}
 
@@ -179,6 +180,7 @@ namespace MDC.Doctors.Lib.Adapters
 			{
 				ForDisplay = null;
 				SearchText = null;
+				NotifyDataSetChanged();
 				return;
 			}
 

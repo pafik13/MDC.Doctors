@@ -2425,11 +2425,11 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c0138
 			public const int paSearchET = 2131493176;
 			
-			// aapt resource value: 0x7f0c0135
-			public const int paSearchIV = 2131493173;
-			
 			// aapt resource value: 0x7f0c0136
-			public const int paSearchPB = 2131493174;
+			public const int paSearchIV = 2131493174;
+			
+			// aapt resource value: 0x7f0c0135
+			public const int paSearchPB = 2131493173;
 			
 			// aapt resource value: 0x7f0c0137
 			public const int paSearchVS = 2131493175;
