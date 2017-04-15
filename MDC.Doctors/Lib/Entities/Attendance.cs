@@ -6,7 +6,7 @@ using MDC.Doctors.Lib.Interfaces;
 namespace MDC.Doctors.Lib.Entities
 {
  	// Attendancies
-	public class Attendance: RealmObject, IEntityFromClient, ISync
+	public class Attendance : RealmObject, IEntityFromClient, ISync
 	{
 		/// <summary>
 		/// Уникальный идентификатор посещения. Используется Guid.

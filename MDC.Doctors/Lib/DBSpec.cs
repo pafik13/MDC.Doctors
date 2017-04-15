@@ -6,6 +6,8 @@ using Realms;
 
 using MDC.Doctors.Lib.Interfaces;
 using MDC.Doctors.Lib.Entities;
+using MDC.Doctors.Lib.Adapters;
+using MDC.Doctors.Lib;
 
 namespace MDC.Doctors
 {
@@ -59,7 +61,93 @@ namespace MDC.Doctors
 
 		//	return result;
 		//}
-		
+		public struct DoctorInfoHolder
+		{
+			Doctor Doctor;
+			WorkPlace MainWorkPlace;
+			IHospital Hospital;
+
+			public override int GetHashCode()
+			{
+				return Doctor.UUID.GetHashCode();
+			}
+		}
+
+		public static Dictionary<string, List<DoctorHolder>> GetDoctorsForRoute(Realm db, DateTimeOffset selectedDate)
+		{
+			var date = selectedDate.UtcDateTime.Date;
+			var result = new Dictionary<string, List<DoctorHolder>>();
+			var emptyGUID = Guid.Empty.ToString();
+			foreach (var doctor in db.All<Doctor>())
+			{
+				DoctorHolder holder;
+
+				//if (string.IsNullOrEmpty(doctor.MainWorkPlace))
+				//{
+				//	holder = new DoctorHolder
+				//	{
+				//		UUID = string.Copy(doctor.UUID),
+				//		Name = doctor.Name == null ? string.Empty : string.Copy(doctor.Name),
+				//		MainWorkPlace = doctor.MainWorkPlace == null ? string.Empty : string.Copy(doctor.MainWorkPlace),
+				//		HospitalName = string.Empty,
+				//		HospitalAddress = string.Empty
+				//	};
+				//}
+				//else
+				//{
+				//	var workPlace = DBHelper.Get<WorkPlace>(DB, doctor.MainWorkPlace);
+				//	var hospital = DBHelper.GetHospital(DB, workPlace.Hospital);
+				//	holder = new DoctorHolder
+				//	{
+				//		UUID = string.Copy(doctor.UUID),
+				//		Name = doctor.Name == null ? string.Empty : string.Copy(doctor.Name),
+				//		MainWorkPlace = doctor.MainWorkPlace == null ? string.Empty : string.Copy(doctor.MainWorkPlace),
+				//		HospitalName = hospital.GetName() == null ? string.Empty : string.Copy(hospital.GetName()),
+				//		HospitalAddress = hospital.GetAddress() == null ? string.Empty : string.Copy(hospital.GetAddress()),
+				//	};
+				//}
+
+				string hospitalUUID = string.Empty;
+
+				if (string.IsNullOrEmpty(doctor.MainWorkPlace))
+				{
+					hospitalUUID = emptyGUID;
+					holder = new DoctorHolder
+					{
+						UUID = string.Copy(doctor.UUID),
+						Name = doctor.Name == null ? string.Empty : string.Copy(doctor.Name),
+						MainWorkPlace = string.Empty,
+						HospitalName = string.Empty,
+						HospitalAddress = string.Empty
+					};
+				}
+				else
+				{
+					var workPlace = DBHelper.Get<WorkPlace>(db, doctor.MainWorkPlace);
+					var hospital = DBHelper.GetHospital(db, workPlace.Hospital);
+					hospitalUUID = hospital.GetUUID();
+					holder = new DoctorHolder
+					{
+						UUID = string.Copy(doctor.UUID),
+						Name = doctor.Name == null ? string.Empty : string.Copy(doctor.Name),
+						MainWorkPlace = string.Copy(doctor.MainWorkPlace),
+						workPlace.
+						HospitalName = hospital.GetName() == null ? string.Empty : string.Copy(hospital.GetName()),
+						HospitalAddress = hospital.GetAddress() == null ? string.Empty : string.Copy(hospital.GetAddress()),
+					};
+				}
+				if (!result.ContainsKey(hospitalUUID))
+				{
+					result.Add(hospitalUUID, new List<DoctorHolder>());
+				}
+
+				result[hospitalUUID].Add(holder);
+			}
+
+			return result;
+		}
+
+
 		public static List<RouteItem> GetRouteItems(Realm db, DateTimeOffset selectedDate)
 		{
 			var date = selectedDate.UtcDateTime.Date;

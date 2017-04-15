@@ -75,18 +75,25 @@ namespace MDC.Doctors.Lib.Adapters
 				var DB = Realms.Realm.GetInstance();
 				var workPlace = DBHelper.Get<WorkPlace>(DB, item.MainWorkPlace);
 				var hospital = DBHelper.GetHospital(DB, workPlace.Hospital);
-				
-				view.FindViewById<TextView>(Resource.Id.dtiHospitalAreaTV).Text = 
+
+				view.FindViewById<TextView>(Resource.Id.dtiHospitalAreaTV).Text =
 					string.IsNullOrEmpty(hospital.GetArea()) ? @"<нет округа>" : hospital.GetArea();
-				view.FindViewById<TextView>(Resource.Id.dtiHospitalNameTV).Text = 
+				view.FindViewById<TextView>(Resource.Id.dtiHospitalNameTV).Text =
 					string.IsNullOrEmpty(hospital.GetName()) ? @"<нет названия>" : hospital.GetName();
-				view.FindViewById<TextView>(Resource.Id.dtiHospitalAddressTV).Text = 
+				view.FindViewById<TextView>(Resource.Id.dtiHospitalAddressTV).Text =
 					string.IsNullOrEmpty(hospital.GetAddress()) ? @"<нет адреса>" : hospital.GetAddress();
-					
-				view.FindViewById<TextView>(Resource.Id.dtiWorkPlaceCabinetTV).Text = 
+
+				view.FindViewById<TextView>(Resource.Id.dtiWorkPlaceCabinetTV).Text =
 					string.IsNullOrEmpty(workPlace.Cabinet) ? @"<нет кабинета>" : workPlace.Cabinet;
-				view.FindViewById<TextView>(Resource.Id.dtiWorkPlaceTimetableTV).Text = 
+				view.FindViewById<TextView>(Resource.Id.dtiWorkPlaceTimetableTV).Text =
 					string.IsNullOrEmpty(workPlace.Timetable) ? @"<нет расписания>" : workPlace.Timetable;
+			}
+			else 
+			{
+				view.FindViewById<TextView>(Resource.Id.dtiHospitalAreaTV).Text = string.Empty;
+				view.FindViewById<TextView>(Resource.Id.dtiHospitalNameTV).Text = string.Empty;
+				view.FindViewById<TextView>(Resource.Id.dtiHospitalAddressTV).Text = string.Empty;
+				view.FindViewById<TextView>(Resource.Id.dtiWorkPlaceTimetableTV).Text = string.Empty;
 			}
 				
 			if (DoctorsInRoute == null) return view;

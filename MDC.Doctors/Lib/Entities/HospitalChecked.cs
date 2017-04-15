@@ -4,7 +4,7 @@ using MDC.Doctors.Lib.Interfaces;
 
 namespace MDC.Doctors.Lib.Entities
 {
-	public class HospitalChecked: RealmObject, IEntityFromServer, IHospital
+	public class HospitalChecked : RealmObject, IEntityFromServer, IHospital
 	{
 		[PrimaryKey]
 		public string uuid { get; set; }

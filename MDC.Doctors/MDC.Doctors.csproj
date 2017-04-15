@@ -122,6 +122,7 @@
     <Compile Include="Lib\DBSpec.cs" />
     <Compile Include="Lib\Other\JSONSerializer.cs" />
     <Compile Include="Lib\Adapters\AttendanceByWeekAdapter.cs" />
+    <Compile Include="Lib\Adapters\ExpandableListAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -182,6 +183,8 @@
     <AndroidResource Include="Resources\layout\Sync.axml" />
     <AndroidResource Include="Resources\layout\AttendanceByWeekTableHeader.axml" />
     <AndroidResource Include="Resources\layout\AttendanceByWeekTableItem.axml" />
+    <AndroidResource Include="Resources\layout\HeaderCustomLayout.axml" />
+    <AndroidResource Include="Resources\layout\ListItemCustomLayout.axml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

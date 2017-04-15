@@ -5,7 +5,7 @@ using MDC.Doctors.Lib.Interfaces;
 
 namespace MDC.Doctors.Lib.Entities
 {
-	public class PotentialData: RealmObject, IEntityFromClient, IAttendanceData, ISync
+	public class PotentialData : RealmObject, IEntityFromClient, IAttendanceData, ISync
 	{
 		/// <summary>
 		/// Уникальный идентификатор информации о потенциале врача. Используется Guid.

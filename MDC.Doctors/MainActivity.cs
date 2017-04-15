@@ -14,6 +14,8 @@ using MDC.Doctors.Lib.Adapters;
 using MDC.Doctors.Lib.Entities;
 using System;
 using System.Linq;
+using MDC.Doctors.Lib.Interfaces;
+using System.ComponentModel;
 
 namespace MDC.Doctors
 {
@@ -77,6 +79,27 @@ namespace MDC.Doctors
 			};
 		}
 
+		public class HospitalComparer : IComparer<IHospital>
+		{
+			readonly ListSortDirection Direcion;
+			public HospitalComparer(ListSortDirection direction)
+			{
+				Direcion = direction;
+			}
+
+			public int Compare(IHospital a, IHospital b)
+			{
+				if (Direcion == ListSortDirection.Ascending)
+				{
+					return string.Compare(a.GetName(), b.GetName(), new System.Globalization.CultureInfo("ru-RU"), System.Globalization.CompareOptions.IgnoreCase);
+				}
+				else
+				{
+					return string.Compare(b.GetName(), a.GetName(), new System.Globalization.CultureInfo("ru-RU"), System.Globalization.CompareOptions.IgnoreCase);
+				}
+			}
+		}
+
         protected override void OnResume()
         {
             base.OnResume();
@@ -85,7 +108,20 @@ namespace MDC.Doctors
 			//Realm.DeleteRealm(RealmConfiguration.DefaultConfiguration);
 			DBHelper.GetDB(ref DB);
 
-			var inputedHospitals = DBHelper.GetAll<HospitalInputed>(DB);
+			var inputedHospitals = DBHelper.GetAll<HospitalInputed>(DB).ToList<IHospital>();
+
+			var sorted = (inputedHospitals as List<IHospital>).OrderBy(arg => arg, new HospitalComparer(ListSortDirection.Descending)).ToList();
+
+			//var orderedHosp = inputedHospitals.OrderByDescending(hosp =>
+			//{
+			//	if (hosp is HospitalInputed)
+			//	{
+			//		return hosp.Name;
+			//	}
+			//	else {
+			//		return string.Empty;
+			//	}
+			//}).ToArray();
 
 			if (inputedHospitals.Count() < 1)
 			{

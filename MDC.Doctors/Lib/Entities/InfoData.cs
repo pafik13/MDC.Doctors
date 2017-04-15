@@ -5,7 +5,7 @@ using MDC.Doctors.Lib.Interfaces;
 
 namespace MDC.Doctors.Lib.Entities
 {
-	public class InfoData: RealmObject, IEntityFromClient, IAttendanceData, ISync
+	public class InfoData : RealmObject, IEntityFromClient, IAttendanceData, ISync
 	{
 		/// <summary>
 		/// Уникальный идентификатор презентации. Используется Guid.

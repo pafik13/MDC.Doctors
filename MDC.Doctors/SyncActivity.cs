@@ -68,7 +68,8 @@ namespace MDC.Doctors
 			//ACCESS_TOKEN = shared.GetString(SigninDialog.C_ACCESS_TOKEN, string.Empty);
 			//USERNAME = shared.GetString(SigninDialog.C_USERNAME, string.Empty);
 			//HOST_URL = shared.GetString(SigninDialog.C_HOST_URL, string.Empty);
-			HOST_URL = @"http://sbl-crm-project-pafik13.c9users.io:8080/";
+			//HOST_URL = @"http://sbl-crm-project-pafik13.c9users.io:8080/";
+			HOST_URL = "http://front-sbldev.rhcloud.com/";
 			//AGENT_UUID = shared.GetString(SigninDialog.C_AGENT_UUID, string.Empty);
 
 			RefreshView();
@@ -221,7 +222,6 @@ namespace MDC.Doctors
 			if (Count > 0) {
 				var progress = ProgressDialog.Show(this, string.Empty, "Синхронизация");
 
-				await SyncEntities<Attendance>();
 				await SyncEntities<Attendance>();
 				await SyncEntities<Doctor>();
 				await SyncEntities<EntityDelete>();

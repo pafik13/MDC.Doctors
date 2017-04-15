@@ -7,7 +7,7 @@ namespace MDC.Doctors.Lib.Entities
 	/// <summary>
 	/// Вид работы (например: листовка, презентация и т.д.).
 	/// </summary>
-	public class WorkType: RealmObject, IEntityFromServer
+	public class WorkType : RealmObject, IEntityFromServer
 	{
 		/// <summary>
 		/// Уникальный идентификатор вида работы. Используется Guid.

@@ -101,14 +101,22 @@
                             android:layout_width="570dp" />
                     </ViewSwitcher>
                 </FrameLayout>
-                <ListView
+                <ExpandableListView
+                    android:id="@+id/raDoctorExpTable"
+                    android:background="#c6c6c6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:dividerHeight="2dp"
+                    android:divider="@color/Grey_300" />
+            <!--                <ListView
                     android:minHeight="40dp"
                     android:id="@+id/raDoctorTable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
                     android:dividerHeight="2dp"
-                    android:divider="@color/Grey_300" />
+                    android:divider="@color/Grey_300" />-->
             </LinearLayout>
             <View
                 android:layout_width="2dp"

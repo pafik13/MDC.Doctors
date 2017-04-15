@@ -9,7 +9,7 @@ namespace MDC.Doctors.Lib.Entities
 	/// <summary>
 	/// ЛПУ - Лечебно-профилактические учреждение.
 	/// </summary>
-	public class HospitalInputed: RealmObject, IEntityFromClient, IHospital, ISync
+	public class HospitalInputed : RealmObject, IEntityFromClient, IHospital, ISync
 	{
 		/// <summary>
 		/// Уникальный идентификатор ЛПУ. Используется Guid.

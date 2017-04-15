@@ -7,7 +7,7 @@ namespace MDC.Doctors.Lib.Entities
 	/// <summary>
 	/// Специальность врача/медработника (например: ... и т.д.).
 	/// </summary>
-	public class Specialty: RealmObject, IEntityFromServer
+	public class Specialty : RealmObject, IEntityFromServer
 	{
 		/// <summary>
 		/// Уникальный идентификатор специальности. Используется Guid.

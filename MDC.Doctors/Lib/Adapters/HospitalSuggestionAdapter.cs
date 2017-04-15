@@ -124,15 +124,15 @@ namespace MDC.Doctors.Lib.Adapters
 				for (int i = 0; i < IHospitals.Length; i++)
 				{
 					var item = IHospitals[i];
-					if (item.Name.Contains(search))
+					if (item.Name.Contains(search, System.StringComparison.CurrentCultureIgnoreCase))
 					{
 						list.Add(item);
 					}
-					else if (item.Address.Contains(search))
+					else if (item.Address.Contains(search, System.StringComparison.CurrentCultureIgnoreCase))
 					{
 						list.Add(item);
 					}
-					else if (item.Area.Contains(search))
+					else if (item.Area.Contains(search, System.StringComparison.CurrentCultureIgnoreCase))
 					{
 						list.Add(item);
 					}

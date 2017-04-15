@@ -29,7 +29,12 @@ namespace MDC.Doctors
 
 		DateTimeOffset SelectedDate;
 
-		ListView RouteDoctorTable;
+		//ListView RouteDoctorTable;
+		ExpandableListView RouteDoctorExpTable;
+		List<string> listDataHeader;
+		Dictionary<string, List<string>> listDataChild;
+		int previousGroup = -1;
+
 
 		LinearLayout RouteTable;
 
@@ -82,10 +87,25 @@ namespace MDC.Doctors
 				Finish();
 			};
 
-			RouteDoctorTable = FindViewById<ListView>(Resource.Id.raDoctorTable);
-			RouteDoctorTable.Adapter = new DoctorsForRouteAdapter(this);
+			//RouteDoctorTable = FindViewById<ListView>(Resource.Id.raDoctorTable);
+			//RouteDoctorTable.Adapter = new DoctorsForRouteAdapter(this);
 
-			RouteDoctorTable.ItemClick += RouteDoctorTable_ItemClick;
+			//RouteDoctorTable.ItemClick += RouteDoctorTable_ItemClick;
+			RouteDoctorExpTable = FindViewById<ExpandableListView>(Resource.Id.raDoctorExpTable);
+
+			// Prepare list data
+			var dataCollectSW = new Stopwatch();
+			dataCollectSW.Start();
+			FnGetListData();
+			dataCollectSW.Stop();
+			System.Diagnostics.Debug.WriteLine("Route, Data collect:{0}", dataCollectSW.ElapsedMilliseconds);
+
+			//Bind list
+			RouteDoctorExpTable.SetAdapter(new ExpandableListAdapter(this, listDataHeader, listDataChild));
+
+			FnClickEvents();
+
+
 
 			SearchSwitcher = FindViewById<ViewSwitcher>(Resource.Id.raSearchVS);
 			SearchSwitcher.SetInAnimation(this, Android.Resource.Animation.SlideInLeft);
@@ -103,13 +123,13 @@ namespace MDC.Doctors
 
 			SearchEditor = FindViewById<EditText>(Resource.Id.raSearchET);
 
-			SearchEditor.AfterTextChanged += (sender, e) => {
-				var text = e.Editable.ToString();
-				if (text.Length < C_SEARCH_THRESHOLD) return;
+			//SearchEditor.AfterTextChanged += (sender, e) => {
+			//	var text = e.Editable.ToString();
+			//	if (text.Length < C_SEARCH_THRESHOLD) return;
 
-				var adapter = RouteDoctorTable.Adapter as DoctorsForRouteAdapter;
-				adapter.SetSearchText(text);
-			};
+			//	var adapter = RouteDoctorTable.Adapter as DoctorsForRouteAdapter;
+			//	adapter.SetSearchText(text);
+			//};
 
 			RouteTable = FindViewById<LinearLayout>(Resource.Id.raRouteTable);
 
@@ -142,6 +162,95 @@ namespace MDC.Doctors
 				}
 				switcher.ShowNext();
 			};
+		}
+
+		void FnClickEvents()
+		{
+			//Listening to child item selection
+			RouteDoctorExpTable.ChildClick += delegate (object sender, ExpandableListView.ChildClickEventArgs e)
+			{
+				Toast.MakeText(this, "child clicked", ToastLength.Short).Show();
+			};
+
+			//Listening to group expand
+			//modified so that on selection of one group other opened group has been closed
+			RouteDoctorExpTable.GroupExpand += delegate (object sender, ExpandableListView.GroupExpandEventArgs e)
+			{
+
+				if (e.GroupPosition != previousGroup)
+					RouteDoctorExpTable.CollapseGroup(previousGroup);
+				previousGroup = e.GroupPosition;
+			};
+
+			//Listening to group collapse
+			RouteDoctorExpTable.GroupCollapse += delegate (object sender, ExpandableListView.GroupCollapseEventArgs e)
+			{
+				Toast.MakeText(this, "group collapsed", ToastLength.Short).Show();
+			};
+
+		}
+
+		void FnGetListData()
+		{
+			var headers = new string[3] {
+				"Computer science",
+				"Electrocs & comm.",
+				"Mechanical"
+			};
+
+			listDataHeader = new List<string>();
+			listDataChild = new Dictionary<string, List<string>>();
+
+			var doctorsDict = DBSpec.GetDoctorsForRoute(DB, DateTimeOffset.Now);
+
+			foreach (var hospital in doctorsDict.Keys)
+			{
+				listDataHeader.Add(hospital);
+				listDataChild.Add(hospital, doctorsDict[hospital].Select(doc => doc.Name).ToList());
+			}
+
+			// Adding child data
+			//listDataHeader.Add("Computer science");
+			//listDataHeader.Add("Electrocs & comm.");
+			//listDataHeader.Add("Mechanical");
+
+			//for (int i = 0; i < 50; i++)
+			//{
+			//	listDataHeader.Add(string.Format("{0} - #{1}", headers[0], i));
+			//	listDataHeader.Add(string.Format("{0} - #{1}", headers[1], i));
+			//	listDataHeader.Add(string.Format("{0} - #{1}", headers[2], i));
+
+			//	// Adding child data
+			//	var lstCS = new List<string>();
+			//	lstCS.Add("Data structure");
+			//	lstCS.Add("C# Programming");
+			//	lstCS.Add("Java programming");
+			//	lstCS.Add("ADA");
+			//	lstCS.Add("Operation reserach");
+			//	lstCS.Add("OOPS with C");
+			//	lstCS.Add("C++ Programming");
+
+			//	var lstEC = new List<string>();
+			//	lstEC.Add("Field Theory");
+			//	lstEC.Add("Logic Design");
+			//	lstEC.Add("Analog electronics");
+			//	lstEC.Add("Network analysis");
+			//	lstEC.Add("Micro controller");
+			//	lstEC.Add("Signals and system");
+
+			//	var lstMech = new List<string>();
+			//	lstMech.Add("Instrumentation technology");
+			//	lstMech.Add("Dynamics of machinnes");
+			//	lstMech.Add("Energy engineering");
+			//	lstMech.Add("Design of machine");
+			//	lstMech.Add("Turbo machine");
+			//	lstMech.Add("Energy conversion");
+
+			//	// Header, Child data
+			//	listDataChild.Add(string.Format("{0} - #{1}", headers[0], i), lstCS);
+			//	listDataChild.Add(string.Format("{0} - #{1}", headers[1], i), lstEC);
+			//	listDataChild.Add(string.Format("{0} - #{1}", headers[2], i), lstMech);
+			//}
 		}
 
 		void RouteDoctorTable_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
@@ -189,7 +298,7 @@ namespace MDC.Doctors
 
 		void RowDelete_Click(object sender, EventArgs e)
 		{
-			var adapter = (DoctorsForRouteAdapter)RouteDoctorTable.Adapter;
+			//var adapter = (DoctorsForRouteAdapter)RouteDoctorTable.Adapter;
 
 			var rowForDelete = (LinearLayout)((ImageView)sender).Parent;
 
@@ -202,7 +311,7 @@ namespace MDC.Doctors
 
 			using (var transaction = DB.BeginWrite()) {
 				var routeItem = DBHelper.Get<RouteItem>(DB, routeItemUUID);
-				adapter.RemoveCurrentRouteItem(routeItem);
+				//adapter.RemoveCurrentRouteItem(routeItem);
 				DBHelper.Delete(DB, transaction, routeItem);
 
 				for (int c = index; c < RouteTable.ChildCount; c++) {
@@ -302,29 +411,29 @@ namespace MDC.Doctors
 		{
 			FindViewById<Button>(Resource.Id.raSelectDateB).Text = SelectedDate.Date.ToLongDateString();
 			
-			var adapter = (RouteDoctorTable.Adapter as DoctorsForRouteAdapter);
-			if (SelectedDate.Date <= DateTimeOffset.Now.Date) {		
-				RouteDoctorTable.Visibility = ViewStates.Gone;
-			} else {
-				RouteDoctorTable.Visibility = ViewStates.Visible;
-				adapter.SetSelectedDate(SelectedDate);
-				adapter.SetSearchText(SearchEditor.Text);
-			}
+			//var adapter = (RouteDoctorTable.Adapter as DoctorsForRouteAdapter);
+			//if (SelectedDate.Date <= DateTimeOffset.Now.Date) {		
+			//	RouteDoctorTable.Visibility = ViewStates.Gone;
+			//} else {
+			//	RouteDoctorTable.Visibility = ViewStates.Visible;
+			//	adapter.SetSelectedDate(SelectedDate);
+			//	adapter.SetSearchText(SearchEditor.Text);
+			//}
 
 			RouteTable.RemoveAllViews();
-			adapter.ClearCurrentRoute();
+			//adapter.ClearCurrentRoute();
 			foreach (var routeItem in DBSpec.GetRouteItems(DB, SelectedDate).OrderBy(ri => ri.Order)) {
 				var row = LayoutInflater.Inflate(Resource.Layout.RouteTableItem, RouteTable, false);
-				var doctor = adapter.Get(routeItem.WorkPlace);
-				if (string.IsNullOrEmpty(doctor.UUID)) {
-					row.FindViewById<TextView>(Resource.Id.rtiDoctorNameTV).Text = "<аптека не найдена>";
-				} else {
-					row.FindViewById<TextView>(Resource.Id.rtiDoctorNameTV).Text = doctor.Name;
-					row.FindViewById<TextView>(Resource.Id.rtiHospitalNameTV).Text = doctor.HospitalName;
-					row.FindViewById<TextView>(Resource.Id.rtiHospitalAddressTV).Text = doctor.HospitalAddress;
-				}
+				//var doctor = adapter.Get(routeItem.WorkPlace);
+				//if (string.IsNullOrEmpty(doctor.UUID)) {
+				//	row.FindViewById<TextView>(Resource.Id.rtiDoctorNameTV).Text = "<аптека не найдена>";
+				//} else {
+				//	row.FindViewById<TextView>(Resource.Id.rtiDoctorNameTV).Text = doctor.Name;
+				//	row.FindViewById<TextView>(Resource.Id.rtiHospitalNameTV).Text = doctor.HospitalName;
+				//	row.FindViewById<TextView>(Resource.Id.rtiHospitalAddressTV).Text = doctor.HospitalAddress;
+				//}
 
-				adapter.AddCurrentRouteItem(routeItem);
+				//adapter.AddCurrentRouteItem(routeItem);
 				
 				row.SetTag(Resource.String.RouteItemUUID, routeItem.UUID);
 				row.SetTag(Resource.String.WorkPlaceUUID, routeItem.WorkPlace);

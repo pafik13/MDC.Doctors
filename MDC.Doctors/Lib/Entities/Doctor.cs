@@ -25,7 +25,7 @@ namespace MDC.Doctors.Lib.Entities
 	/// <summary>
 	/// Врач/медработник.
 	/// </summary>
-	public class Doctor: RealmObject, IEntityFromClient, ISync
+	public class Doctor : RealmObject, IEntityFromClient, ISync
 	{
 		/// <summary>
 		/// Уникальный идентификатор врача/медработника. Используется Guid.
