@@ -3,6 +3,11 @@
 	<string name="hello">Hello World, Click Me!</string>
 	<string name="app_name">ОФ:Врачи</string>
 
+	<string name="ViewHolder">ViewHolder</string>
+	<string name="CategoryUUID">CategoryUUID</string>
+	<string name="CategoryOrder">CategoryOrder</string>
+	<string name="PotentialDataUUID">PotentialDataUUID</string>
+
 	<string name="IsChanged">IsChanged</string>
 	<string name="RouteItemOrder">RouteItemOrder</string>
 	<string name="RouteItemUUID">ContractDataUUID</string>

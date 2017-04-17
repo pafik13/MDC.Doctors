@@ -14,12 +14,17 @@ namespace MDC.Doctors
 		readonly List<string> _listDataHeader; // header titles
 									  // child data in format of header title, child title
 		readonly Dictionary<string, List<string>> _listDataChild;
+		readonly string EmptyUUID;
+		readonly Dictionary<string, List<DoctorInfoHolder>> Source;
 
-		public ExpandableListAdapter(Activity context, List<string> listDataHeader, Dictionary<string, List<string>> listChildData)
+		public ExpandableListAdapter(Activity context, List<string> listDataHeader, Dictionary<string, List<string>> listChildData,
+		                             Dictionary<string, List<DoctorInfoHolder>> source = null)
 		{
 			_context = context;
 			_listDataHeader = listDataHeader;
 			_listDataChild = listChildData;
+			EmptyUUID = Guid.Empty.ToString();
+			Source = source;
 		}
 		//for cchild item view
 		public override Java.Lang.Object GetChild(int groupPosition, int childPosition)
@@ -34,11 +39,10 @@ namespace MDC.Doctors
 		public override View GetChildView(int groupPosition, int childPosition, bool isLastChild, View convertView, ViewGroup parent)
 		{
 			string childText = (string)GetChild(groupPosition, childPosition);
-			if (convertView == null)
-			{
-				convertView = _context.LayoutInflater.Inflate(Resource.Layout.ListItemCustomLayout, null);
-			}
-			TextView txtListChild = (TextView)convertView.FindViewById(Resource.Id.lblListItem);
+
+			convertView = convertView ?? _context.LayoutInflater.Inflate(Resource.Layout.RouteDoctorChild, null);
+
+			TextView txtListChild = (TextView)convertView.FindViewById(Resource.Id.rdcDoctorNameTV);
 			txtListChild.Text = childText;
 			return convertView;
 		}
@@ -64,11 +68,23 @@ namespace MDC.Doctors
 		}
 		public override View GetGroupView(int groupPosition, bool isExpanded, View convertView, ViewGroup parent)
 		{
-			string headerTitle = (string)GetGroup(groupPosition);
+			string hospitalUUID = (string)GetGroup(groupPosition);
 
-			convertView = convertView ?? _context.LayoutInflater.Inflate(Resource.Layout.HeaderCustomLayout, null);
-			var lblListHeader = (TextView)convertView.FindViewById(Resource.Id.lblListHeader);
-			lblListHeader.Text = headerTitle;
+			convertView = convertView ?? _context.LayoutInflater.Inflate(Resource.Layout.RouteDoctorGroup, null);
+			var hospitalName = (TextView)convertView.FindViewById(Resource.Id.rdgHospitalName);
+			var hospitalAddress = (TextView)convertView.FindViewById(Resource.Id.rdgHospitalAddress);
+
+			if (hospitalUUID == EmptyUUID)
+			{
+				hospitalName.Text = "Без места работы";
+				hospitalAddress.Text = string.Empty;
+			}
+			else
+			{
+				var hospital = Source[hospitalUUID][0].Hospital;
+				hospitalName.Text = hospital.GetName();
+				hospitalAddress.Text = hospital.GetAddress();				
+			}
 
 			return convertView;
 		}

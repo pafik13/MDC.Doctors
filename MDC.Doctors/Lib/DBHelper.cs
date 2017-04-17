@@ -14,6 +14,10 @@ namespace MDC.Doctors.Lib
 		public static void GetDB(ref Realm db)
 		{
 			if (db == null) {
+				//db = Realm.GetInstance(new RealmConfiguration()
+				//{
+				//	ShouldDeleteIfMigrationNeeded = true
+				//});
 				db = Realm.GetInstance();
 				return;	
 			}

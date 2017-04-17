@@ -172,6 +172,12 @@ namespace MDC.Doctors.Lib.Entities
         /// <value>The next attendance date.</value>
         public DateTimeOffset? NextAttendanceDate { get; set; }
 
+
+		public int CategoryOrderSum { get; set; }
+
+		public string CategoryText { get; set; }
+
+
 		#region ISync
 		/// <summary>
 		/// Дата заведения сотрудника. Присваивается при сохранении.

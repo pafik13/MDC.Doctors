@@ -17,16 +17,24 @@ namespace MDC.Doctors.Lib.Entities
 		[Indexed]
 		public string Attendance { get; set; }
 
+		/// <summary>
+		/// (UUID) Gets or sets the brand.
+		/// </summary>
+		/// <value>The brand.</value>
 		public string Brand { get; set; }
 
-		public string Potential { get; set; }
+		public int Potential { get; set; }
 
 		public float PrescriptionOfOur { get; set; }
 		
 		public float PrescriptionOfOther { get; set; }
 
-		public float Portion { get; set; }
+		public float Proportion { get; set; }
 
+		/// <summary>
+		/// (UUID) Gets or sets the category.
+		/// </summary>
+		/// <value>The category.</value>
 		public string Category { get; set; }
 
 		#region ISync

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="1280dp"
     android:layout_height="match_parent"
-    android:background="@color/Grey_300">
+    android:background="@color/Indigo_50">
     <RelativeLayout
         android:id="@+id/raUpPanelRL"
         android:orientation="horizontal"
@@ -103,12 +103,12 @@
                 </FrameLayout>
                 <ExpandableListView
                     android:id="@+id/raDoctorExpTable"
-                    android:background="#c6c6c6"
+                    android:background="@color/Indigo_50"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
                     android:dividerHeight="2dp"
-                    android:divider="@color/Grey_300" />
+                    android:divider="@android:color/black" />
             <!--                <ListView
                     android:minHeight="40dp"
                     android:id="@+id/raDoctorTable"

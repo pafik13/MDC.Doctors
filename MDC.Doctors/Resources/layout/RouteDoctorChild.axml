@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+    <TextView
+        android:id="@+id/rdcDoctorNameTV"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:textSize="14sp"
+        android:gravity="center_vertical"
+        android:text="rdcDoctorNameTV"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:textColor="@android:color/black"
+        android:background="@android:color/white" />
+    <TextView
+        android:id="@+id/rdcDoctorPotentialTV"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:textSize="14sp"
+        android:gravity="center_vertical"
+        android:text="rdcDoctorPotentialTV"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:textColor="@android:color/black"
+        android:background="@android:color/white"
+        android:layout_below="@id/rdcDoctorNameTV" />
+    <TextView
+        android:id="@+id/rdcDoctorLastAttendanceDateTV"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:textSize="14sp"
+        android:gravity="center_vertical"
+        android:text="rdcDoctorLastAttendanceDateTV"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:textColor="@android:color/black"
+        android:background="@android:color/white"
+        android:layout_below="@id/rdcDoctorPotentialTV" />
+    <TextView
+        android:id="@+id/rdcCabinetAndTimetableTV"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:textSize="14sp"
+        android:gravity="top"
+        android:text="rdcCabinetAndTimetableTV"
+        android:textColor="@android:color/black"
+        android:background="@android:color/white"
+        android:layout_alignParentRight="true" />
+</RelativeLayout>

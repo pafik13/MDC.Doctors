@@ -62,6 +62,12 @@ namespace MDC.Doctors
 				StartActivity(new Intent(this, typeof(DoctorActivity)));
 			};
 
+			var lib = FindViewById<ImageView>(Resource.Id.maLibrary);
+			lib.Click += (sender, e) =>
+			{
+				StartActivity(new Intent(this, typeof(TestDataActivity)));
+			};
+
 			var sync = FindViewById<ImageView>(Resource.Id.maSync);
 			sync.Click += (sender, e) =>
 			{
@@ -209,7 +215,11 @@ namespace MDC.Doctors
 
 			SDiag.Debug.WriteLine(sw.ElapsedMilliseconds, DEBUG_CATEGORY);
 			sw.Reset();
-			DoctorTable.Adapter = new DoctorAdapter(this, DBHelper.GetList<Doctor>(DB));
+			var doctors = DBHelper.GetAll<Doctor>(DB)
+								  .OrderBy(doc => doc.LastAttendanceDate)
+								  .ThenBy(doc => doc.CategoryOrderSum)
+								  .ToList();
+			DoctorTable.Adapter = new DoctorAdapter(this, doctors);
 			SDiag.Debug.WriteLine(sw.ElapsedMilliseconds, DEBUG_CATEGORY);
 			sw.Stop();
 		}

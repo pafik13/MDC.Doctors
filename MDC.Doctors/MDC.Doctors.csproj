@@ -123,6 +123,9 @@
     <Compile Include="Lib\Other\JSONSerializer.cs" />
     <Compile Include="Lib\Adapters\AttendanceByWeekAdapter.cs" />
     <Compile Include="Lib\Adapters\ExpandableListAdapter.cs" />
+    <Compile Include="Lib\Entities\Category.cs" />
+    <Compile Include="Lib\Entities\CategoryRule.cs" />
+    <Compile Include="TestDataActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -183,8 +186,9 @@
     <AndroidResource Include="Resources\layout\Sync.axml" />
     <AndroidResource Include="Resources\layout\AttendanceByWeekTableHeader.axml" />
     <AndroidResource Include="Resources\layout\AttendanceByWeekTableItem.axml" />
-    <AndroidResource Include="Resources\layout\HeaderCustomLayout.axml" />
-    <AndroidResource Include="Resources\layout\ListItemCustomLayout.axml" />
+    <AndroidResource Include="Resources\layout\RouteDoctorGroup.axml" />
+    <AndroidResource Include="Resources\layout\RouteDoctorChild.axml" />
+    <AndroidResource Include="Resources\layout\TestData.axml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

@@ -6,91 +6,95 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/saMainLL">
-        <CheckBox
-            android:text="LoadPositions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saLoadPositionsCB" />
-        <CheckBox
-            android:text="LoadNets"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saLoadNetsCB" />
-        <CheckBox
-            android:text="LoadSubways"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saLoadSubwaysCB" />
-        <CheckBox
-            android:text="LoadRegions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saLoadRegionsCB" />
-        <CheckBox
-            android:text="LoadPlaces"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saLoadPlacesCB" />
-        <CheckBox
-            android:text="LoadCategories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saLoadCategoriesCB" />
-        <CheckBox
-            android:text="LoadDrugSKUs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saLoadDrugSKUsCB" />
-        <CheckBox
-            android:text="LoadDrugBrands"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saLoadDrugBrandsCB" />
-        <CheckBox
-            android:text="LoadPromotions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saLoadPromotionsCB" />
-        <CheckBox
-            android:text="LoadMessageTypes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saLoadMessageTypesCB" />
-        <CheckBox
-            android:text="LoadCategories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saCategoryCB" />
-        <CheckBox
-            android:text="LoadCategoryRules"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saCategoryRuleCB" />
-        <CheckBox
-            android:text="LoadWorkTypes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saWorkTypesCB" />
-        <CheckBox
-            android:text="LoadMaterials"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saMaterialsCB" />
-        <CheckBox
-            android:text="LoadListedHospitals"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/saListedHospitalsCB" />
+        android:minWidth="25px"
+        android:minHeight="25px">
         <Button
-            android:text="Button"
+            android:text="Generate Data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/saGetDataB" />
+            android:id="@+id/tdaGenerateDataB" />
+        <TextView
+            android:text="tdaPharmacies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaPharmacies" />
+        <TextView
+            android:text="tdaAttendances"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaAttendances" />
+        <TextView
+            android:text="tdaDistributions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaDistributions" />
+        <TextView
+            android:text="tdaFinanceDatas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaFinanceDatas" />
+        <TextView
+            android:text="tdaPresentationDatas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaPresentationDatas" />
+        <TextView
+            android:text="tdaCoteriaDatas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaCoteriaDatas" />
+        <TextView
+            android:text="tdaPromotionDatas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaPromotionDatas" />
+        <TextView
+            android:text="tdaCompetitorDatas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaCompetitorDatas" />
+        <TextView
+            android:text="tdaMessageDatas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaMessageDatas" />
+        <TextView
+            android:text="tdaResumeDatas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaResumeDatas" />
+        <TextView
+            android:text="tdaSaleDatas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaSaleDatas" />
+        <TextView
+            android:text="tdaPhotoDatas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaPhotoDatas" />
         <Button
-            android:text="CheckAll"
+            android:text="Change WorkMode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/saCheckAll" />
+            android:id="@+id/tdaChangeWorkModeB" />
+        <Button
+            android:text="Custom Action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaCustomActionB" />
+        <Button
+            android:layout_marginTop="20dp"
+            android:text="Clear DB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaClearB" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tdaDataLL" />
     </LinearLayout>
 </ScrollView>

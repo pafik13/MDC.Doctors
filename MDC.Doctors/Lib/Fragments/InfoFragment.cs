@@ -142,24 +142,116 @@ namespace MDC.Doctors.Lib.Fragments
 			Arrow = mainView.FindViewById<ImageView>(Resource.Id.arrow);
 
 			mainView.FindViewById<Button>(Resource.Id.aaPotentialBrandsB).Click += PotentialBrands_Click;
-			
+
+			Chrono.Stop();
+			SD.Debug.WriteLine("InfoFragment: {0}", Chrono.ElapsedMilliseconds);
+
 			return mainView;
+		}
+
+		#region PotentialViewHolder
+		class PotentialViewHolder : Java.Lang.Object
+		{
+			public TextView Brand { get; set; }
+			public EditText Potential { get; set; }
+			public EditText PrescribeOur { get; set; }
+			public EditText PrescribeOther { get; set; }
+			public TextView Proportion { get; set; }
+			public TextView Category { get; set; }
+		}
+		#endregion
+
+		void PotentialInfoChange(object sender, EventArgs e)
+		{
+			var item = (sender as View).Parent.Parent as TableLayout;
+			item.SetTag(Resource.String.CategoryUUID, string.Empty);
+
+			var viewHolder = item.GetTag(Resource.String.ViewHolder) as PotentialViewHolder;
+
+			if (string.IsNullOrEmpty(viewHolder.PrescribeOur.Text) || string.IsNullOrEmpty(viewHolder.PrescribeOther.Text)) return;
+
+			var prescribeOur = float.Parse(viewHolder.PrescribeOur.Text);
+			var prescribeOther = float.Parse(viewHolder.PrescribeOther.Text);
+			var proportion = prescribeOur / (prescribeOur + prescribeOther);
+			viewHolder.Proportion.Text = proportion.ToString();
+
+			if (string.IsNullOrEmpty(viewHolder.Potential.Text)) return;
+
+			var potential = int.Parse(viewHolder.Potential.Text);
+
+			var drugBrandUUID = (string)item.GetTag(Resource.String.DrugBrandUUID);
+
+			var rules = DBHelper.GetAll<CategoryRule>(DB).Where(cr => cr.brand == drugBrandUUID);
+
+			string categoryUUID = string.Empty;
+
+			foreach (var rule in rules)
+			{
+				if ((rule.proportionStart <= proportion) && (proportion <= rule.proportionEnd)) {
+					if ((rule.potentialStart <= potential) && (potential <= rule.potentialEnd))
+					{
+						categoryUUID = rule.category;
+					}
+				}
+			}
+
+			if (string.IsNullOrEmpty(categoryUUID))
+			{
+				viewHolder.Category.Text = "<Не найдена подходящая категория>";
+			}
+			else 
+			{
+				var category = DBHelper.Get<Category>(DB, categoryUUID);
+
+				viewHolder.Category.Text = category.name;
+				item.SetTag(Resource.String.CategoryUUID, category.uuid);
+				item.SetTag(Resource.String.CategoryOrder, category.order);
+			}
+
 		}
 
 		void AddPotentialItem(DrugBrand brand)
 		{
-			var row = Activity.LayoutInflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
-			row.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = brand.name;
-			row.SetTag(Resource.String.DrugBrandUUID, brand.uuid);
-			PotentialTable.AddView(row);
+			var item = Activity.LayoutInflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
+			item.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = brand.name;
+			item.SetTag(Resource.String.DrugBrandUUID, brand.uuid);
+
+			var viewHolder = new PotentialViewHolder
+			{
+				Potential = item.FindViewById<EditText>(Resource.Id.ptiPotentialET),
+				PrescribeOur = item.FindViewById<EditText>(Resource.Id.ptiPrescribeOurET),
+				PrescribeOther = item.FindViewById<EditText>(Resource.Id.ptiPrescribeOtherET),
+				Proportion = item.FindViewById<TextView>(Resource.Id.ptiProportionTV),
+				Category = item.FindViewById<TextView>(Resource.Id.ptiCategoryTV)
+			};
+			viewHolder.Potential.TextChanged += PotentialInfoChange;
+			viewHolder.PrescribeOur.TextChanged += PotentialInfoChange;
+			viewHolder.PrescribeOther.TextChanged += PotentialInfoChange;
+			item.SetTag(Resource.String.ViewHolder, viewHolder);
+
+			PotentialTable.AddView(item);
 		}
 
 		void AddPotentialItem(PotentialData potential)
 		{
-			var row = Activity.LayoutInflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
-			row.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = potential.UUID;
-			row.SetTag(Resource.String.DrugBrandUUID, potential.Brand);
-			PotentialTable.AddView(row);
+			var item = Activity.LayoutInflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
+			item.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = potential.UUID;
+			item.SetTag(Resource.String.DrugBrandUUID, potential.Brand);
+
+			var viewHolder = new PotentialViewHolder
+			{
+				Potential = item.FindViewById<EditText>(Resource.Id.ptiPotentialET),
+				PrescribeOur = item.FindViewById<EditText>(Resource.Id.ptiPrescribeOurET),
+				PrescribeOther = item.FindViewById<EditText>(Resource.Id.ptiPrescribeOtherET),
+				Proportion = item.FindViewById<TextView>(Resource.Id.ptiProportionTV),
+				Category = item.FindViewById<TextView>(Resource.Id.ptiCategoryTV)
+			};
+			viewHolder.Potential.TextChanged += PotentialInfoChange;
+			viewHolder.PrescribeOur.TextChanged += PotentialInfoChange;
+			viewHolder.PrescribeOther.TextChanged += PotentialInfoChange;
+			item.SetTag(Resource.String.ViewHolder, viewHolder);
+
+			PotentialTable.AddView(item);
 		}
 
 		void PotentialBrands_Click(object sender, EventArgs e)
@@ -342,7 +434,14 @@ namespace MDC.Doctors.Lib.Fragments
 				}
 			}
 		}
-		
+
+		public struct CategoryOrderInfo
+		{
+			public string BrandName;
+			public string CategoryName;
+			public int CategoryOrder;
+		}
+
 		public void OnAttendanceStop()
 		{
 			// Сохранить данные
@@ -380,6 +479,72 @@ namespace MDC.Doctors.Lib.Fragments
 							if (!infoData.IsManaged) DBHelper.Save(DB, transaction, infoData);
 						}
 					}
+				}
+
+				var categoryOrderInfos = new List<CategoryOrderInfo>();
+				for (int c = 1; c < PotentialTable.ChildCount; c++)
+				{
+					var item = InfoTable.GetChildAt(c);
+					var isChanged = (bool)item.GetTag(Resource.String.IsChanged);
+					if (isChanged)
+					{
+						var viewHolder = item.GetTag(Resource.String.ViewHolder) as PotentialViewHolder;
+						var categoryUUID = (string)item.GetTag(Resource.String.CategoryUUID);
+
+						if (string.IsNullOrEmpty(categoryUUID)) break;
+
+						var category = DBHelper.Get<Category>(DB, categoryUUID);
+
+						var potentialDataUUID = (string)item.GetTag(Resource.String.PotentialDataUUID);
+						var drugBrandUUID = (string)item.GetTag(Resource.String.DrugBrandUUID);
+
+						PotentialData potentialData;
+						if (string.IsNullOrEmpty(potentialDataUUID))
+						{
+							potentialData = DBHelper.Create<PotentialData>(DB, transaction);
+						}
+						else
+						{
+							potentialData = DBHelper.Get<PotentialData>(DB, potentialDataUUID);
+						}
+						potentialData.Brand = drugBrandUUID;
+						potentialData.Attendance = Attendance.UUID;
+						potentialData.Potential = int.Parse(viewHolder.Potential.Text);
+						potentialData.PrescriptionOfOur = float.Parse(viewHolder.PrescribeOur.Text);
+						potentialData.PrescriptionOfOther = float.Parse(viewHolder.PrescribeOther.Text);
+						potentialData.Proportion = float.Parse(viewHolder.Proportion.Text);
+						potentialData.Category = categoryUUID;
+
+						if (!potentialData.IsManaged) DBHelper.Save(DB, transaction, potentialData);
+
+						var categoryOrderInfo = new CategoryOrderInfo
+						{
+							BrandName = DBHelper.Get<DrugBrand>(DB, drugBrandUUID).name,
+							CategoryName = category.name,
+							CategoryOrder = category.order
+						};
+
+						categoryOrderInfos.Add(categoryOrderInfo);
+					}
+				}
+
+				categoryOrderInfos.Sort((x, y) => x.CategoryOrder.CompareTo(y.CategoryOrder));
+
+				switch (categoryOrderInfos.Count)
+				{
+					case 0:
+						break;
+					case 1:
+						Doctor.CategoryText = string.Format("{0}:({1})", categoryOrderInfos[0].BrandName, categoryOrderInfos[0].CategoryName);
+						Doctor.CategoryOrderSum = categoryOrderInfos[0].CategoryOrder;
+						break;
+					default:
+						Doctor.CategoryText = string.Format("{0}:({1}), {2}:({3})"
+						                                   , categoryOrderInfos[0].BrandName, categoryOrderInfos[0].CategoryName
+						                                   , categoryOrderInfos[1].BrandName, categoryOrderInfos[1].CategoryName
+						                                   );
+						Doctor.CategoryOrderSum = categoryOrderInfos.Sum(coi => coi.CategoryOrder);
+						break;
 				}
 
 				transaction.Commit();

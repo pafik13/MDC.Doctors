@@ -11,6 +11,18 @@ using MDC.Doctors.Lib;
 
 namespace MDC.Doctors
 {
+	public struct DoctorInfoHolder
+	{
+		public Doctor Doctor;
+		public WorkPlace MainWorkPlace;
+		public IHospital Hospital;
+
+		public override int GetHashCode()
+		{
+			return Doctor.UUID.GetHashCode();
+		}
+	}
+
 	public static class DBSpec
 	{
 		public static int CountItemsToSync<T>(Realm db) where T : RealmObject, ISync
@@ -61,64 +73,27 @@ namespace MDC.Doctors
 
 		//	return result;
 		//}
-		public struct DoctorInfoHolder
-		{
-			Doctor Doctor;
-			WorkPlace MainWorkPlace;
-			IHospital Hospital;
 
-			public override int GetHashCode()
-			{
-				return Doctor.UUID.GetHashCode();
-			}
-		}
 
-		public static Dictionary<string, List<DoctorHolder>> GetDoctorsForRoute(Realm db, DateTimeOffset selectedDate)
+		public static Dictionary<string, List<DoctorInfoHolder>> GetDoctorsForRoute(Realm db, DateTimeOffset selectedDate)
 		{
 			var date = selectedDate.UtcDateTime.Date;
-			var result = new Dictionary<string, List<DoctorHolder>>();
+			var result = new Dictionary<string, List<DoctorInfoHolder>>();
 			var emptyGUID = Guid.Empty.ToString();
 			foreach (var doctor in db.All<Doctor>())
 			{
-				DoctorHolder holder;
-
-				//if (string.IsNullOrEmpty(doctor.MainWorkPlace))
-				//{
-				//	holder = new DoctorHolder
-				//	{
-				//		UUID = string.Copy(doctor.UUID),
-				//		Name = doctor.Name == null ? string.Empty : string.Copy(doctor.Name),
-				//		MainWorkPlace = doctor.MainWorkPlace == null ? string.Empty : string.Copy(doctor.MainWorkPlace),
-				//		HospitalName = string.Empty,
-				//		HospitalAddress = string.Empty
-				//	};
-				//}
-				//else
-				//{
-				//	var workPlace = DBHelper.Get<WorkPlace>(DB, doctor.MainWorkPlace);
-				//	var hospital = DBHelper.GetHospital(DB, workPlace.Hospital);
-				//	holder = new DoctorHolder
-				//	{
-				//		UUID = string.Copy(doctor.UUID),
-				//		Name = doctor.Name == null ? string.Empty : string.Copy(doctor.Name),
-				//		MainWorkPlace = doctor.MainWorkPlace == null ? string.Empty : string.Copy(doctor.MainWorkPlace),
-				//		HospitalName = hospital.GetName() == null ? string.Empty : string.Copy(hospital.GetName()),
-				//		HospitalAddress = hospital.GetAddress() == null ? string.Empty : string.Copy(hospital.GetAddress()),
-				//	};
-				//}
+				DoctorInfoHolder holder;
 
 				string hospitalUUID = string.Empty;
 
 				if (string.IsNullOrEmpty(doctor.MainWorkPlace))
 				{
 					hospitalUUID = emptyGUID;
-					holder = new DoctorHolder
+					holder = new DoctorInfoHolder
 					{
-						UUID = string.Copy(doctor.UUID),
-						Name = doctor.Name == null ? string.Empty : string.Copy(doctor.Name),
-						MainWorkPlace = string.Empty,
-						HospitalName = string.Empty,
-						HospitalAddress = string.Empty
+						Doctor = doctor,
+						MainWorkPlace = null,
+						Hospital = null
 					};
 				}
 				else
@@ -126,19 +101,16 @@ namespace MDC.Doctors
 					var workPlace = DBHelper.Get<WorkPlace>(db, doctor.MainWorkPlace);
 					var hospital = DBHelper.GetHospital(db, workPlace.Hospital);
 					hospitalUUID = hospital.GetUUID();
-					holder = new DoctorHolder
+					holder = new DoctorInfoHolder
 					{
-						UUID = string.Copy(doctor.UUID),
-						Name = doctor.Name == null ? string.Empty : string.Copy(doctor.Name),
-						MainWorkPlace = string.Copy(doctor.MainWorkPlace),
-						workPlace.
-						HospitalName = hospital.GetName() == null ? string.Empty : string.Copy(hospital.GetName()),
-						HospitalAddress = hospital.GetAddress() == null ? string.Empty : string.Copy(hospital.GetAddress()),
+						Doctor = doctor,
+						MainWorkPlace = workPlace,
+						Hospital = hospital
 					};
 				}
 				if (!result.ContainsKey(hospitalUUID))
 				{
-					result.Add(hospitalUUID, new List<DoctorHolder>());
+					result.Add(hospitalUUID, new List<DoctorInfoHolder>());
 				}
 
 				result[hospitalUUID].Add(holder);

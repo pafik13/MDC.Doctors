@@ -67,8 +67,8 @@ namespace MDC.Doctors
 			if (FindViewById<CheckBox>(Resource.Id.saLoadDrugBrandsCB).Checked) Load<DrugBrand>(client);
 			//if (FindViewById<CheckBox>(Resource.Id.saLoadPromotionsCB).Checked) LoadPromotions(client);
 			//if (FindViewById<CheckBox>(Resource.Id.saLoadMessageTypesCB).Checked) LoadMessageTypes(client);
-			//if (FindViewById<CheckBox>(Resource.Id.saLoadPhotoTypesCB).Checked) LoadPhotoTypes(client);
-			//if (FindViewById<CheckBox>(Resource.Id.saContractsCB).Checked) LoadContracts(client);
+			if (FindViewById<CheckBox>(Resource.Id.saCategoryCB).Checked) Load<Category>(client);
+			if (FindViewById<CheckBox>(Resource.Id.saCategoryRuleCB).Checked) Load<CategoryRule>(client);
 			if (FindViewById<CheckBox>(Resource.Id.saWorkTypesCB).Checked) Load<WorkType>(client);
 			//if (FindViewById<CheckBox>(Resource.Id.saMaterialsCB).Checked) LoadMaterials(client);
 			//if (FindViewById<CheckBox>(Resource.Id.saListedHospitalsCB).Checked) LoadListedHospitals(client);

@@ -19,6 +19,7 @@ using MDC.Doctors.Lib.Adapters;
 using MDC.Doctors.Lib.Fragments;
 using MDC.Doctors.Lib;
 using Realms;
+using MDC.Doctors.Lib.Interfaces;
 
 namespace MDC.Doctors
 {
@@ -101,7 +102,7 @@ namespace MDC.Doctors
 			System.Diagnostics.Debug.WriteLine("Route, Data collect:{0}", dataCollectSW.ElapsedMilliseconds);
 
 			//Bind list
-			RouteDoctorExpTable.SetAdapter(new ExpandableListAdapter(this, listDataHeader, listDataChild));
+			//RouteDoctorExpTable.SetAdapter(new ExpandableListAdapter(this, listDataHeader, listDataChild));
 
 			FnClickEvents();
 
@@ -192,7 +193,7 @@ namespace MDC.Doctors
 
 		void FnGetListData()
 		{
-			var headers = new string[3] {
+			var headers = new string[] {
 				"Computer science",
 				"Electrocs & comm.",
 				"Mechanical"
@@ -200,14 +201,29 @@ namespace MDC.Doctors
 
 			listDataHeader = new List<string>();
 			listDataChild = new Dictionary<string, List<string>>();
+			var emptyUUID = Guid.Empty.ToString();
 
 			var doctorsDict = DBSpec.GetDoctorsForRoute(DB, DateTimeOffset.Now);
-
+			var hospitals = doctorsDict.ContainsKey(emptyUUID) ? new IHospital[doctorsDict.Keys.Count - 1] : new IHospital[doctorsDict.Keys.Count];
+			var h = 0;
 			foreach (var hospital in doctorsDict.Keys)
 			{
-				listDataHeader.Add(hospital);
-				listDataChild.Add(hospital, doctorsDict[hospital].Select(doc => doc.Name).ToList());
+				//listDataHeader.Add(hospital)
+				listDataChild.Add(hospital, doctorsDict[hospital].Select(doc => doc.Doctor.Name).ToList());
+				if (emptyUUID != hospital)
+				{
+					hospitals[h] = doctorsDict[hospital][0].Hospital;
+					h++;
+				}
 			}
+
+			listDataHeader = hospitals.OrderBy(
+				(IHospital arg) => arg, new MainActivity.HospitalComparer(System.ComponentModel.ListSortDirection.Ascending)
+			).Select((IHospital arg) => arg.GetUUID()).ToList();
+
+			listDataHeader.Add(emptyUUID);
+
+			RouteDoctorExpTable.SetAdapter(new ExpandableListAdapter(this, listDataHeader, listDataChild, doctorsDict));
 
 			// Adding child data
 			//listDataHeader.Add("Computer science");

@@ -114,20 +114,15 @@
             style="@style/control_label"
             android:layout_height="@dimen/row_height"
             android:layout_width="match_parent" />
-        <EditText
-            android:textCursorDrawable="@null"
+        <TextView
+            android:id="@+id/ptiProportionTV"
+            android:text="Доля (высч.)"
             android:layout_column="1"
-            android:id="@+id/ptiProportionET"
-            android:background="@drawable/bottomline"
-            android:textColorHint="@color/Grey_300"
+            android:background="@android:color/background_light"
+            android:gravity="center_vertical"
             android:textColor="@android:color/black"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:hint="Доля (высч.)"
-            android:enabled="true"
-            android:layout_marginRight="24dp"
-            android:inputType="textCapWords"
-            android:layout_height="match_parent"
+            android:textSize="18sp"
+            android:layout_height="@dimen/row_height"
             android:layout_width="match_parent" />
     </TableRow>
     <TableRow
@@ -140,7 +135,7 @@
             android:layout_height="@dimen/row_height"
             android:layout_width="match_parent" />
         <TextView
-            android:id="@+id/ptiCategory"
+            android:id="@+id/ptiCategoryTV"
             android:text="Категория"
             android:layout_column="1"
             android:background="@android:color/background_light"
