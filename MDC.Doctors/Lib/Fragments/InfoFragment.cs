@@ -24,6 +24,7 @@ namespace MDC.Doctors.Lib.Fragments
 		Doctor Doctor;
 
 		List<DrugBrand> Brands;
+		Dictionary<string, bool> PotentialDataToDelete;
 
 		LinearLayout PotentialTable;
 		LinearLayout InfoTable;
@@ -138,6 +139,14 @@ namespace MDC.Doctors.Lib.Fragments
 				}
 			}
 
+			foreach (var pot in DBHelper.GetAll<PotentialData>(DB))
+			{
+				if (pot.Doctor == Doctor.UUID)
+				{
+					AddPotentialItem(pot);
+				}
+			}
+			
 			Locker = mainView.FindViewById<TextView>(Resource.Id.locker);
 			Arrow = mainView.FindViewById<ImageView>(Resource.Id.arrow);
 
@@ -165,9 +174,11 @@ namespace MDC.Doctors.Lib.Fragments
 		{
 			var item = (sender as View).Parent.Parent as TableLayout;
 			item.SetTag(Resource.String.CategoryUUID, string.Empty);
+			item.SetTag(Resource.String.IsChanged, true);
 
 			var viewHolder = item.GetTag(Resource.String.ViewHolder) as PotentialViewHolder;
-
+			viewHolder.Category.Text = "Категория";
+			
 			if (string.IsNullOrEmpty(viewHolder.PrescribeOur.Text) || string.IsNullOrEmpty(viewHolder.PrescribeOther.Text)) return;
 
 			var prescribeOur = float.Parse(viewHolder.PrescribeOur.Text);
@@ -215,6 +226,7 @@ namespace MDC.Doctors.Lib.Fragments
 			var item = Activity.LayoutInflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
 			item.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = brand.name;
 			item.SetTag(Resource.String.DrugBrandUUID, brand.uuid);
+			item.SetTag(Resource.String.IsChanged, false);
 
 			var viewHolder = new PotentialViewHolder
 			{
@@ -235,8 +247,10 @@ namespace MDC.Doctors.Lib.Fragments
 		void AddPotentialItem(PotentialData potential)
 		{
 			var item = Activity.LayoutInflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
-			item.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = potential.UUID;
+			item.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = DBHelper.Get<DrugBrand>(DB, potential.Brand).name;
+			item.SetTag(Resource.String.PotentialDataUUID, potential.UUID);
 			item.SetTag(Resource.String.DrugBrandUUID, potential.Brand);
+			item.SetTag(Resource.String.IsChanged, false);
 
 			var viewHolder = new PotentialViewHolder
 			{
@@ -294,8 +308,11 @@ namespace MDC.Doctors.Lib.Fragments
 								   {
 									   if (cacheBrands[brand.uuid]) continue;
 									   PotentialTable.RemoveView(cacheViews[brand.uuid]);
+									   var potentialDataUUID = (string)item.GetTag(Resource.String.PotentialDataUUID);
+									   if (string.IsNullOrEmpty(potentialDataUUID)) continue;
+									   PotentialDataToDelete.Add(potentialDataUUID, true);
 									   continue;
-									}
+								   }
 								   if (cacheBrands[brand.uuid])
 								   {
 									   AddPotentialItem(brand);
@@ -502,13 +519,23 @@ namespace MDC.Doctors.Lib.Fragments
 						if (string.IsNullOrEmpty(potentialDataUUID))
 						{
 							potentialData = DBHelper.Create<PotentialData>(DB, transaction);
+							potentialData.Attendance = Attendance.UUID;
 						}
 						else
 						{
 							potentialData = DBHelper.Get<PotentialData>(DB, potentialDataUUID);
+							if (PotentialDataToDelete.ContainsKey(potentialDataUUID))
+							{
+								DBHelper.Delete(potentialData);
+								continue;
+							}
+							else
+							{
+								potentialData.UpdateAt = DateTimeOffset.Now;
+								potentialData.AttendanceWithChanges = Attendance.UUID;	
+							}							
 						}
 						potentialData.Brand = drugBrandUUID;
-						potentialData.Attendance = Attendance.UUID;
 						potentialData.Potential = int.Parse(viewHolder.Potential.Text);
 						potentialData.PrescriptionOfOur = float.Parse(viewHolder.PrescribeOur.Text);
 						potentialData.PrescriptionOfOther = float.Parse(viewHolder.PrescribeOther.Text);

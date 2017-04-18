@@ -16,7 +16,13 @@ namespace MDC.Doctors.Lib.Entities
 
 		[Indexed]
 		public string Attendance { get; set; }
-
+		
+		[Indexed]
+		public string AttendanceWithChanges { get; set; }
+		
+		[Indexed]
+		public string Doctor { get; set; }
+		
 		/// <summary>
 		/// (UUID) Gets or sets the brand.
 		/// </summary>
