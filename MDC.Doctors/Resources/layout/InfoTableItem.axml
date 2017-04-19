@@ -27,4 +27,16 @@
         android:layout_width="1156dp"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent" />
+    <TextView
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="@android:color/white"
+        android:id="@+id/itiHolderTV"
+        android:text="Выберите бренды"
+		android:ellipsize="none"  
+		android:maxLines="10"  
+		android:scrollHorizontally="false"
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:gravity="center" />
 </LinearLayout>

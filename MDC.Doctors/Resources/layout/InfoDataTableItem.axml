@@ -42,8 +42,6 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:id="@+id/idtiCallbackET"
-            android:background="@drawable/bottomline"
-            android:textColorHint="@color/Grey_300"
             android:textColor="@android:color/black"
             android:hint="Обратная связь"
             android:enabled="false"
@@ -56,13 +54,10 @@
         android:layout_width="378dp"
         android:layout_height="98dp">
         <EditText
-            android:textCursorDrawable="@null"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:id="@+id/idtiResumeET"
-            android:background="@drawable/bottomline"
-            android:textColorHint="@color/Grey_300"
             android:textColor="@android:color/black"
             android:hint="Резюме"
             android:enabled="false"
@@ -75,13 +70,10 @@
         android:layout_width="134dp"
         android:layout_height="98dp">
         <EditText
-            android:textCursorDrawable="@null"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:id="@+id/idtiGoalET"
-            android:background="@drawable/bottomline"
-            android:textColorHint="@color/Grey_300"
             android:textColor="@android:color/black"
             android:hint="Цель на след визит"
             android:enabled="false"

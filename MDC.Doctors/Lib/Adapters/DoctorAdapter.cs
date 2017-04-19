@@ -52,8 +52,10 @@ namespace MDC.Doctors.Lib.Adapters
             var view = (convertView ?? Context.LayoutInflater.Inflate(Resource.Layout.DoctorTableItem, parent, false)
 			           ) as LinearLayout;
 			view.FindViewById<TextView>(Resource.Id.dtiNoTV).Text = (position + 1).ToString();
+			view.FindViewById<TextView>(Resource.Id.dtiCategoyTV).Text = 
+				string.IsNullOrEmpty(item.CategoryText) ? @"<нет категорий>" : item.CategoryText;;
             view.FindViewById<TextView>(Resource.Id.dtiStateTV).Text =
-				    string.IsNullOrEmpty(item.State) ? @"<нет статуса>" : item.GetStateDesc();
+				string.IsNullOrEmpty(item.State) ? @"<нет статуса>" : item.GetStateDesc();
 			view.FindViewById<TextView>(Resource.Id.dtiNameTV).Text = 
                 string.IsNullOrEmpty(item.Name) ? @"<нет ФИО>" : item.Name;
             view.FindViewById<TextView>(Resource.Id.dtiSpecialityTV).Text = 
