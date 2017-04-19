@@ -89,7 +89,7 @@
             style="@style/control_label"
             android:layout_height="@dimen/row_height"
             android:layout_width="match_parent" />
-        <EditText
+    <!--        <EditText
             android:textCursorDrawable="@null"
             android:layout_column="1"
             android:id="@+id/ptiPrescribeOtherET"
@@ -103,6 +103,16 @@
             android:layout_marginRight="24dp"
             android:inputType="textCapWords"
             android:layout_height="match_parent"
+            android:layout_width="match_parent" />-->
+        <TextView
+            android:id="@+id/ptiPrescribeOtherTV"
+            android:text="Выписка (конк.)"
+            android:layout_column="1"
+            android:background="@android:color/background_light"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:layout_height="@dimen/row_height"
             android:layout_width="match_parent" />
     </TableRow>
     <TableRow

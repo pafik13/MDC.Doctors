@@ -67,6 +67,21 @@
             android:textStyle="bold"
             android:minHeight="62dp"
             android:layout_marginBottom="2dp" />
+        <Button
+            android:text="МАТЕРИАЛ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/aaCloseB"
+            android:id="@+id/aaMaterialB"
+            android:background="@color/Yellow_600"
+            android:typeface="monospace"
+            android:width="150dp"
+            android:height="62dp"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:minHeight="62dp"
+            android:layout_marginBottom="2dp" />
     </RelativeLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/aaContainerVP"

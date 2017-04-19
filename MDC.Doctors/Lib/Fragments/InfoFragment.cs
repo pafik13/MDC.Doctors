@@ -24,6 +24,7 @@ namespace MDC.Doctors.Lib.Fragments
 		Doctor Doctor;
 
 		List<DrugBrand> Brands;
+		Dictionary<int, Category> Categories = new Dictionary<int, Category>();
 		Dictionary<string, bool> PotentialDataToDelete;
 
 		LinearLayout PotentialTable;
@@ -152,6 +153,11 @@ namespace MDC.Doctors.Lib.Fragments
 
 			mainView.FindViewById<Button>(Resource.Id.aaPotentialBrandsB).Click += PotentialBrands_Click;
 
+			foreach (var category in DB.All<Category>())
+			{
+				Categories[category.order] = category;	
+			}
+
 			Chrono.Stop();
 			SD.Debug.WriteLine("InfoFragment: {0}", Chrono.ElapsedMilliseconds);
 
@@ -164,7 +170,7 @@ namespace MDC.Doctors.Lib.Fragments
 			public TextView Brand { get; set; }
 			public EditText Potential { get; set; }
 			public EditText PrescribeOur { get; set; }
-			public EditText PrescribeOther { get; set; }
+			public TextView PrescribeOther { get; set; }
 			public TextView Proportion { get; set; }
 			public TextView Category { get; set; }
 		}
@@ -179,41 +185,47 @@ namespace MDC.Doctors.Lib.Fragments
 			var viewHolder = item.GetTag(Resource.String.ViewHolder) as PotentialViewHolder;
 			viewHolder.Category.Text = "Категория";
 			
-			if (string.IsNullOrEmpty(viewHolder.PrescribeOur.Text) || string.IsNullOrEmpty(viewHolder.PrescribeOther.Text)) return;
-
-			var prescribeOur = float.Parse(viewHolder.PrescribeOur.Text);
-			var prescribeOther = float.Parse(viewHolder.PrescribeOther.Text);
-			var proportion = prescribeOur / (prescribeOur + prescribeOther);
-			viewHolder.Proportion.Text = proportion.ToString();
-
-			if (string.IsNullOrEmpty(viewHolder.Potential.Text)) return;
+			if (string.IsNullOrEmpty(viewHolder.PrescribeOur.Text) || string.IsNullOrEmpty(viewHolder.Potential.Text)) return;
 
 			var potential = int.Parse(viewHolder.Potential.Text);
+
+			var prescribeOur = int.Parse(viewHolder.PrescribeOur.Text);
+
+			if (prescribeOur > potential)
+				viewHolder.Category.Text = "Пот. < Вып.(наш.)";{
+				return;
+			}
+
+			var prescribeOther = potential - prescribeOur;
+
+			var proportion = prescribeOur / potential;
+
+			viewHolder.PrescribeOther.Text = prescribeOther.ToString();
+			viewHolder.Proportion.Text = proportion.ToString();
 
 			var drugBrandUUID = (string)item.GetTag(Resource.String.DrugBrandUUID);
 
 			var rules = DBHelper.GetAll<CategoryRule>(DB).Where(cr => cr.brand == drugBrandUUID);
 
-			string categoryUUID = string.Empty;
+			Category category = null;
 
 			foreach (var rule in rules)
 			{
-				if ((rule.proportionStart <= proportion) && (proportion <= rule.proportionEnd)) {
-					if ((rule.potentialStart <= potential) && (potential <= rule.potentialEnd))
-					{
-						categoryUUID = rule.category;
-					}
-				}
+				if ((potential > rule.potential) && (proportion < rule.proportion)) category = Categories[1];
+
+				if ((potential > rule.potential) && (proportion > rule.proportion)) category = Categories[2];
+
+				if ((potential < rule.potential) && (proportion < rule.proportion)) category = Categories[4];
+
+				if ((potential < rule.potential) && (proportion > rule.proportion)) category = Categories[3];
 			}
 
-			if (string.IsNullOrEmpty(categoryUUID))
+			if (category == null)
 			{
 				viewHolder.Category.Text = "<Не найдена подходящая категория>";
 			}
 			else 
 			{
-				var category = DBHelper.Get<Category>(DB, categoryUUID);
-
 				viewHolder.Category.Text = category.name;
 				item.SetTag(Resource.String.CategoryUUID, category.uuid);
 				item.SetTag(Resource.String.CategoryOrder, category.order);
@@ -232,7 +244,7 @@ namespace MDC.Doctors.Lib.Fragments
 			{
 				Potential = item.FindViewById<EditText>(Resource.Id.ptiPotentialET),
 				PrescribeOur = item.FindViewById<EditText>(Resource.Id.ptiPrescribeOurET),
-				PrescribeOther = item.FindViewById<EditText>(Resource.Id.ptiPrescribeOtherET),
+				PrescribeOther = item.FindViewById<TextView>(Resource.Id.ptiPrescribeOtherTV),
 				Proportion = item.FindViewById<TextView>(Resource.Id.ptiProportionTV),
 				Category = item.FindViewById<TextView>(Resource.Id.ptiCategoryTV)
 			};
@@ -256,7 +268,7 @@ namespace MDC.Doctors.Lib.Fragments
 			{
 				Potential = item.FindViewById<EditText>(Resource.Id.ptiPotentialET),
 				PrescribeOur = item.FindViewById<EditText>(Resource.Id.ptiPrescribeOurET),
-				PrescribeOther = item.FindViewById<EditText>(Resource.Id.ptiPrescribeOtherET),
+				PrescribeOther = item.FindViewById<TextView>(Resource.Id.ptiPrescribeOtherTV),
 				Proportion = item.FindViewById<TextView>(Resource.Id.ptiProportionTV),
 				Category = item.FindViewById<TextView>(Resource.Id.ptiCategoryTV)
 			};
@@ -308,7 +320,7 @@ namespace MDC.Doctors.Lib.Fragments
 								   {
 									   if (cacheBrands[brand.uuid]) continue;
 									   PotentialTable.RemoveView(cacheViews[brand.uuid]);
-									   var potentialDataUUID = (string)item.GetTag(Resource.String.PotentialDataUUID);
+									   var potentialDataUUID = (string) (cacheViews[brand.uuid].Parent as TableLayout).GetTag(Resource.String.PotentialDataUUID);
 									   if (string.IsNullOrEmpty(potentialDataUUID)) continue;
 									   PotentialDataToDelete.Add(potentialDataUUID, true);
 									   continue;
@@ -392,7 +404,25 @@ namespace MDC.Doctors.Lib.Fragments
 
 		void WorkTypes_Click(object sender, EventArgs e)
 		{
-			Toast.MakeText(Activity, "<Click on WorkTypes>", ToastLength.Short).Show();
+			//Toast.MakeText(Activity, "<Click on WorkTypes>", ToastLength.Short).Show();
+			var workTypes = DBHelper.GetList<WorkType>(DB);
+
+			new Android.App.AlertDialog.Builder(Activity)
+						   .SetTitle("Выберите материал для показа:")
+						   .SetCancelable(true)
+						   .SetItems(
+							   workTypes.Select(item => item.name).ToArray(),
+							   (caller, arguments) =>
+							   {
+								   Toast.MakeText(Activity, "<Click on WorkTypes>", ToastLength.Short).Show();
+
+								   //var intent = new Intent(Intent.ActionView);
+								   //var uri = Android.Net.Uri.FromFile(new Java.IO.File(materials[arguments.Which].fullPath));
+								   //intent.SetDataAndType(uri, "application/pdf");
+								   //intent.SetFlags(ActivityFlags.NoHistory);
+								   //StartActivity(intent);
+							   })
+						   .Show();
 		}
 
 		public void OnAttendanceStart(Attendance newAttendance)
@@ -526,12 +556,12 @@ namespace MDC.Doctors.Lib.Fragments
 							potentialData = DBHelper.Get<PotentialData>(DB, potentialDataUUID);
 							if (PotentialDataToDelete.ContainsKey(potentialDataUUID))
 							{
-								DBHelper.Delete(potentialData);
+								DBHelper.Delete(DB, transaction, potentialData);
 								continue;
 							}
 							else
 							{
-								potentialData.UpdateAt = DateTimeOffset.Now;
+								potentialData.UpdatedAt = DateTimeOffset.Now;
 								potentialData.AttendanceWithChanges = Attendance.UUID;	
 							}							
 						}

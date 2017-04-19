@@ -54,7 +54,7 @@ namespace MDC.Doctors
 
 		void GetData_Click(object sender, EventArgs e)
 		{
-			var client = new RestClient(@"http://front-sblcrm.rhcloud.com/");
+			var client = new RestClient(@"http://front-sbldev.rhcloud.com/");
 			//var client = new RestClient(@"http://sbl-crm-project-pafik13.c9users.io:8080/");
 
 			//if (FindViewById<CheckBox>(Resource.Id.saLoadPositionsCB).Checked) LoadPositions(client);
@@ -70,7 +70,7 @@ namespace MDC.Doctors
 			if (FindViewById<CheckBox>(Resource.Id.saCategoryCB).Checked) Load<Category>(client);
 			if (FindViewById<CheckBox>(Resource.Id.saCategoryRuleCB).Checked) Load<CategoryRule>(client);
 			if (FindViewById<CheckBox>(Resource.Id.saWorkTypesCB).Checked) Load<WorkType>(client);
-			//if (FindViewById<CheckBox>(Resource.Id.saMaterialsCB).Checked) LoadMaterials(client);
+			if (FindViewById<CheckBox>(Resource.Id.saMaterialsCB).Checked) Load<Material>(client);
 			//if (FindViewById<CheckBox>(Resource.Id.saListedHospitalsCB).Checked) LoadListedHospitals(client);
 
 		}

@@ -264,6 +264,27 @@ namespace MDC.Doctors
 			{
 				SetButtonsStatesWhenPausing();
 			}
+
+			var btnMaterial = FindViewById<Button>(Resource.Id.aaMaterialB);
+			btnMaterial.Click += (sender, e) =>
+			{
+				var materials = DBHelper.GetList<Material>(DB);
+
+				new AlertDialog.Builder(this)
+							   .SetTitle("Выберите материал для показа:")
+							   .SetCancelable(true)
+							   .SetItems(
+					               materials.Select(item => item.name).ToArray(),
+								   (caller, arguments) =>
+								   {
+									   var intent = new Intent(Intent.ActionView);
+									   var uri = Android.Net.Uri.FromFile(new Java.IO.File(materials[arguments.Which].fullPath));
+									   intent.SetDataAndType(uri, "application/pdf");
+									   intent.SetFlags(ActivityFlags.NoHistory);
+									   StartActivity(intent);
+								   })
+							   .Show();
+			};
 		}
 
 		void SetButtonsStatesWhenNotStart()

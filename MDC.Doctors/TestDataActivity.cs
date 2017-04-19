@@ -14,6 +14,9 @@ using Android.Accounts;
 using Realms;
 using MDC.Doctors.Lib;
 using MDC.Doctors.Lib.Entities;
+using Amazon;
+using Amazon.S3;
+using Amazon.S3.Model;
 
 namespace MDC.Doctors
 {
@@ -28,6 +31,18 @@ namespace MDC.Doctors
 		Button CustomAction;
 		Button Clear;
 		Button ChangeWorkMode;
+
+		#if DEBUG
+		const string S3BucketName = "sbl-crm";
+		#else
+		const string S3BucketName = "sbl-crm-frankfurt";
+		#endif
+
+		readonly RegionEndpoint S3Endpoint = RegionEndpoint.USEast1;
+
+		string DBPath = string.Empty;
+		string AgentUUID = string.Empty;
+		IAmazonS3 S3Client;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -65,6 +80,18 @@ namespace MDC.Doctors
 			DBHelper.GetDB(ref DB);
 
 			RefreshView();
+
+			#if DEBUG
+			var loggingConfig = AWSConfigs.LoggingConfig;
+			loggingConfig.LogMetrics = true;
+			loggingConfig.LogResponses = ResponseLoggingOption.Always;
+			loggingConfig.LogMetricsFormat = LogMetricsFormatOption.JSON;
+			loggingConfig.LogTo = LoggingOptions.SystemDiagnostics;
+			#endif
+
+			AWSConfigsS3.UseSignatureVersion4 = true;
+
+			S3Client = new AmazonS3Client(Secret.AWSAccessKeyId, Secret.AWSSecretKey, S3Endpoint);
 		}
 
 		void Clear_Click(object sender, EventArgs e)
@@ -78,26 +105,51 @@ namespace MDC.Doctors
 
 		void CustomAction_Click(object sender, EventArgs e)
 		{
-			var intent = new Intent(Intent.ActionGetContent);
-			intent.SetType("*/*");
-			intent.AddCategory(Intent.CategoryOpenable);
-			StartActivityForResult(intent, PICKFILE_REQUEST_CODE);
+			Helper.Username = "test1";
+
+			var materials = DBHelper.GetAll<Material>(DB);
+
+			foreach (var material in materials)
+			{
+				//if (string.IsNullOrEmpty(material.fullPath) || !File.Exists(material.fullPath))
+				{
+					var dest = new Java.IO.File(Helper.MaterialDir, material.s3Key).ToString();
+					var objectRequest = new GetObjectRequest
+					{
+						BucketName = material.s3Bucket,
+						Key = material.s3Key
+					};
+
+					using (var response = S3Client.GetObjectAsync(objectRequest).Result)
+					{
+						//if (!File.Exists(dest))
+						{
+							//response.WriteResponseStreamToFileAsync(dest, true);
+							using (Stream s = response.ResponseStream)
+							{
+								using (FileStream fs = new FileStream(dest, FileMode.Create, FileAccess.Write))
+								{
+									byte[] data = new byte[32768];
+									int bytesRead = 0;
+									do
+									{
+										bytesRead = s.Read(data, 0, data.Length);
+										fs.Write(data, 0, bytesRead);
+									}
+									while (bytesRead > 0);
+									fs.Flush();
 
 
-			//if (File.Exists(MainDatabase.DBPath)) {
-			//	SDiag.Debug.WriteLine(MainDatabase.DBPath + " is Exists!");
-			//	//var fi = new FileInfo(MainDatabase.DBPath);
-			//	//var directory = fi.Directory.FullName;
-			//	var newPath = Path.Combine(new FileInfo(MainDatabase.DBPath).Directory.FullName, fileName);
-			//	if (!File.Exists(newPath)) File.Copy(dbFileLocation, newPath, true);
-
-			//	if (File.Exists(newPath)) {
-			//		SDiag.Debug.WriteLine(newPath + " is Exists!");
-			//		MainDatabase.Dispose();
-			//		Helper.C_DB_FILE_NAME = fileName;
-			//		MainDatabase.Username = Helper.Username;
-			//	}
-			//}
+								}
+							}
+						}
+						DB.Write(() =>
+						{
+							material.fullPath = dest;
+						});
+					}
+				}
+			}
 		}
 
 		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
@@ -124,16 +176,16 @@ namespace MDC.Doctors
 		void GenerateData_Click(object sender, EventArgs e)
 		{
 			var cats = DBHelper.GetAll<Category>(DB);
-			var newCats = new Category[5];
+			var newCats = new Category[4];
 			if (cats.Count() == 0)
 			{
-				for (int i = 0; i < 5; i++)
+				for (int i = 1; i <= 4; i++)
 				{
-					newCats[i] = new Category
+					newCats[i-1] = new Category
 					{
 						uuid = Guid.NewGuid().ToString(),
-						name = (i + 1) + "-ая кат.",
-						order = (i + 1)
+						name = i + "-ая кат.",
+						order = i
 					};
 				};
 
@@ -154,24 +206,18 @@ namespace MDC.Doctors
 			var rules = DBHelper.GetAll<CategoryRule>(DB);
 			if (rules.Count() == 0)
 			{
-				var newRules = new CategoryRule[brands.Count() * 5];
+				var newRules = new CategoryRule[brands.Count()];
 
 				for (int b = 0; b < brands.Count; b++)
 				{
-					for (int i = 0; i < 5; i++)
+					newRules[b] = new CategoryRule
 					{
-						newRules[b * 5 + i] = new CategoryRule
-						{
-							uuid = Guid.NewGuid().ToString(),
-							name = string.Format("Правило для категории {0} и препарата {1}", i, brands[b].name),
-							brand = brands[b].uuid,
-							potentialStart = (i * 3 + 1),
-							potentialEnd = (i * 3 + 1) + 2,
-							proportionStart = 0.0f,
-							proportionEnd = 1.0f,
-							category = newCats[i].uuid
-						};
-					};	
+						uuid = Guid.NewGuid().ToString(),
+						desc = string.Format("Правило для препарата {0}", brands[b].name),
+						brand = brands[b].uuid,
+						potential = 10 - b,
+						proportion = 0.5f
+					};
 				};
 
 				DB.Write(() =>
