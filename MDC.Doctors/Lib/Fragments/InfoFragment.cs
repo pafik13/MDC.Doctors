@@ -176,7 +176,7 @@ namespace MDC.Doctors.Lib.Fragments
 
 			var prescribeOur = int.Parse(viewHolder.PrescribeOur.Text);
 
-			if (prescribeOur > potential)
+			if (prescribeOur > potential) {
 				Toast.MakeText(Activity, "ОШИБКА: Выписка наших не может быть больше потенциала!", ToastLength.Short).Show();
 				return;
 			}
@@ -218,7 +218,7 @@ namespace MDC.Doctors.Lib.Fragments
 
 		}
 
-		void AddPotentialItem(DrugBrand brand)
+		void AddPotentialItem(DrugBrand brand, PotentialData potential = null)
 		{
 			var item = Activity.LayoutInflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
 			item.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = brand.name;
@@ -233,9 +233,26 @@ namespace MDC.Doctors.Lib.Fragments
 				Proportion = item.FindViewById<TextView>(Resource.Id.ptiProportionTV),
 				Category = item.FindViewById<TextView>(Resource.Id.ptiCategoryTV)
 			};
+
+			if (potential != null)
+			{
+				item.SetTag(Resource.String.PotentialDataUUID, potential.UUID);
+
+				viewHolder.Potential.Text = potential.Potential.ToString();
+				viewHolder.PrescribeOur.Text = potential.PrescriptionOfOur.ToString();
+				viewHolder.PrescribeOther.Text = potential.PrescriptionOfOther.ToString();
+				viewHolder.Proportion.Text = potential.Proportion.ToString();
+
+				if (string.IsNullOrEmpty(potential.Category)) {
+					viewHolder.Category.Text = string.Empty;
+				} else {
+					viewHolder.Category.Text = DBHelper.Get<Category>(DB, potential.Category).name;
+				}
+				
+			}
+
 			viewHolder.Potential.TextChanged += PotentialInfoChange;
 			viewHolder.PrescribeOur.TextChanged += PotentialInfoChange;
-			viewHolder.PrescribeOther.TextChanged += PotentialInfoChange;
 			item.SetTag(Resource.String.ViewHolder, viewHolder);
 
 			PotentialTable.AddView(item);
@@ -243,26 +260,9 @@ namespace MDC.Doctors.Lib.Fragments
 
 		void AddPotentialItem(PotentialData potential)
 		{
-			var item = Activity.LayoutInflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
-			item.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = DBHelper.Get<DrugBrand>(DB, potential.Brand).name;
-			item.SetTag(Resource.String.PotentialDataUUID, potential.UUID);
-			item.SetTag(Resource.String.DrugBrandUUID, potential.Brand);
-			item.SetTag(Resource.String.IsChanged, false);
+			var brand = DBHelper.Get<DrugBrand>(DB, potential.Brand);
 
-			var viewHolder = new PotentialViewHolder
-			{
-				Potential = item.FindViewById<EditText>(Resource.Id.ptiPotentialET),
-				PrescribeOur = item.FindViewById<EditText>(Resource.Id.ptiPrescribeOurET),
-				PrescribeOther = item.FindViewById<TextView>(Resource.Id.ptiPrescribeOtherTV),
-				Proportion = item.FindViewById<TextView>(Resource.Id.ptiProportionTV),
-				Category = item.FindViewById<TextView>(Resource.Id.ptiCategoryTV)
-			};
-			viewHolder.Potential.TextChanged += PotentialInfoChange;
-			viewHolder.PrescribeOur.TextChanged += PotentialInfoChange;
-			viewHolder.PrescribeOther.TextChanged += PotentialInfoChange;
-			item.SetTag(Resource.String.ViewHolder, viewHolder);
-
-			PotentialTable.AddView(item);
+			AddPotentialItem(brand, potential);
 		}
 
 		void PotentialBrands_Click(object sender, EventArgs e)
@@ -361,7 +361,7 @@ namespace MDC.Doctors.Lib.Fragments
 			}
 			
 			if (infoDataTable.ChildCount > 1) {
-				infoTableItem.FindViewById<TextView>(Resource.Id.itiHolderTV).Visibility = ViewStates.GONE;
+				infoTableItem.FindViewById<TextView>(Resource.Id.itiHolderTV).Visibility = ViewStates.Gone;
 			} else {
 				infoTableItem.FindViewById<TextView>(Resource.Id.itiHolderTV).Text = "<НЕТ ДАННЫХ>";
 			}
@@ -472,7 +472,7 @@ namespace MDC.Doctors.Lib.Fragments
 			Locker.Visibility = ViewStates.Gone;
 			Arrow.Visibility = ViewStates.Gone;
 			Attendance = newAttendance;
-			AddInfoItem(newAttendance, true, true);
+			AddInfoItem(newAttendance, true);
 		}
 		
 		public void OnAttendanceResume(Attendance oldAttendance)
@@ -579,9 +579,6 @@ namespace MDC.Doctors.Lib.Fragments
 						var viewHolder = item.GetTag(Resource.String.ViewHolder) as PotentialViewHolder;
 						var categoryUUID = (string)item.GetTag(Resource.String.CategoryUUID);
 
-						if (!string.IsNullOrEmpty(categoryUUID)) {
-							var category = DBHelper.Get<Category>(DB, categoryUUID);							
-						};
 
 						var potentialDataUUID = (string)item.GetTag(Resource.String.PotentialDataUUID);
 						var drugBrandUUID = (string)item.GetTag(Resource.String.DrugBrandUUID);
@@ -608,12 +605,16 @@ namespace MDC.Doctors.Lib.Fragments
 						}
 						potentialData.Brand = drugBrandUUID;
 						potentialData.Potential = int.Parse(viewHolder.Potential.Text);
-						potentialData.PrescriptionOfOur =int.Parse(viewHolder.PrescribeOur.Text);
+						potentialData.PrescriptionOfOur = int.Parse(viewHolder.PrescribeOur.Text);
 						potentialData.PrescriptionOfOther = int.Parse(viewHolder.PrescribeOther.Text);
 						potentialData.Proportion = float.Parse(viewHolder.Proportion.Text);
 						potentialData.Category = categoryUUID;
 
 						if (!potentialData.IsManaged) DBHelper.Save(DB, transaction, potentialData);
+
+						if (string.IsNullOrEmpty(categoryUUID)) continue;
+
+						var category = DBHelper.Get<Category>(DB, categoryUUID);
 
 						var categoryOrderInfo = new CategoryOrderInfo
 						{
