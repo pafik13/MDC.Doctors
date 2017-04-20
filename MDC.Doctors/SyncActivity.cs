@@ -39,7 +39,8 @@ namespace MDC.Doctors
 		public string USERNAME { get; private set; }
 		public string AGENT_UUID { get; private set; }
 
-		public int Count { get; private set; }
+		public int CountItems { get; private set; }
+		public int CountMaterials { get; private set; }
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -164,23 +165,35 @@ namespace MDC.Doctors
 
 		void RefreshView(){
 
-			Count = 0;
+			CountItems = 0;
 
-			Count += DBSpec.CountItemsToSyncAll(DB);
+			CountItems += DBSpec.CountItemsToSyncAll(DB);
 
-			//Count += DBSpec.CountItemsToSync<Attendance>(DB);
-			//Count += DBSpec.CountItemsToSync<Doctor>(DB);
-			//Count += DBSpec.CountItemsToSync<EntityDelete>(DB);
-			//Count += DBSpec.CountItemsToSync<GPSData>(DB);
-			//Count += DBSpec.CountItemsToSync<HospitalInputed>(DB);
-			//Count += DBSpec.CountItemsToSync<InfoData>(DB);
-			//Count += DBSpec.CountItemsToSync<PotentialData>(DB);
-			//Count += DBSpec.CountItemsToSync<RouteItem>(DB);
-			//Count += DBSpec.CountItemsToSync<WorkPlace>(DB);
+			//CountItems += DBSpec.CountItemsToSync<Attendance>(DB);
+			//CountItems += DBSpec.CountItemsToSync<Doctor>(DB);
+			//CountItems += DBSpec.CountItemsToSync<EntityDelete>(DB);
+			//CountItems += DBSpec.CountItemsToSync<GPSData>(DB);
+			//CountItems += DBSpec.CountItemsToSync<HospitalInputed>(DB);
+			//CountItems += DBSpec.CountItemsToSync<InfoData>(DB);
+			//CountItems += DBSpec.CountItemsToSync<PotentialData>(DB);
+			//CountItems += DBSpec.CountItemsToSync<RouteItem>(DB);
+			//CountItems += DBSpec.CountItemsToSync<WorkPlace>(DB);
 
 			var toSyncCount = FindViewById<TextView>(Resource.Id.saSyncEntitiesCount);
-			toSyncCount.Text = string.Format("Необходимо синхронизировать {0} объектов", Count);
-
+			toSyncCount.Text = string.Format("Необходимо синхронизировать {0} объектов", CountItems);
+			
+			CountMaterials = 0;
+			foreach(var material in DBHelper.GetAll<Material>(DB)) {
+				if (string.IsNullOrEmpty(material.fullPath)) {
+					CountMaterials++;
+					continue;
+				}
+				
+				if (File.Exists(material.fullPath)) continue;
+				
+				CountMaterials++;
+			}
+			
 			var toUpdateCount = FindViewById<TextView>(Resource.Id.saUpdateEntitiesCount);
 			toUpdateCount.Text = string.Format("Необходимо обновить {0} объектов", 0);
 
@@ -218,9 +231,10 @@ namespace MDC.Doctors
 		//}
 
 		async void Sync_Click(object sender, EventArgs e){
-
-			if (Count > 0) {
-				var progress = ProgressDialog.Show(this, string.Empty, "Синхронизация");
+			
+			ProgressDialog progress = null;
+			if (CountItems > 0) {
+				progress = ProgressDialog.Show(this, string.Empty, "Синхронизация");
 
 				await SyncEntities<Attendance>();
 				await SyncEntities<Doctor>();
@@ -232,12 +246,56 @@ namespace MDC.Doctors
 				await SyncEntities<RouteItem>();
 				await SyncEntities<WorkPlace>();
 
-				RunOnUiThread(() =>
-				{
-					progress.Dismiss();
-					RefreshView();
-				});
 			}
+			
+			if (CountMaterials > 0) {
+				if (progress == null) {
+					progress = ProgressDialog.Show(this, string.Empty, "Обновление материалов");
+				} else {
+					progress.Text = "Обновление материалов";
+				}
+				
+				Helper.Username = "test1";
+
+				foreach (var material in DBHelper.GetAll<Material>(DB))
+				{
+					var dest = new Java.IO.File(Helper.MaterialDir, material.s3Key).ToString();
+					if (!File.Exists(dest))
+					{
+						using (var response = await S3Client.GetObjectAsync(material.s3Bucket, material.s3Key))
+						{
+							using (Stream s = response.ResponseStream)
+							{
+								using (FileStream fs = new FileStream(dest, FileMode.Create, FileAccess.Write))
+								{
+									s.CopyTo(fs);
+									// byte[] data = new byte[32768];
+									// int bytesRead = 0;
+									// do
+									// {
+										// bytesRead = s.Read(data, 0, data.Length);
+										// fs.Write(data, 0, bytesRead);
+									// }
+									// while (bytesRead > 0);
+									// fs.Flush();
+								}
+							}
+							DB.Write(() =>
+							{
+								material.fullPath = dest;
+							});
+						}
+					}
+				}
+			}
+			
+			if (progress == null) return;
+			
+			RunOnUiThread(() =>
+			{
+				progress.Dismiss();
+				RefreshView();
+			});
 		}
 
 		protected override void OnResume()

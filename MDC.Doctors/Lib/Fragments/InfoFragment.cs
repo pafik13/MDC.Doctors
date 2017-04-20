@@ -25,11 +25,14 @@ namespace MDC.Doctors.Lib.Fragments
 
 		List<DrugBrand> Brands;
 		Dictionary<int, Category> Categories;
-		Dictionary<string, bool> PotentialDataToDelete;
 
+		Button PotentialBrands;
 		LinearLayout PotentialTable;
+		Dictionary<string, CacheItem> PotentialDataCache;
+
+		Button InfoBrands;
 		LinearLayout InfoTable;
-		Dictionary<string, InfoDataCacheItem> InfoDataCache;
+		Dictionary<string, CacheItem> InfoDataCache;
 		
 		TextView Locker;
 		ImageView Arrow;
@@ -68,8 +71,8 @@ namespace MDC.Doctors.Lib.Fragments
 		}
 		#endregion
 
-		#region InfoDataCacheItem
-		struct InfoDataCacheItem
+		#region CacheItem
+		struct CacheItem
 		{
 			public bool IsActive { get; set; }
 			public View View { get; set; }
@@ -121,8 +124,11 @@ namespace MDC.Doctors.Lib.Fragments
 				}
 			}
 			
-			mainView.FindViewById<Button>(Resource.Id.aaPotentialBrandsB).Click += PotentialBrands_Click;
-			
+			PotentialBrands = mainView.FindViewById<Button>(Resource.Id.aaPotentialBrandsB);
+			PotentialBrands.Click += PotentialBrands_Click;
+			PotentialBrands.Enabled = false;
+			PotentialDataCache = new Dictionary<string, CacheItem>();
+
 			
 			InfoTable = mainView.FindViewById<LinearLayout>(Resource.Id.aaInfoTable);
 			var infoTableHeader = inflater.Inflate(Resource.Layout.InfoTableHeader, InfoTable, false);
@@ -136,8 +142,10 @@ namespace MDC.Doctors.Lib.Fragments
 				}
 			}
 			
-			mainView.FindViewById<Button>(Resource.Id.aaInfoBrandsB).Click += InfoBrands_Click;
-			InfoDataCache = new Dictionary<string, InfoDataCacheItem>();
+			InfoBrands = mainView.FindViewById<Button>(Resource.Id.aaInfoBrandsB);
+			InfoBrands.Click += InfoBrands_Click;
+			InfoBrands.Enabled = false;
+			InfoDataCache = new Dictionary<string, CacheItem>();
 
 			Locker = mainView.FindViewById<TextView>(Resource.Id.locker);
 			Arrow = mainView.FindViewById<ImageView>(Resource.Id.arrow);
@@ -218,7 +226,7 @@ namespace MDC.Doctors.Lib.Fragments
 
 		}
 
-		void AddPotentialItem(DrugBrand brand, PotentialData potential = null)
+		void AddPotentialItem(DrugBrand brand, bool isEditable = false, PotentialData potential = null)
 		{
 			var item = Activity.LayoutInflater.Inflate(Resource.Layout.PotentialTableItem, PotentialTable, false);
 			item.FindViewById<TextView>(Resource.Id.ptiDrugBrandTV).Text = brand.name;
@@ -250,9 +258,13 @@ namespace MDC.Doctors.Lib.Fragments
 				}
 				
 			}
-
-			viewHolder.Potential.TextChanged += PotentialInfoChange;
-			viewHolder.PrescribeOur.TextChanged += PotentialInfoChange;
+			
+			if (isEditable) {
+				viewHolder.Potential.TextChanged += PotentialInfoChange;
+				viewHolder.PrescribeOur.TextChanged += PotentialInfoChange;
+				PotentialDataCache.Add(brand.uuid, new CacheItem { IsActive = true, View = row});
+			}
+			
 			item.SetTag(Resource.String.ViewHolder, viewHolder);
 
 			PotentialTable.AddView(item);
@@ -262,28 +274,22 @@ namespace MDC.Doctors.Lib.Fragments
 		{
 			var brand = DBHelper.Get<DrugBrand>(DB, potential.Brand);
 
-			AddPotentialItem(brand, potential);
+			AddPotentialItem(brand, false, potential);
 		}
 
 		void PotentialBrands_Click(object sender, EventArgs e)
 		{
-			//var button = (Button)sender;
-			//var parent = button.Parent as LinearLayout;
-			//var potentialTable = parent.FindViewById<LinearLayout>(Resource.Id.aaPotentialTable);
-
 			var cacheBrands = new Dictionary<string, bool>(Brands.Count);
 			for (int b = 0; b < Brands.Count; b++)
 			{
 				cacheBrands.Add(Brands[b].uuid, false);
 			}
 
-			var cacheViews = new Dictionary<string, View>(Brands.Count);
 			for (int c = 0; c < PotentialTable.ChildCount; c++) {
 				var row = PotentialTable.GetChildAt(c) as TableLayout;
 				var brandUUID = (string)row.GetTag(Resource.String.DrugBrandUUID);
 				if (string.IsNullOrEmpty(brandUUID)) continue;
 				cacheBrands[brandUUID] = true;
-				cacheViews.Add(brandUUID, row);
 			}
 			
 			new Android.App.AlertDialog.Builder(Activity)
@@ -299,22 +305,33 @@ namespace MDC.Doctors.Lib.Fragments
 						.SetPositiveButton(
 						   "Сохранить",
 						   (caller, arguments) => {
-								foreach (var brand in Brands)
+							    foreach (var brand in Brands)
 								{
-								   if (cacheViews.ContainsKey(brand.uuid))
+								   if (PotentialDataCache.ContainsKey(brand.uuid))
 								   {
-									   if (cacheBrands[brand.uuid]) continue;
-									   PotentialTable.RemoveView(cacheViews[brand.uuid]);
-									   var potentialDataUUID = (string) (cacheViews[brand.uuid].Parent as TableLayout).GetTag(Resource.String.PotentialDataUUID);
-									   if (string.IsNullOrEmpty(potentialDataUUID)) continue;
-									   PotentialDataToDelete.Add(potentialDataUUID, true);
+									   var cacheItem = PotentialDataCache[brand.uuid];
+									   if (cacheItem.IsActive){
+										   if (cacheItem.View.Parent == null) {
+											   PotentialTable.AddView(cacheItem.View);
+										   }
+										   continue;
+									   }
+									   
+									   if (cacheItem.View.Parent == null) continue;
+									   
+									   PotentialTable.RemoveView(PotentialTable.View);
+									   
+									   //var infoDataUUID = (string) (cacheViews[brand.uuid].Parent as TableLayout).GetTag(Resource.String.InfoDataUUID);
+									   //if (string.IsNullOrEmpty(infoDataUUID)) continue;
+									   //InfoDataToDelete.Add(infoDataUUID, true);
 									   continue;
 								   }
 								   if (cacheBrands[brand.uuid])
 								   {
-									   AddPotentialItem(brand);
+									  AddPotentialItem(brand, true);
 								   }
 								}
+								
 								(caller as Android.App.Dialog).Dispose();
 						   }
 						)
@@ -356,6 +373,8 @@ namespace MDC.Doctors.Lib.Fragments
 					callback.Enabled = true;
 					resume.Enabled = true;
 					goal.Enabled = true;
+					
+					InfoDataCache.Add(brand.uuid, new CacheItem { IsActive = true, View = row});
 				}
 				infoDataTable.AddView(row);
 			}
@@ -433,9 +452,10 @@ namespace MDC.Doctors.Lib.Fragments
 										
 										infoDataTable.AddView(row);
 										
-										InfoDataCache.Add(brand.uuid, new InfoDataCacheItem { IsActive = true, View = row});
+										InfoDataCache.Add(brand.uuid, new CacheItem { IsActive = true, View = row});
 								   }
 								}
+								
 								(caller as Android.App.Dialog).Dispose();
 						   }
 						)
@@ -445,25 +465,52 @@ namespace MDC.Doctors.Lib.Fragments
 		
 		void WorkTypes_Click(object sender, EventArgs e)
 		{
-			//Toast.MakeText(Activity, "<Click on WorkTypes>", ToastLength.Short).Show();
-			var workTypes = DBHelper.GetList<WorkType>(DB);
+			var cacheWorkTypes = new Dictionary<string, bool>(WorkTypes.Count);
+			for (int wt = 0; wt < WorkTypes.Count; wt++)
+			{
+				cacheWorkTypes.Add(WorkTypes[wt].uuid, false);
+			}
+			
+			var tv = sender as View;
+			var workTypeUUIDs = tv.GetTag(Resource.String.WorkTypeUUIDs);
+			if (!string.IsNullOrEmpty(workTypeUUIDs)) {
+				foreach (var uuid in workTypeUUIDs.Split(';')) {
+					cacheWorkTypes[uuid] = true;
+				}
+			}
 
+			
 			new Android.App.AlertDialog.Builder(Activity)
-						   .SetTitle("Выберите материал для показа:")
+						   .SetTitle("Выберите виды работ:")
 						   .SetCancelable(true)
-						   .SetItems(
-							   workTypes.Select(item => item.name).ToArray(),
-							   (caller, arguments) =>
-							   {
-								   Toast.MakeText(Activity, "<Click on WorkTypes>", ToastLength.Short).Show();
-
-								   //var intent = new Intent(Intent.ActionView);
-								   //var uri = Android.Net.Uri.FromFile(new Java.IO.File(materials[arguments.Which].fullPath));
-								   //intent.SetDataAndType(uri, "application/pdf");
-								   //intent.SetFlags(ActivityFlags.NoHistory);
-								   //StartActivity(intent);
-							   })
-						   .Show();
+					   .SetMultiChoiceItems(
+				           WorkTypes.Select(item => item.name).ToArray(),
+				           cacheWorkTypes.Values.ToArray(),
+						   (caller, arguments) => {
+								cacheWorkTypes[WorkTypes[arguments.Which].uuid] = arguments.IsChecked;
+						   }
+					   )
+						.SetPositiveButton(
+						   "Сохранить",
+						   (caller, arguments) => {
+							    var workTypeUUIDs = string.Empty;
+								var workTypeNames = string.Empty;
+								foreach (var workType in WorkTypes)
+								{
+									if (cacheWorkTypes[workType]) {
+										workTypeUUIDs = string.Concat(workTypeUUIDs, workType.uuid, ";");
+										workTypeNames = string.Concat(workTypeNames, workType.name, ";");
+									}
+								}
+								
+								tv.Text = workTypeNames;
+								tv.SetTag(Resource.String.WorkTypeUUIDs, workTypeUUIDs);
+								
+							    (caller as Android.App.Dialog).Dispose();
+						   }
+						)
+						.SetNegativeButton("Отмена", (caller, arguments) => { (caller as Android.App.Dialog).Dispose(); })
+						.Show();
 		}
 
 		public void OnAttendanceStart(Attendance newAttendance)
@@ -473,6 +520,9 @@ namespace MDC.Doctors.Lib.Fragments
 			Arrow.Visibility = ViewStates.Gone;
 			Attendance = newAttendance;
 			AddInfoItem(newAttendance, true);
+			
+			InfoBrands.Enabled = true;
+			PotentialBrands.Enabled = true;
 		}
 		
 		public void OnAttendanceResume(Attendance oldAttendance)
@@ -481,7 +531,7 @@ namespace MDC.Doctors.Lib.Fragments
 			Locker.Visibility = ViewStates.Gone;
 			Arrow.Visibility = ViewStates.Gone;
 			Attendance = oldAttendance;
-
+			
 			for (int c = 1; c < InfoTable.ChildCount; c++)
 			{
 				var item = InfoTable.GetChildAt(c);
@@ -492,17 +542,27 @@ namespace MDC.Doctors.Lib.Fragments
 					for (int cc = 0; cc < table.ChildCount; cc++)
 					{
 						var row = (LinearLayout)table.GetChildAt(cc);
+						var drugBrandUUID = (string)row.GetTag(Resource.String.DrugBrandUUID);
 						row.FindViewById<TextView>(Resource.Id.idtiWorkTypesTV).Click += WorkTypes_Click;
 						row.FindViewById<TextView>(Resource.Id.idtiCallbackET).Enabled = true;
 						row.FindViewById<TextView>(Resource.Id.idtiResumeET).Enabled = true;
 						row.FindViewById<TextView>(Resource.Id.idtiGoalET).Enabled = true;
+						if (InfoDataCache.ContainsKey(drugBrandUUID)) continue;
+						
+						InfoDataCache.Add(drugBrandUUID, new CacheItem { IsActive = true, View = row});
 					}
 				}
 			}
+			
+			InfoBrands.Enabled = true;
+			PotentialBrands.Enabled = true;
 		}
 
 		public void OnAttendancePause()
 		{
+			InfoBrands.Enabled = false;
+			PotentialBrands.Enabled = false;
+			
 			// Заблокировать строки от ввода данных
 			Locker.Text = "ПРОДОЛЖИТЕ ВИЗИТ";
 			Locker.Visibility = ViewStates.Visible;
@@ -532,22 +592,21 @@ namespace MDC.Doctors.Lib.Fragments
 
 		public void OnAttendanceStop()
 		{
+			InfoBrands.Enabled = false;
+			PotentialBrands.Enabled = false;
+			
 			// Сохранить данные
 			using (var transaction = DB.BeginWrite())
 			{
-				for (int c = 1; c < InfoTable.ChildCount; c++)
-				{
-					var item = InfoTable.GetChildAt(c);
-					var isChanged = (bool)item.GetTag(Resource.String.IsChanged);
-					if (isChanged)
-					{
-						var attendaceUUID = (string)item.GetTag(Resource.String.AttendanceUUID);
-						var table = item.FindViewById<LinearLayout>(Resource.Id.itiInfoDataTable);
-						for (int cc = 0; cc < table.ChildCount; cc++)
+				foreach (var cacheItem in InfoDataCache.Values) {
+					var row = cacheItem.View as LinearLayout;
+					var infoDataUUID = (string)row.GetTag(Resource.String.InfoDataUUID);
+					if (cacheItem.IsActive) {
+						var isChanged = (bool)row.Parent.GetTag(Resource.String.IsChanged);
+						if (isChanged)
 						{
-							var row = (LinearLayout)table.GetChildAt(cc);
+							var attendaceUUID = (string)row.Parent.GetTag(Resource.String.AttendanceUUID);
 							var drugBrandUUID = (string)row.GetTag(Resource.String.DrugBrandUUID);
-							var infoDataUUID = (string)row.GetTag(Resource.String.InfoDataUUID);
 							InfoData infoData;
 							if (string.IsNullOrEmpty(infoDataUUID))
 							{
@@ -556,17 +615,79 @@ namespace MDC.Doctors.Lib.Fragments
 							else
 							{
 								infoData = DBHelper.Get<InfoData>(DB, infoDataUUID);
+								infoData.UpdatedAt = DateTimeOffset.Now;
 							}
 							infoData.Brand = drugBrandUUID;
 							infoData.Attendance = attendaceUUID;
-							//infoData.row.FindViewById<TextView>(Resource.Id.idtiWorkTypesTV).Click -= WorkTypes_Click;
+							infoData.WorkTypes = row.FindViewById<TextView>(Resource.Id.idtiCallbackET).GetTag(Resource.String.WorkTypeUUIDs);
 							infoData.Callback = row.FindViewById<TextView>(Resource.Id.idtiCallbackET).Text;
 							infoData.Resume = row.FindViewById<TextView>(Resource.Id.idtiResumeET).Text;
 							infoData.Goal = row.FindViewById<TextView>(Resource.Id.idtiGoalET).Text;
 
 							if (!infoData.IsManaged) DBHelper.Save(DB, transaction, infoData);
-						}
+						}						
+					} else {
+						if (string.IsNullOrEmpty(infoDataUUID)) continue;
+						
+						DBHelper.Delete(BD, infoDataUUID);
 					}
+
+				}
+				
+				
+				
+				foreach (var cacheItem in InfoDataCache.Values) {
+					var item = cacheItem.View as TableLayout;
+					var potentialDataUUID = (string)item.GetTag(Resource.String.PotentialDataUUID);
+					if (cacheItem.IsActive) {
+						var isChanged = (bool)item.GetTag(Resource.String.IsChanged);
+						if (isChanged)
+						{
+							var viewHolder = item.GetTag(Resource.String.ViewHolder) as PotentialViewHolder;
+							var categoryUUID = (string)item.GetTag(Resource.String.CategoryUUID);
+
+							var drugBrandUUID = (string)item.GetTag(Resource.String.DrugBrandUUID);
+
+							PotentialData potentialData;
+							if (string.IsNullOrEmpty(potentialDataUUID))
+							{
+								potentialData = DBHelper.Create<PotentialData>(DB, transaction);
+								potentialData.Attendance = Attendance.UUID;
+							}
+							else
+							{
+								potentialData = DBHelper.Get<PotentialData>(DB, potentialDataUUID);
+								potentialData.UpdatedAt = DateTimeOffset.Now;
+								potentialData.AttendanceWithChanges = Attendance.UUID;	
+							}
+							potentialData.Brand = drugBrandUUID;
+							potentialData.Potential = int.Parse(viewHolder.Potential.Text);
+							potentialData.PrescriptionOfOur = int.Parse(viewHolder.PrescribeOur.Text);
+							potentialData.PrescriptionOfOther = int.Parse(viewHolder.PrescribeOther.Text);
+							potentialData.Proportion = float.Parse(viewHolder.Proportion.Text);
+							potentialData.Category = categoryUUID;
+
+							if (!potentialData.IsManaged) DBHelper.Save(DB, transaction, potentialData);
+
+							if (string.IsNullOrEmpty(categoryUUID)) continue;
+
+							var category = DBHelper.Get<Category>(DB, categoryUUID);
+
+							var categoryOrderInfo = new CategoryOrderInfo
+							{
+								BrandName = DBHelper.Get<DrugBrand>(DB, drugBrandUUID).name,
+								CategoryName = category.name,
+								CategoryOrder = category.order
+							};
+
+							categoryOrderInfos.Add(categoryOrderInfo);
+						}						
+					} else {
+						if (string.IsNullOrEmpty(potentialDataUUID)) continue;
+						
+						DBHelper.Delete(BD, potentialDataUUID);
+					}
+
 				}
 
 				var categoryOrderInfos = new List<CategoryOrderInfo>();
@@ -576,54 +697,7 @@ namespace MDC.Doctors.Lib.Fragments
 					var isChanged = (bool)item.GetTag(Resource.String.IsChanged);
 					if (isChanged)
 					{
-						var viewHolder = item.GetTag(Resource.String.ViewHolder) as PotentialViewHolder;
-						var categoryUUID = (string)item.GetTag(Resource.String.CategoryUUID);
-
-
-						var potentialDataUUID = (string)item.GetTag(Resource.String.PotentialDataUUID);
-						var drugBrandUUID = (string)item.GetTag(Resource.String.DrugBrandUUID);
-
-						PotentialData potentialData;
-						if (string.IsNullOrEmpty(potentialDataUUID))
-						{
-							potentialData = DBHelper.Create<PotentialData>(DB, transaction);
-							potentialData.Attendance = Attendance.UUID;
-						}
-						else
-						{
-							potentialData = DBHelper.Get<PotentialData>(DB, potentialDataUUID);
-							if (PotentialDataToDelete.ContainsKey(potentialDataUUID))
-							{
-								DBHelper.Delete(DB, transaction, potentialData);
-								continue;
-							}
-							else
-							{
-								potentialData.UpdatedAt = DateTimeOffset.Now;
-								potentialData.AttendanceWithChanges = Attendance.UUID;	
-							}							
-						}
-						potentialData.Brand = drugBrandUUID;
-						potentialData.Potential = int.Parse(viewHolder.Potential.Text);
-						potentialData.PrescriptionOfOur = int.Parse(viewHolder.PrescribeOur.Text);
-						potentialData.PrescriptionOfOther = int.Parse(viewHolder.PrescribeOther.Text);
-						potentialData.Proportion = float.Parse(viewHolder.Proportion.Text);
-						potentialData.Category = categoryUUID;
-
-						if (!potentialData.IsManaged) DBHelper.Save(DB, transaction, potentialData);
-
-						if (string.IsNullOrEmpty(categoryUUID)) continue;
-
-						var category = DBHelper.Get<Category>(DB, categoryUUID);
-
-						var categoryOrderInfo = new CategoryOrderInfo
-						{
-							BrandName = DBHelper.Get<DrugBrand>(DB, drugBrandUUID).name,
-							CategoryName = category.name,
-							CategoryOrder = category.order
-						};
-
-						categoryOrderInfos.Add(categoryOrderInfo);
+						
 					}
 				}
 				
@@ -641,6 +715,7 @@ namespace MDC.Doctors.Lib.Fragments
 						case 1:
 							Doctor.CategoryText = string.Format("{0}:({1})", categoryOrderInfos[0].BrandName, categoryOrderInfos[0].CategoryName);
 							Doctor.CategoryOrderSum = categoryOrderInfos[0].CategoryOrder;
+							Doctor.UpdatedAt = DateTimeOffset.Now;
 							break;
 						default:
 							Doctor.CategoryText = string.Format("{0}:({1}), {2}:({3})"
@@ -648,6 +723,7 @@ namespace MDC.Doctors.Lib.Fragments
 															   , categoryOrderInfos[1].BrandName, categoryOrderInfos[1].CategoryName
 															   );
 							Doctor.CategoryOrderSum = categoryOrderInfos.Sum(coi => coi.CategoryOrder);
+							Doctor.UpdatedAt = DateTimeOffset.Now;
 							break;
 					}
 				});

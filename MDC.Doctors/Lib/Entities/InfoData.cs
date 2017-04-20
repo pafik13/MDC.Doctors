@@ -19,7 +19,7 @@ namespace MDC.Doctors.Lib.Entities
 
 		public string Brand { get; set; }
 
-		public string WorkType { get; set; }
+		public string WorkTypes { get; set; }
 
 		public string Callback { get; set; }
 
