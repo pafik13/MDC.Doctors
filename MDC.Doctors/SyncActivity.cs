@@ -23,9 +23,13 @@ using Realms;
 
 //using Newtonsoft.Json;
 
+using MDC.Doctors.Lib;
 using MDC.Doctors.Lib.Other;
 using MDC.Doctors.Lib.Entities;
 using MDC.Doctors.Lib.Interfaces;
+
+using Amazon;
+using Amazon.S3;
 
 namespace MDC.Doctors
 {
@@ -38,6 +42,18 @@ namespace MDC.Doctors
 		public string HOST_URL { get; private set; }
 		public string USERNAME { get; private set; }
 		public string AGENT_UUID { get; private set; }
+
+		#if DEBUG
+		const string S3BucketName = "sbl-crm";
+		#else
+		const string S3BucketName = "sbl-crm-frankfurt";
+		#endif
+
+		readonly RegionEndpoint S3Endpoint = RegionEndpoint.USEast1;
+
+		string DBPath = string.Empty;
+		string AgentUUID = string.Empty;
+		IAmazonS3 S3Client;
 
 		public int CountItems { get; private set; }
 		public int CountMaterials { get; private set; }
@@ -73,6 +89,18 @@ namespace MDC.Doctors
 			HOST_URL = "http://front-sbldev.rhcloud.com/";
 			//AGENT_UUID = shared.GetString(SigninDialog.C_AGENT_UUID, string.Empty);
 
+			#if DEBUG
+			var loggingConfig = AWSConfigs.LoggingConfig;
+			loggingConfig.LogMetrics = true;
+			loggingConfig.LogResponses = ResponseLoggingOption.Always;
+			loggingConfig.LogMetricsFormat = LogMetricsFormatOption.JSON;
+			loggingConfig.LogTo = LoggingOptions.SystemDiagnostics;
+			#endif
+
+			AWSConfigsS3.UseSignatureVersion4 = true;
+
+			S3Client = new AmazonS3Client(Secret.AWSAccessKeyId, Secret.AWSSecretKey, S3Endpoint);
+
 			RefreshView();
 		}
 
@@ -101,83 +129,12 @@ namespace MDC.Doctors
 			}
 		}
 
-		//void UploadPhoto_Click(object sender, EventArgs e)
-		//{
-		//	var progress = ProgressDialog.Show(this, string.Empty, @"Выгрузка фото");
-
-		//	new Task(() => {
-
-		//		var client = new RestClient(HOST_URL);
-		//		IRestRequest request;
-		//		IRestResponse response;
-
-		//		using (var trans = MainDatabase.BeginTransaction()) {
-
-		//			foreach (var photo in MainDatabase.GetItemsToSync<PhotoData>()) {
-		//				try {
-		//					//Toast.MakeText(this, string.Format(@"Загрузка фото с uuid {0} по посещению с uuid:{1}", photo.UUID, photo.Attendance), ToastLength.Short).Show();
-		//					SDiag.Debug.WriteLine(string.Format(@"Загрузка фото с uuid {0} по посещению с uuid:{1}", photo.UUID, photo.Attendance));
-
-		//					request = new RestRequest(@"PhotoData/upload", Method.POST);
-		//					request.AddQueryParameter(@"access_token", ACCESS_TOKEN);
-		//					//request.AddQueryParameter(@"Stamp", photo.Stamp.ToString());
-		//					request.AddQueryParameter(@"Attendance", photo.Attendance);
-		//					request.AddQueryParameter(@"PhotoType", photo.PhotoType);
-		//					request.AddQueryParameter(@"Brand", photo.Brand);
-		//					request.AddQueryParameter(@"Latitude", photo.Latitude.ToString(CultureInfo.CreateSpecificCulture(@"en-GB")));
-		//					request.AddQueryParameter(@"Longitude", photo.Longitude.ToString(CultureInfo.CreateSpecificCulture(@"en-GB")));
-		//					request.AddFile(@"photo", File.ReadAllBytes(photo.PhotoPath), Path.GetFileName(photo.PhotoPath), string.Empty);
-
-		//					response = client.Execute(request);
-
-		//					switch (response.StatusCode) {
-		//						case HttpStatusCode.OK:
-		//						case HttpStatusCode.Created:
-		//							// TODO: переделать на вызов с проверкой открытой транзакции
-		//							photo.IsSynced = true;
-		//							if (!photo.IsManaged) MainDatabase.SavePhoto(photo);
-		//							//Toast.MakeText(this, "Фото ЗАГРУЖЕНО!", ToastLength.Short).Show();
-		//							SDiag.Debug.WriteLine("Фото ЗАГРУЖЕНО!");
-		//							continue;
-		//						default:
-		//							//Toast.MakeText(this, "Не удалось загрузить фото по посещению!", ToastLength.Short).Show();
-		//							SDiag.Debug.WriteLine("Не удалось загрузить фото по посещению!");
-		//							continue;
-		//					}
-		//				} catch (Exception ex) {
-		//					//Toast.MakeText(this, @"Error : " + ex.Message, ToastLength.Short).Show();
-		//					SDiag.Debug.WriteLine("Error : " + ex.Message);
-		//					continue;
-		//				}
-		//			}
-		//			trans.Commit();
-		//		}
-
-		//		MainDatabase.Dispose();
-		//		RunOnUiThread(() => {
-		//			MainDatabase.Username = USERNAME;
-		//			// Thread.Sleep(1000);
-		//			progress.Dismiss();
-		//			RefreshView();
-		//		});
-		//	}).Start();
-		//}
 
 		void RefreshView(){
 
 			CountItems = 0;
 
 			CountItems += DBSpec.CountItemsToSyncAll(DB);
-
-			//CountItems += DBSpec.CountItemsToSync<Attendance>(DB);
-			//CountItems += DBSpec.CountItemsToSync<Doctor>(DB);
-			//CountItems += DBSpec.CountItemsToSync<EntityDelete>(DB);
-			//CountItems += DBSpec.CountItemsToSync<GPSData>(DB);
-			//CountItems += DBSpec.CountItemsToSync<HospitalInputed>(DB);
-			//CountItems += DBSpec.CountItemsToSync<InfoData>(DB);
-			//CountItems += DBSpec.CountItemsToSync<PotentialData>(DB);
-			//CountItems += DBSpec.CountItemsToSync<RouteItem>(DB);
-			//CountItems += DBSpec.CountItemsToSync<WorkPlace>(DB);
 
 			var toSyncCount = FindViewById<TextView>(Resource.Id.saSyncEntitiesCount);
 			toSyncCount.Text = string.Format("Необходимо синхронизировать {0} объектов", CountItems);
@@ -200,19 +157,6 @@ namespace MDC.Doctors
 			var photoCount = FindViewById<TextView>(Resource.Id.saSyncPhotosCount);
 			//photoCount.Text = string.Format("Необходимо выгрузить {0} фото", MainDatabase.CountItemsToSync<PhotoData>());
 		}
-
-		//public bool IsTokenExpired(string token)
-		//{
-		//	var payloadBytes = Convert.FromBase64String(token.Split('.')[1] + "=");
-		//	var payloadStr = Encoding.UTF8.GetString(payloadBytes, 0, payloadBytes.Length);
-
-		//	// Here, I only extract the "exp" payload property. You can extract other properties if you want.
-		//	var payload = JsonConvert.DeserializeAnonymousType(payloadStr, new { Exp = 0UL }); // 0UL makes implicit typing create the field as unsigned long. 
-
-		//	var currentTimestamp = (ulong)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds;
-
-		//	return currentTimestamp > payload.Exp;
-		//}
 
 		//public Account CreateSyncAccount(Context context)
 		//{
@@ -252,7 +196,7 @@ namespace MDC.Doctors
 				if (progress == null) {
 					progress = ProgressDialog.Show(this, string.Empty, "Обновление материалов");
 				} else {
-					progress.Text = "Обновление материалов";
+					progress.SetMessage("Обновление материалов");
 				}
 				
 				Helper.Username = "test1";

@@ -3177,8 +3177,8 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f060015
 			public const int ApplicationName = 2131099669;
 			
-			// aapt resource value: 0x7f060069
-			public const int AttendanceUUID = 2131099753;
+			// aapt resource value: 0x7f06006a
+			public const int AttendanceUUID = 2131099754;
 			
 			// aapt resource value: 0x7f060062
 			public const int CategoryOrder = 2131099746;
@@ -3186,41 +3186,44 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f060061
 			public const int CategoryUUID = 2131099745;
 			
-			// aapt resource value: 0x7f060068
-			public const int DoctorUUID = 2131099752;
+			// aapt resource value: 0x7f060069
+			public const int DoctorUUID = 2131099753;
 			
-			// aapt resource value: 0x7f06006d
-			public const int DrugBrandUUID = 2131099757;
+			// aapt resource value: 0x7f06006e
+			public const int DrugBrandUUID = 2131099758;
 			
 			// aapt resource value: 0x7f060014
 			public const int Hello = 2131099668;
 			
-			// aapt resource value: 0x7f06006a
-			public const int HospitalUUID = 2131099754;
+			// aapt resource value: 0x7f06006b
+			public const int HospitalUUID = 2131099755;
 			
-			// aapt resource value: 0x7f06006c
-			public const int InfoDataUUID = 2131099756;
+			// aapt resource value: 0x7f06006d
+			public const int InfoDataUUID = 2131099757;
 			
-			// aapt resource value: 0x7f060064
-			public const int IsChanged = 2131099748;
+			// aapt resource value: 0x7f060065
+			public const int IsChanged = 2131099749;
 			
-			// aapt resource value: 0x7f060067
-			public const int Position = 2131099751;
+			// aapt resource value: 0x7f060068
+			public const int Position = 2131099752;
 			
 			// aapt resource value: 0x7f060063
 			public const int PotentialDataUUID = 2131099747;
 			
-			// aapt resource value: 0x7f060065
-			public const int RouteItemOrder = 2131099749;
-			
 			// aapt resource value: 0x7f060066
-			public const int RouteItemUUID = 2131099750;
+			public const int RouteItemOrder = 2131099750;
+			
+			// aapt resource value: 0x7f060067
+			public const int RouteItemUUID = 2131099751;
 			
 			// aapt resource value: 0x7f060060
 			public const int ViewHolder = 2131099744;
 			
-			// aapt resource value: 0x7f06006b
-			public const int WorkPlaceUUID = 2131099755;
+			// aapt resource value: 0x7f06006c
+			public const int WorkPlaceUUID = 2131099756;
+			
+			// aapt resource value: 0x7f060064
+			public const int WorkTypeUUIDs = 2131099748;
 			
 			// aapt resource value: 0x7f060000
 			public const int abc_action_bar_home_description = 2131099648;
@@ -3282,20 +3285,20 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f06005f
 			public const int app_name = 2131099743;
 			
-			// aapt resource value: 0x7f060076
-			public const int cancel_button = 2131099766;
+			// aapt resource value: 0x7f060079
+			public const int cancel_button = 2131099769;
 			
-			// aapt resource value: 0x7f060077
-			public const int check_button = 2131099767;
+			// aapt resource value: 0x7f06007a
+			public const int check_button = 2131099770;
+			
+			// aapt resource value: 0x7f060074
+			public const int delete_caption = 2131099764;
 			
 			// aapt resource value: 0x7f060071
-			public const int delete_caption = 2131099761;
+			public const int doctor_not_found = 2131099761;
 			
-			// aapt resource value: 0x7f06006e
-			public const int doctor_not_found = 2131099758;
-			
-			// aapt resource value: 0x7f06006f
-			public const int error_caption = 2131099759;
+			// aapt resource value: 0x7f060072
+			public const int error_caption = 2131099762;
 			
 			// aapt resource value: 0x7f06005e
 			public const int hello = 2131099742;
@@ -3516,29 +3519,35 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f060016
 			public const int library_name = 2131099670;
 			
-			// aapt resource value: 0x7f060072
-			public const int no_internet_connection = 2131099762;
+			// aapt resource value: 0x7f060070
+			public const int material_file_not_found = 2131099760;
 			
-			// aapt resource value: 0x7f060074
-			public const int no_internet_provider = 2131099764;
+			// aapt resource value: 0x7f06006f
+			public const int material_pick_caption = 2131099759;
 			
 			// aapt resource value: 0x7f060075
-			public const int no_location_provider = 2131099765;
+			public const int no_internet_connection = 2131099765;
 			
-			// aapt resource value: 0x7f060079
-			public const int ok_button = 2131099769;
+			// aapt resource value: 0x7f060077
+			public const int no_internet_provider = 2131099767;
 			
 			// aapt resource value: 0x7f060078
-			public const int on_button = 2131099768;
+			public const int no_location_provider = 2131099768;
+			
+			// aapt resource value: 0x7f06007c
+			public const int ok_button = 2131099772;
+			
+			// aapt resource value: 0x7f06007b
+			public const int on_button = 2131099771;
 			
 			// aapt resource value: 0x7f060013
 			public const int status_bar_notification_info_overflow = 2131099667;
 			
-			// aapt resource value: 0x7f060073
-			public const int time_changed = 2131099763;
+			// aapt resource value: 0x7f060076
+			public const int time_changed = 2131099766;
 			
-			// aapt resource value: 0x7f060070
-			public const int warning_caption = 2131099760;
+			// aapt resource value: 0x7f060073
+			public const int warning_caption = 2131099763;
 			
 			static String()
 			{

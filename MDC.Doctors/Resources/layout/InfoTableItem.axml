@@ -22,6 +22,7 @@
             android:textAppearance="@style/rowTextForPharmacy" />
     </RelativeLayout>
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/itiInfoDataTable"
         android:orientation="vertical"
         android:layout_width="1156dp"
@@ -30,12 +31,13 @@
     <TextView
         android:layout_marginRight="2dp"
         android:layout_marginBottom="2dp"
-        android:background="@android:color/white"
+        android:background="@color/translucent_black"
+        android:textColor="@android:color/white"
         android:id="@+id/itiHolderTV"
         android:text="Выберите бренды"
-		android:ellipsize="none"  
-		android:maxLines="10"  
-		android:scrollHorizontally="false"
+        android:textSize="18sp"
+        android:ellipsize="none"
+        android:scrollHorizontally="false"
         android:layout_width="match_parent"
         android:layout_height="98dp"
         android:gravity="center" />

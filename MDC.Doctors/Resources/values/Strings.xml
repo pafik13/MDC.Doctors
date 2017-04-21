@@ -7,6 +7,8 @@
 	<string name="CategoryUUID">CategoryUUID</string>
 	<string name="CategoryOrder">CategoryOrder</string>
 	<string name="PotentialDataUUID">PotentialDataUUID</string>
+	<string name="WorkTypeUUIDs">WorkTypeUUIDs</string>
+
 
 	<string name="IsChanged">IsChanged</string>
 	<string name="RouteItemOrder">RouteItemOrder</string>
@@ -21,6 +23,8 @@
 	<string name="InfoDataUUID">InfoDataUUID</string>
 	<string name="DrugBrandUUID">DrugBrandUUID</string>
 
+	<string name="material_pick_caption">Выберите материал для показа:</string>
+	<string name="material_file_not_found">Отсутствует файл материала - проверьте экран синхронизации.</string>
 	
 	<string name="doctor_not_found"><![CDATA[<врач не найден>]]></string>
 

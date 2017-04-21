@@ -24,6 +24,7 @@ namespace MDC.Doctors.Lib.Fragments
 		Doctor Doctor;
 
 		List<DrugBrand> Brands;
+		List<WorkType> WorkTypes;
 		Dictionary<int, Category> Categories;
 
 		Button PotentialBrands;
@@ -49,7 +50,7 @@ namespace MDC.Doctors.Lib.Fragments
 			return fragment;
 		}
 
-		// TODO: add savedInstanceStat processe
+		// TODO: add savedInstanceState processing
 		public override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -97,6 +98,7 @@ namespace MDC.Doctors.Lib.Fragments
 			mainView.FindViewById<TextView>(Resource.Id.ifHospitalTV).Text = string.Concat(hospital.GetName(), ", ", hospital.GetAddress(), ", ", hospital.GetPhone());
 
 			Brands = DBHelper.GetList<DrugBrand>(DB);
+			WorkTypes = DBHelper.GetList<WorkType>(DB);
 
 			var attendanceLastOrNewUUID = Arguments.GetString(Consts.C_ATTENDANCE_UUID);
 			if (!string.IsNullOrEmpty(attendanceLastOrNewUUID))
@@ -262,7 +264,7 @@ namespace MDC.Doctors.Lib.Fragments
 			if (isEditable) {
 				viewHolder.Potential.TextChanged += PotentialInfoChange;
 				viewHolder.PrescribeOur.TextChanged += PotentialInfoChange;
-				PotentialDataCache.Add(brand.uuid, new CacheItem { IsActive = true, View = row});
+				PotentialDataCache.Add(brand.uuid, new CacheItem { IsActive = true, View = item });
 			}
 			
 			item.SetTag(Resource.String.ViewHolder, viewHolder);
@@ -319,7 +321,7 @@ namespace MDC.Doctors.Lib.Fragments
 									   
 									   if (cacheItem.View.Parent == null) continue;
 									   
-									   PotentialTable.RemoveView(PotentialTable.View);
+									   PotentialTable.RemoveView(PotentialDataCache[brand.uuid].View);
 									   
 									   //var infoDataUUID = (string) (cacheViews[brand.uuid].Parent as TableLayout).GetTag(Resource.String.InfoDataUUID);
 									   //if (string.IsNullOrEmpty(infoDataUUID)) continue;
@@ -398,7 +400,7 @@ namespace MDC.Doctors.Lib.Fragments
 
 			var infoDataTable = InfoTable.GetChildAt(1).FindViewById<LinearLayout>(Resource.Id.itiInfoDataTable);
 			for (int c = 0; c < infoDataTable.ChildCount; c++) {
-				var row = infoDataTable.GetChildAt(c) as TableLayout;
+				var row = infoDataTable.GetChildAt(c) as LinearLayout;
 				var brandUUID = (string)row.GetTag(Resource.String.DrugBrandUUID);
 				if (string.IsNullOrEmpty(brandUUID)) continue;
 				cacheBrands[brandUUID] = true;
@@ -411,7 +413,13 @@ namespace MDC.Doctors.Lib.Fragments
 				           Brands.Select(item => item.name).ToArray(),
 				           cacheBrands.Values.ToArray(),
 						   (caller, arguments) => {
-								cacheBrands[Brands[arguments.Which].uuid] = arguments.IsChecked;
+							   var brand = Brands[arguments.Which];
+								cacheBrands[brand.uuid] = arguments.IsChecked;
+							   if (InfoDataCache.ContainsKey(brand.uuid))
+							   {
+								   var cacheItem = InfoDataCache[brand.uuid];
+								   cacheItem.IsActive = arguments.IsChecked;
+							   }
 						   }
 					   )
 						.SetPositiveButton(
@@ -471,8 +479,8 @@ namespace MDC.Doctors.Lib.Fragments
 				cacheWorkTypes.Add(WorkTypes[wt].uuid, false);
 			}
 			
-			var tv = sender as View;
-			var workTypeUUIDs = tv.GetTag(Resource.String.WorkTypeUUIDs);
+			var tv = sender as TextView;
+			var workTypeUUIDs = (string)tv.GetTag(Resource.String.WorkTypeUUIDs);
 			if (!string.IsNullOrEmpty(workTypeUUIDs)) {
 				foreach (var uuid in workTypeUUIDs.Split(';')) {
 					cacheWorkTypes[uuid] = true;
@@ -493,11 +501,11 @@ namespace MDC.Doctors.Lib.Fragments
 						.SetPositiveButton(
 						   "Сохранить",
 						   (caller, arguments) => {
-							    var workTypeUUIDs = string.Empty;
+							    workTypeUUIDs = string.Empty;
 								var workTypeNames = string.Empty;
 								foreach (var workType in WorkTypes)
 								{
-									if (cacheWorkTypes[workType]) {
+								if (cacheWorkTypes[workType.uuid]) {
 										workTypeUUIDs = string.Concat(workTypeUUIDs, workType.uuid, ";");
 										workTypeNames = string.Concat(workTypeNames, workType.name, ";");
 									}
@@ -602,10 +610,11 @@ namespace MDC.Doctors.Lib.Fragments
 					var row = cacheItem.View as LinearLayout;
 					var infoDataUUID = (string)row.GetTag(Resource.String.InfoDataUUID);
 					if (cacheItem.IsActive) {
-						var isChanged = (bool)row.Parent.GetTag(Resource.String.IsChanged);
+						var parent = row.Parent as LinearLayout;
+						var isChanged = (bool)parent.GetTag(Resource.String.IsChanged);
 						if (isChanged)
 						{
-							var attendaceUUID = (string)row.Parent.GetTag(Resource.String.AttendanceUUID);
+							var attendaceUUID = (string)parent.GetTag(Resource.String.AttendanceUUID);
 							var drugBrandUUID = (string)row.GetTag(Resource.String.DrugBrandUUID);
 							InfoData infoData;
 							if (string.IsNullOrEmpty(infoDataUUID))
@@ -619,7 +628,7 @@ namespace MDC.Doctors.Lib.Fragments
 							}
 							infoData.Brand = drugBrandUUID;
 							infoData.Attendance = attendaceUUID;
-							infoData.WorkTypes = row.FindViewById<TextView>(Resource.Id.idtiCallbackET).GetTag(Resource.String.WorkTypeUUIDs);
+							infoData.WorkTypes = (string)row.FindViewById<TextView>(Resource.Id.idtiCallbackET).GetTag(Resource.String.WorkTypeUUIDs);
 							infoData.Callback = row.FindViewById<TextView>(Resource.Id.idtiCallbackET).Text;
 							infoData.Resume = row.FindViewById<TextView>(Resource.Id.idtiResumeET).Text;
 							infoData.Goal = row.FindViewById<TextView>(Resource.Id.idtiGoalET).Text;
@@ -629,13 +638,12 @@ namespace MDC.Doctors.Lib.Fragments
 					} else {
 						if (string.IsNullOrEmpty(infoDataUUID)) continue;
 						
-						DBHelper.Delete(BD, infoDataUUID);
+						DBHelper.Delete(DB, transaction, DBHelper.Get<InfoData>(DB, infoDataUUID));
 					}
 
 				}
-				
-				
-				
+
+				var categoryOrderInfos = new List<CategoryOrderInfo>();
 				foreach (var cacheItem in InfoDataCache.Values) {
 					var item = cacheItem.View as TableLayout;
 					var potentialDataUUID = (string)item.GetTag(Resource.String.PotentialDataUUID);
@@ -685,22 +693,11 @@ namespace MDC.Doctors.Lib.Fragments
 					} else {
 						if (string.IsNullOrEmpty(potentialDataUUID)) continue;
 						
-						DBHelper.Delete(BD, potentialDataUUID);
+						DBHelper.Delete(DB, transaction, DBHelper.Get<PotentialData>(DB, potentialDataUUID));
 					}
 
 				}
 
-				var categoryOrderInfos = new List<CategoryOrderInfo>();
-				for (int c = 1; c < PotentialTable.ChildCount; c++)
-				{
-					var item = InfoTable.GetChildAt(c);
-					var isChanged = (bool)item.GetTag(Resource.String.IsChanged);
-					if (isChanged)
-					{
-						
-					}
-				}
-				
 				transaction.Commit();
 
 				if (categoryOrderInfos.Count == 0) return;

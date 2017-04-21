@@ -119,6 +119,20 @@ namespace MDC.Doctors
 			}
 		}
 
+
+		public static bool IsTokenExpired(string token)
+		{
+			var payloadBytes = Convert.FromBase64String(token.Split('.')[1] + "=");
+			var payloadStr = System.Text.Encoding.UTF8.GetString(payloadBytes, 0, payloadBytes.Length);
+
+			// Here, I only extract the "exp" payload property. You can extract other properties if you want.
+			var payload = Newtonsoft.Json.JsonConvert.DeserializeAnonymousType(payloadStr, new { Exp = 0UL }); // 0UL makes implicit typing create the field as unsigned long. 
+
+			var currentTimestamp = (ulong)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds;
+
+			return currentTimestamp > payload.Exp;
+		}
+
 		// This presumes that weeks start with Monday.
 		// Week 1 is the 1st week of the year with a Thursday in it.
 		public static int GetIso8601WeekOfYear(DateTime time)

@@ -271,12 +271,17 @@ namespace MDC.Doctors
 				var materials = DBHelper.GetList<Material>(DB);
 
 				new AlertDialog.Builder(this)
-							   .SetTitle("Выберите материал для показа:")
+				               .SetTitle(Resource.String.material_pick_caption)
 							   .SetCancelable(true)
 							   .SetItems(
 					               materials.Select(item => item.name).ToArray(),
 								   (caller, arguments) =>
 								   {
+									   if (string.IsNullOrEmpty(materials[arguments.Which].fullPath))
+									   {
+										   Toast.MakeText(this, Resource.String.material_file_not_found, ToastLength.Short).Show();
+										   return;
+									   }
 									   var intent = new Intent(Intent.ActionView);
 									   var uri = Android.Net.Uri.FromFile(new Java.IO.File(materials[arguments.Which].fullPath));
 									   intent.SetDataAndType(uri, "application/pdf");
