@@ -21,6 +21,7 @@
 	<string name="InfoDataUUID">InfoDataUUID</string>
 	<string name="DrugBrandUUID">DrugBrandUUID</string>
 
+	<string name="brand_pick_caption">Выберите бренды:</string>
 	
 	<string name="doctor_not_found"><![CDATA[<врач не найден>]]></string>
 
@@ -33,6 +34,7 @@
 	<string name="no_internet_provider">Выключено подключение к интернету.</string>
 	<string name="no_location_provider">Не получается получить данные о местоположении, так как отключены провайдеры.</string>
 	
+	<string name="save_button">Сохранить</string>
 	<string name="cancel_button">Отмена</string>
 	<string name="check_button">Проверить</string>
 	<string name="on_button">Включить</string>
