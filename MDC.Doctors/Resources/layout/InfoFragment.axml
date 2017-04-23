@@ -8,8 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/Indigo_50"
-		android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" >
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -128,30 +128,30 @@
                     android:text="УКАЗАТЬ ПРЕПАРАТЫ ДЛЯ ОПРЕДЕЛЕНИЯ ПОТЕНЦИАЛА ВРАЧА"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-				<FrameLayout
-					android:layout_width="match_parent"
-					android:layout_height="310dp">
-					<HorizontalScrollView
-						android:layout_width="match_parent"
-						android:layout_height="match_parent">
-						<LinearLayout
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:gravity="center"
-							android:orientation="horizontal"
-							android:id="@+id/aaPotentialTable" />
-					</HorizontalScrollView>
-					<TextView
-						android:text="Выберите препараты"
-						android:textColor="@android:color/black"
-						android:textSize="@dimen/font_size_medium"
-						android:layout_width="match_parent"
-						android:layout_height="match_parent"
-						android:gravity="center" />
-				</FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="296dp">
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:id="@+id/aaPotentialTable" />
+                    </HorizontalScrollView>
+                    <TextView
+                        android:text="Выберите препараты"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/font_size_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center" />
+                </FrameLayout>
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="6dp" />
+                    android:layout_height="12dp" />
                 <TextView
                     android:text="Содержание визита"
                     android:layout_width="match_parent"

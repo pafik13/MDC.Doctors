@@ -1392,8 +1392,8 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f080004
 			public const int abc_text_size_title_material_toolbar = 2131230724;
 			
-			// aapt resource value: 0x7f08004e
-			public const int ball_radius = 2131230798;
+			// aapt resource value: 0x7f08004f
+			public const int ball_radius = 2131230799;
 			
 			// aapt resource value: 0x7f080043
 			public const int disabled_alpha_material_dark = 2131230787;
@@ -1401,20 +1401,20 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f080044
 			public const int disabled_alpha_material_light = 2131230788;
 			
-			// aapt resource value: 0x7f08004d
-			public const int drop_down_width = 2131230797;
-			
-			// aapt resource value: 0x7f080050
-			public const int font_size = 2131230800;
-			
-			// aapt resource value: 0x7f080052
-			public const int font_size_large = 2131230802;
+			// aapt resource value: 0x7f08004e
+			public const int drop_down_width = 2131230798;
 			
 			// aapt resource value: 0x7f080051
-			public const int font_size_medium = 2131230801;
+			public const int font_size = 2131230801;
 			
-			// aapt resource value: 0x7f08004f
-			public const int font_size_small = 2131230799;
+			// aapt resource value: 0x7f080053
+			public const int font_size_large = 2131230803;
+			
+			// aapt resource value: 0x7f080052
+			public const int font_size_medium = 2131230802;
+			
+			// aapt resource value: 0x7f080050
+			public const int font_size_small = 2131230800;
 			
 			// aapt resource value: 0x7f080045
 			public const int highlight_alpha_material_colored = 2131230789;
@@ -1435,10 +1435,13 @@ namespace MDC.Doctors
 			public const int notification_subtext_size = 2131230794;
 			
 			// aapt resource value: 0x7f08004b
-			public const int row_height = 2131230795;
+			public const int potential_item_margin = 2131230795;
 			
 			// aapt resource value: 0x7f08004c
-			public const int row_height_x2 = 2131230796;
+			public const int row_height = 2131230796;
+			
+			// aapt resource value: 0x7f08004d
+			public const int row_height_x2 = 2131230797;
 			
 			static Dimension()
 			{
@@ -3285,20 +3288,23 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f06005f
 			public const int app_name = 2131099743;
 			
-			// aapt resource value: 0x7f060079
-			public const int cancel_button = 2131099769;
+			// aapt resource value: 0x7f06006f
+			public const int brand_pick_caption = 2131099759;
 			
-			// aapt resource value: 0x7f06007a
-			public const int check_button = 2131099770;
+			// aapt resource value: 0x7f06007b
+			public const int cancel_button = 2131099771;
 			
-			// aapt resource value: 0x7f060074
-			public const int delete_caption = 2131099764;
+			// aapt resource value: 0x7f06007c
+			public const int check_button = 2131099772;
 			
-			// aapt resource value: 0x7f060071
-			public const int doctor_not_found = 2131099761;
+			// aapt resource value: 0x7f060075
+			public const int delete_caption = 2131099765;
 			
 			// aapt resource value: 0x7f060072
-			public const int error_caption = 2131099762;
+			public const int doctor_not_found = 2131099762;
+			
+			// aapt resource value: 0x7f060073
+			public const int error_caption = 2131099763;
 			
 			// aapt resource value: 0x7f06005e
 			public const int hello = 2131099742;
@@ -3519,35 +3525,38 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f060016
 			public const int library_name = 2131099670;
 			
+			// aapt resource value: 0x7f060071
+			public const int material_file_not_found = 2131099761;
+			
 			// aapt resource value: 0x7f060070
-			public const int material_file_not_found = 2131099760;
+			public const int material_pick_caption = 2131099760;
 			
-			// aapt resource value: 0x7f06006f
-			public const int material_pick_caption = 2131099759;
-			
-			// aapt resource value: 0x7f060075
-			public const int no_internet_connection = 2131099765;
-			
-			// aapt resource value: 0x7f060077
-			public const int no_internet_provider = 2131099767;
+			// aapt resource value: 0x7f060076
+			public const int no_internet_connection = 2131099766;
 			
 			// aapt resource value: 0x7f060078
-			public const int no_location_provider = 2131099768;
+			public const int no_internet_provider = 2131099768;
 			
-			// aapt resource value: 0x7f06007c
-			public const int ok_button = 2131099772;
+			// aapt resource value: 0x7f060079
+			public const int no_location_provider = 2131099769;
 			
-			// aapt resource value: 0x7f06007b
-			public const int on_button = 2131099771;
+			// aapt resource value: 0x7f06007e
+			public const int ok_button = 2131099774;
+			
+			// aapt resource value: 0x7f06007d
+			public const int on_button = 2131099773;
+			
+			// aapt resource value: 0x7f06007a
+			public const int save_button = 2131099770;
 			
 			// aapt resource value: 0x7f060013
 			public const int status_bar_notification_info_overflow = 2131099667;
 			
-			// aapt resource value: 0x7f060076
-			public const int time_changed = 2131099766;
+			// aapt resource value: 0x7f060077
+			public const int time_changed = 2131099767;
 			
-			// aapt resource value: 0x7f060073
-			public const int warning_caption = 2131099763;
+			// aapt resource value: 0x7f060074
+			public const int warning_caption = 2131099764;
 			
 			static String()
 			{

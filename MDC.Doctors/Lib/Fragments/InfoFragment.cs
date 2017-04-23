@@ -118,7 +118,7 @@ namespace MDC.Doctors.Lib.Fragments
 			}
 			
 			PotentialTable = mainView.FindViewById<LinearLayout>(Resource.Id.aaPotentialTable);
-
+			PotentialDataCache = new Dictionary<string, View>();
 			foreach (var pot in DBHelper.GetAll<PotentialData>(DB))
 			{
 				if (pot.Doctor == Doctor.UUID)
@@ -130,12 +130,12 @@ namespace MDC.Doctors.Lib.Fragments
 			PotentialBrands = mainView.FindViewById<Button>(Resource.Id.aaPotentialBrandsB);
 			PotentialBrands.Click += PotentialBrands_Click;
 			PotentialBrands.Enabled = false;
-			PotentialDataCache = new Dictionary<string, View>();
+
 			
 			InfoTable = mainView.FindViewById<LinearLayout>(Resource.Id.aaInfoTable);
 			var infoTableHeader = inflater.Inflate(Resource.Layout.InfoTableHeader, InfoTable, false);
 			InfoTable.AddView(infoTableHeader);
-
+			InfoDataCache = new Dictionary<string, View>();
 			foreach (var att in DBHelper.GetAll<Attendance>(DB))
 			{
 				if (att.Doctor == Doctor.UUID)
@@ -147,11 +147,10 @@ namespace MDC.Doctors.Lib.Fragments
 			InfoBrands = mainView.FindViewById<Button>(Resource.Id.aaInfoBrandsB);
 			InfoBrands.Click += InfoBrands_Click;
 			InfoBrands.Enabled = false;
-			InfoDataCache = new Dictionary<string, View>();
+
 
 			Locker = mainView.FindViewById<TextView>(Resource.Id.locker);
 			Arrow = mainView.FindViewById<ImageView>(Resource.Id.arrow);
-
 
 			Chrono.Stop();
 			SD.Debug.WriteLine("InfoFragment: {0}", Chrono.ElapsedMilliseconds);
@@ -273,6 +272,11 @@ namespace MDC.Doctors.Lib.Fragments
 			
 			PotentialDataCache.Add(brand.uuid, item);
 			PotentialTable.AddView(item);
+
+			var layoutParams = item.LayoutParameters as LinearLayout.LayoutParams;
+			var potentialItemMargin = (int)Resources.GetDimension(Resource.Dimension.potential_item_margin);
+
+			layoutParams.SetMargins(potentialItemMargin, potentialItemMargin, potentialItemMargin, potentialItemMargin);
 		}
 
 		void AddPotentialItem(PotentialData potential)
@@ -353,10 +357,8 @@ namespace MDC.Doctors.Lib.Fragments
 		{
 			var infoTableItem = Activity.LayoutInflater.Inflate(Resource.Layout.InfoTableItem, InfoTable, false);
 			infoTableItem.SetTag(Resource.String.AttendanceUUID, attendance.UUID);
-			infoTableItem.SetTag(Resource.String.IsChanged, isEditable);
 			var infoDataTable = infoTableItem.FindViewById<LinearLayout>(Resource.Id.itiInfoDataTable);
-			
-						
+				
 			if (!attendance.IsFinished) {
 				InfoDataTable = infoDataTable;
 			}
@@ -374,26 +376,26 @@ namespace MDC.Doctors.Lib.Fragments
 				if (attendance.IsFinished) {
 					if (!string.IsNullOrEmpty(iData.WorkTypes)) {
 						var workTypeUUIDs = iData.WorkTypes.Split(';');
-						var workTypeNames = DBHelper.GetAll<WorkType>(DB).Where(wt => workTypeUUIDs.Contains(wt.uuid)).Select(wt => wt.name);
-						row.FindViewById<TextView>(Resource.Id.idtiWorkTypesTV).Text = string.Join(workTypeNames, ',');
+						var workTypeNames = DBHelper.GetAll<WorkType>(DB).Where(wt => workTypeUUIDs.Contains(wt.uuid)).Select(wt => wt.name).ToArray();
+						row.FindViewById<TextView>(Resource.Id.idtiWorkTypesTV).Text = string.Join(", ", workTypeNames);
 					}
 					
-					row.FindViewById<EditText>(Resource.Id.idtiCallbackET).Callback.Text = iData.Callback;
-					row.FindViewById<EditText>(Resource.Id.idtiResumeET).Resume.Text = iData.Resume;
-					row.FindViewById<EditText>(Resource.Id.idtiGoalET).Goal.Text = iData.Goal;
+					row.FindViewById<EditText>(Resource.Id.idtiCallbackET).Text = iData.Callback;
+					row.FindViewById<EditText>(Resource.Id.idtiResumeET).Text = iData.Resume;
+					row.FindViewById<EditText>(Resource.Id.idtiGoalET).Text = iData.Goal;
 				} else {
 					var viewHolder = new InfoViewHolder
 					{
-						WorkTypes = row.FindViewById<TextView>(Resource.Id.idtiWorkTypesTV);
-						Callback = row.FindViewById<EditText>(Resource.Id.idtiCallbackET);
-						Resume = row.FindViewById<EditText>(Resource.Id.idtiResumeET);
-						Goal = row.FindViewById<EditText>(Resource.Id.idtiGoalET);
-					}
+						WorkTypes = row.FindViewById<TextView>(Resource.Id.idtiWorkTypesTV),
+						Callback = row.FindViewById<EditText>(Resource.Id.idtiCallbackET),
+						Resume = row.FindViewById<EditText>(Resource.Id.idtiResumeET),
+						Goal = row.FindViewById<EditText>(Resource.Id.idtiGoalET)
+					};
 
 					if (!string.IsNullOrEmpty(iData.WorkTypes)) {
 						var workTypeUUIDs = iData.WorkTypes.Split(';');
-						var workTypeNames = DBHelper.GetAll<WorkType>(DB).Where(wt => workTypeUUIDs.Contains(wt.uuid)).Select(wt => wt.name);
-						viewHolder.WorkTypes.Text = string.Join(workTypeNames, ',');
+						var workTypeNames = DBHelper.GetAll<WorkType>(DB).Where(wt => workTypeUUIDs.Contains(wt.uuid)).Select(wt => wt.name).ToArray();
+						viewHolder.WorkTypes.Text = string.Join(", ", workTypeNames);
 					}
 					
 					viewHolder.Callback.Text = iData.Callback;
@@ -406,8 +408,9 @@ namespace MDC.Doctors.Lib.Fragments
 				infoDataTable.AddView(row);
 			}
 			
-			if (infoDataTable.ChildCount > 1) {
+			if (infoDataTable.ChildCount > 0) {
 				infoTableItem.FindViewById<TextView>(Resource.Id.itiHolderTV).Visibility = ViewStates.Gone;
+				infoDataTable.Visibility = ViewStates.Visible;
 			} else {
 				infoTableItem.FindViewById<TextView>(Resource.Id.itiHolderTV).Text = "<НЕТ ДАННЫХ>";
 			}
@@ -415,34 +418,37 @@ namespace MDC.Doctors.Lib.Fragments
 			InfoTable.AddView(infoTableItem, 1);
 		}
 		
-		void AddInfoItem(Brand brand)
+		void AddInfoItem(DrugBrand brand)
 		{
-			if (InfoDataTable == null) throw Exception();
+			if (InfoDataTable == null) throw new Exception("InfoDataTable is NULL");
 			
 			var row = Activity.LayoutInflater.Inflate(Resource.Layout.InfoDataTableItem, InfoDataTable, false);
-			
-			row.FindViewById<TextView>(Resource.Id.idtiBrandTV).Text = brand == null ? "<УДАЛЕНО>" : brand.name;
 			row.SetTag(Resource.String.DrugBrandUUID, brand.uuid);
-			
+
+			row.FindViewById<TextView>(Resource.Id.idtiBrandTV).Text = brand == null ? "<УДАЛЕНО>" : brand.name;
+
 			var viewHolder = new InfoViewHolder
 			{
-				WorkTypes = row.FindViewById<TextView>(Resource.Id.idtiWorkTypesTV);
-				Callback = row.FindViewById<EditText>(Resource.Id.idtiCallbackET);
-				Resume = row.FindViewById<EditText>(Resource.Id.idtiResumeET);
-				Goal = row.FindViewById<EditText>(Resource.Id.idtiGoalET);
-			}
+				WorkTypes = row.FindViewById<TextView>(Resource.Id.idtiWorkTypesTV),
+				Callback = row.FindViewById<EditText>(Resource.Id.idtiCallbackET),
+				Resume = row.FindViewById<EditText>(Resource.Id.idtiResumeET),
+				Goal = row.FindViewById<EditText>(Resource.Id.idtiGoalET)
+			};
 			
 			viewHolder.WorkTypes.Enabled = true;
 			viewHolder.WorkTypes.Click += WorkTypes_Click;
 			
-			viewHolder.CallbackET.Enabled = true;
-			viewHolder.ResumeET.Enabled = true;
-			viewHolder.GoalET.Enabled = true;
+			viewHolder.Callback.Enabled = true;
+			viewHolder.Resume.Enabled = true;
+			viewHolder.Goal.Enabled = true;
 			
 			row.SetTag(Resource.String.ViewHolder, viewHolder);
 			
 			InfoDataCache.Add(brand.uuid, row);
-			InfoDataTable.AddView(row, 1);
+			InfoDataTable.AddView(row, 0);
+
+			(InfoDataTable.Parent as LinearLayout).FindViewById<TextView>(Resource.Id.itiHolderTV).Visibility = ViewStates.Gone;
+			InfoDataTable.Visibility = ViewStates.Visible;
 		}
 		
 		void InfoBrands_Click(object sender, EventArgs e)
@@ -465,13 +471,7 @@ namespace MDC.Doctors.Lib.Fragments
 				           Brands.Select(item => item.name).ToArray(),
 				           cacheBrands.Values.ToArray(),
 						   (caller, arguments) => {
-							   var brand = Brands[arguments.Which];
-								cacheBrands[brand.uuid] = arguments.IsChecked;
-							   if (InfoDataCache.ContainsKey(brand.uuid))
-							   {
-								   var cacheItem = InfoDataCache[brand.uuid];
-								   cacheItem.IsActive = arguments.IsChecked;
-							   }
+								cacheBrands[Brands[arguments.Which].uuid] = arguments.IsChecked;
 						   }
 					   )
 						.SetPositiveButton(
@@ -488,7 +488,7 @@ namespace MDC.Doctors.Lib.Fragments
 											   InfoDataTable.AddView(view);
 											}
 									   } else {
-										   AddPotentialItem(brand);
+										   AddInfoItem(brand);
 									   }
 								   } else {
 									   if (InfoDataCache.ContainsKey(brand.uuid))
@@ -526,17 +526,17 @@ namespace MDC.Doctors.Lib.Fragments
 
 			
 			new Android.App.AlertDialog.Builder(Activity)
-						   .SetTitle("Выберите виды работ:")
-						   .SetCancelable(true)
+					   .SetTitle(Resource.String.brand_pick_caption)
+			           .SetCancelable(true)
 					   .SetMultiChoiceItems(
 				           WorkTypes.Select(item => item.name).ToArray(),
 				           cacheWorkTypes.Values.ToArray(),
 						   (caller, arguments) => {
 								cacheWorkTypes[WorkTypes[arguments.Which].uuid] = arguments.IsChecked;
 						   }
-					   )
-						.SetPositiveButton(
-						   "Сохранить",
+				          )
+			           .SetPositiveButton(
+						   Resource.String.save_button,
 						   (caller, arguments) => {
 							    workTypeUUIDs = string.Empty;
 								var workTypeNames = string.Empty;
@@ -554,7 +554,7 @@ namespace MDC.Doctors.Lib.Fragments
 							    (caller as Android.App.Dialog).Dispose();
 						   }
 						)
-						.SetNegativeButton("Отмена", (caller, arguments) => { (caller as Android.App.Dialog).Dispose(); })
+						.SetNegativeButton(Resource.String.cancel_button, (caller, arguments) => { (caller as Android.App.Dialog).Dispose(); })
 						.Show();
 		}
 
@@ -567,7 +567,7 @@ namespace MDC.Doctors.Lib.Fragments
 			AddInfoItem(newAttendance);
 			
 			foreach(var item in PotentialDataCache.Values){
-				var viewHolder = item.GetTag(Resource.String.PotentialViewHolder) as PotentialViewHolder;
+				var viewHolder = item.GetTag(Resource.String.ViewHolder) as PotentialViewHolder;
 				
 				viewHolder.Potential.Enabled = true;
 				viewHolder.Potential.TextChanged += PotentialInfoChange;
@@ -603,9 +603,9 @@ namespace MDC.Doctors.Lib.Fragments
 				viewHolder.WorkTypes.Enabled = true;
 				viewHolder.WorkTypes.Click += WorkTypes_Click;
 				
-				viewHolder.CallbackET.Enabled = true;
-				viewHolder.ResumeET.Enabled = true;
-				viewHolder.GoalET.Enabled = true;
+				viewHolder.Callback.Enabled = true;
+				viewHolder.Resume.Enabled = true;
+				viewHolder.Goal.Enabled = true;
 			}
 			
 			
@@ -645,9 +645,9 @@ namespace MDC.Doctors.Lib.Fragments
 				viewHolder.WorkTypes.Enabled = false;
 				viewHolder.WorkTypes.Click -= WorkTypes_Click;
 				
-				viewHolder.CallbackET.Enabled = false;
-				viewHolder.ResumeET.Enabled = false;
-				viewHolder.GoalET.Enabled = false;
+				viewHolder.Callback.Enabled = false;
+				viewHolder.Resume.Enabled = false;
+				viewHolder.Goal.Enabled = false;
 			}
 		}
 
@@ -666,35 +666,29 @@ namespace MDC.Doctors.Lib.Fragments
 			// Сохранить данные
 			using (var transaction = DB.BeginWrite())
 			{
-				foreach (var cacheItem in InfoDataCache.Values) {
-					var row = cacheItem.View as LinearLayout;
+				foreach (var row in InfoDataCache.Values) {
+					//var row = cacheItem.View as LinearLayout;
 					var infoDataUUID = (string)row.GetTag(Resource.String.InfoDataUUID);
-					if (cacheItem.IsActive) {
-						var parent = row.Parent as LinearLayout;
-						var isChanged = (bool)parent.GetTag(Resource.String.IsChanged);
-						if (isChanged)
+					if (row.Parent != null) {
+						var drugBrandUUID = (string)row.GetTag(Resource.String.DrugBrandUUID);
+						InfoData infoData;
+						if (string.IsNullOrEmpty(infoDataUUID))
 						{
-							var attendaceUUID = (string)parent.GetTag(Resource.String.AttendanceUUID);
-							var drugBrandUUID = (string)row.GetTag(Resource.String.DrugBrandUUID);
-							InfoData infoData;
-							if (string.IsNullOrEmpty(infoDataUUID))
-							{
-								infoData = DBHelper.Create<InfoData>(DB, transaction);
-							}
-							else
-							{
-								infoData = DBHelper.Get<InfoData>(DB, infoDataUUID);
-								infoData.UpdatedAt = DateTimeOffset.Now;
-							}
-							infoData.Brand = drugBrandUUID;
-							infoData.Attendance = attendaceUUID;
-							infoData.WorkTypes = (string)row.FindViewById<TextView>(Resource.Id.idtiCallbackET).GetTag(Resource.String.WorkTypeUUIDs);
-							infoData.Callback = row.FindViewById<TextView>(Resource.Id.idtiCallbackET).Text;
-							infoData.Resume = row.FindViewById<TextView>(Resource.Id.idtiResumeET).Text;
-							infoData.Goal = row.FindViewById<TextView>(Resource.Id.idtiGoalET).Text;
+							infoData = DBHelper.Create<InfoData>(DB, transaction);
+						}
+						else
+						{
+							infoData = DBHelper.Get<InfoData>(DB, infoDataUUID);
+							infoData.UpdatedAt = DateTimeOffset.Now;
+						}
+						infoData.Brand = drugBrandUUID;
+						infoData.Attendance = Attendance.UUID;
+						infoData.WorkTypes = (string)row.FindViewById<TextView>(Resource.Id.idtiCallbackET).GetTag(Resource.String.WorkTypeUUIDs);
+						infoData.Callback = row.FindViewById<TextView>(Resource.Id.idtiCallbackET).Text;
+						infoData.Resume = row.FindViewById<TextView>(Resource.Id.idtiResumeET).Text;
+						infoData.Goal = row.FindViewById<TextView>(Resource.Id.idtiGoalET).Text;
 
-							if (!infoData.IsManaged) DBHelper.Save(DB, transaction, infoData);
-						}						
+						if (!infoData.IsManaged) DBHelper.Save(DB, transaction, infoData);
 					} else {
 						if (string.IsNullOrEmpty(infoDataUUID)) continue;
 						
