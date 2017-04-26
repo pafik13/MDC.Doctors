@@ -18,7 +18,7 @@ namespace MDC.Doctors.Lib.Fragments
 		Realm DB;
 		Doctor Doctor;
 
-		Spinner State;
+		//Spinner State;
 
 
 		public static DoctorMainInfoFragment Create(string doctorUUID)
@@ -37,60 +37,133 @@ namespace MDC.Doctors.Lib.Fragments
 			DB = Realm.GetInstance();
 		}
 
+		#region DoctorMainInfoHolder
+		public class DoctorMainInfoHolder : Java.Lang.Object
+		{
+			public Spinner DoctorState;
+			public EditText Name;
+			public AutoCompleteTextView Speciality;
+			public EditText Specialism;
+			public AutoCompleteTextView Position;
+			public EditText Phone;
+			public EditText Email;
+			public CheckBox CanParticipateInActions;
+			public CheckBox CanParticipateInConference;
+			public EditText Comment;
+			public TextView LastAttendanceDate;
+			public TextView NextAttendanceDate;
+		}
+		#endregion
+
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
 			base.OnCreateView(inflater, container, savedInstanceState);
 
 			var view = inflater.Inflate(Resource.Layout.DoctorMainInfoFragment, container, false);
 
-			State = view.FindViewById<Spinner>(Resource.Id.dmifStateS);
+			var viewHolder = new DoctorMainInfoHolder
+			{
+				DoctorState = view.FindViewById<Spinner>(Resource.Id.dmifStateS),
+				Name = view.FindViewById<EditText>(Resource.Id.dmifNameET),
+				Speciality = view.FindViewById<AutoCompleteTextView>(Resource.Id.dmifSpecialtyACTV),
+				Specialism = view.FindViewById<EditText>(Resource.Id.dmifSpecialismET),
+				Position = view.FindViewById<AutoCompleteTextView>(Resource.Id.dmifPositionACTV),
+				Phone = view.FindViewById<EditText>(Resource.Id.dmifPhoneET),
+				Email = view.FindViewById<EditText>(Resource.Id.dmifEmailET),
+				CanParticipateInActions = view.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInActionsCB),
+				CanParticipateInConference = view.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInConferenceCB),
+				Comment = view.FindViewById<EditText>(Resource.Id.dmifCommentET),
+				LastAttendanceDate = view.FindViewById<TextView>(Resource.Id.dmifLastAttendanceDateTV),
+				NextAttendanceDate = view.FindViewById<TextView>(Resource.Id.dmifNextAttendanceDateTV)
+			};
+
+			view.SetTag(Resource.String.ViewHolder, viewHolder);
+
 			var stateAdapter = new ArrayAdapter(Activity, Android.Resource.Layout.SimpleSpinnerItem, Doctor.GetStates());
 			stateAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerItem);
-			State.Adapter = stateAdapter;
+			viewHolder.DoctorState.Adapter = stateAdapter;
 
 			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID);
-			if (string.IsNullOrEmpty(doctorUUID)) return view;
 
-			Doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
+			if (!string.IsNullOrEmpty(doctorUUID))
+			{
+				Doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
 
-			// var shared = Activity.GetSharedPreferences(MainActivity.C_MAIN_PREFS, FileCreationMode.Private);
+				// var shared = Activity.GetSharedPreferences(MainActivity.C_MAIN_PREFS, FileCreationMode.Private);
 
-			// var agentUUID = shared.GetString(SigninDialog.C_AGENT_UUID, string.Empty);
-			// try {
+				// var agentUUID = shared.GetString(SigninDialog.C_AGENT_UUID, string.Empty);
+				// try {
 				// Agent = MainDatabase.GetItem<Agent>(agentUUID);
-			// } catch (Exception ex) {
+				// } catch (Exception ex) {
 				// Console.WriteLine(ex.Message);
 				// Agent = null;
-			// }
+				// }
 
-			#region State
-			State.SetSelection((int)Doctor.GetState());
+				#region State
+				viewHolder.DoctorState.SetSelection((int)Doctor.GetState());
+				#endregion
+
+				viewHolder.Name.Text = Doctor.Name;
+
+				#region Specialty
+				viewHolder.Speciality.Text = Doctor.Specialty;
+				#endregion
+
+				viewHolder.Specialism.Text = Doctor.Specialism;
+
+				#region Position
+				viewHolder.Position.Text = Doctor.Position;
+				#endregion
+
+				viewHolder.Phone.Text = Doctor.Phone;
+				viewHolder.Email.Text = Doctor.Email;
+				viewHolder.CanParticipateInActions.Checked = Doctor.CanParticipateInActions;
+				viewHolder.CanParticipateInConference.Checked = Doctor.CanParticipateInConference;
+				viewHolder.Comment.Text = Doctor.Comment;
+			}
+
+			#region ADD_ACTIONS
+			viewHolder.Name.AfterTextChanged += Name_AfterTextChanged;
+			viewHolder.Phone.TextChanged += TextChanged;
+			viewHolder.Email.TextChanged += TextChanged;
+			viewHolder.Specialism.TextChanged += TextChanged;
+			viewHolder.Comment.TextChanged += TextChanged;
+
+			viewHolder.CanParticipateInActions.CheckedChange += CheckedChange;
+			viewHolder.CanParticipateInConference.CheckedChange += CheckedChange;
 			#endregion
 
-			view.FindViewById<EditText>(Resource.Id.dmifNameET).Text = Doctor.Name;
-			
-			#region Specialty
-			view.FindViewById<AutoCompleteTextView>(Resource.Id.dmifSpecialtyACTV).Text = Doctor.Specialty;
-			#endregion
-			
-			view.FindViewById<EditText>(Resource.Id.dmifSpecialismET).Text = Doctor.Specialism;
-
-			#region Position
-			view.FindViewById<AutoCompleteTextView>(Resource.Id.dmifPositionACTV).Text = Doctor.Position;
-			#endregion
-			
-			view.FindViewById<EditText>(Resource.Id.dmifPhoneET).Text = Doctor.Phone;
-			view.FindViewById<EditText>(Resource.Id.dmifEmailET).Text = Doctor.Email;
-			view.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInActionsCB).Checked = Doctor.CanParticipateInActions;
-			view.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInConferenceCB).Checked = Doctor.CanParticipateInConference;
-			view.FindViewById<EditText>(Resource.Id.dmifCommentET).Text = Doctor.Comment;
-			
 			return view;
+		}
+
+		void Name_AfterTextChanged(object sender, Android.Text.AfterTextChangedEventArgs e)
+		{
+			if (sender is EditText)
+			{
+				View.SetTag(Resource.String.IsChanged, true);
+			}
+		}
+
+		void TextChanged(object sender, Android.Text.TextChangedEventArgs e)
+		{
+			if (sender is EditText)
+			{
+				View.SetTag(Resource.String.IsChanged, true);
+			}
+		}
+
+		void CheckedChange(object sender, CompoundButton.CheckedChangeEventArgs e)
+		{
+			if (sender is CheckBox)
+			{
+				View.SetTag(Resource.String.IsChanged, true);
+			}
 		}
 
 		public override void OnResume()
 		{
 			base.OnResume();
+			DBHelper.GetDB(ref DB);
 		}
 
 		public override void OnPause()
@@ -98,12 +171,14 @@ namespace MDC.Doctors.Lib.Fragments
 			base.OnPause();
 		}
 
-		public Doctor Save(Transaction openedTransaction)
+		public bool Save(Transaction openedTransaction, out Doctor doctor)
 		{
 			if (openedTransaction == null)
 			{
 				throw new ArgumentNullException(nameof(openedTransaction));
 			}
+
+			doctor = Doctor;
 
 			// TIP: check section
 			var errors = string.Empty;
@@ -124,39 +199,43 @@ namespace MDC.Doctors.Lib.Fragments
 								   }
 							   })
 							   .Show();
-				return null;
+				return false;
 			}
 
 
 			// TIP: save sectio
-			Doctor item = null;
-
-			if (Doctor == null)
+			var isChanged = (bool)View.GetTag(Resource.String.IsChanged);
+			if (isChanged)
 			{
-				item = DBHelper.Create<Doctor>(DB, openedTransaction);
-				item.SetState(DoctorState.dsActive);
+				var viewHolder = View.GetTag(Resource.String.ViewHolder) as DoctorMainInfoHolder;
+
+				if (doctor == null)
+				{
+					doctor = DBHelper.Create<Doctor>(DB, openedTransaction);
+					doctor.SetState(DoctorState.dsActive);
+				}
+				else
+				{
+					doctor = Doctor;
+					doctor.SetState((DoctorState)viewHolder.DoctorState.SelectedItemPosition);
+				}
+
+				doctor.UpdatedAt = DateTimeOffset.Now;
+				doctor.IsSynced = false;
+				doctor.Name = viewHolder.Name.Text;
+				doctor.Specialty = viewHolder.Speciality.Text;
+				doctor.Specialism = viewHolder.Specialism.Text;
+				doctor.Position = viewHolder.Position.Text;
+				doctor.Phone = viewHolder.Phone.Text;
+				doctor.Email = viewHolder.Email.Text;
+				doctor.CanParticipateInActions = viewHolder.CanParticipateInActions.Checked;
+				doctor.CanParticipateInConference = viewHolder.CanParticipateInConference.Checked;
+				doctor.Comment = viewHolder.Comment.Text;
+
+				if (!doctor.IsManaged) DBHelper.Save(DB, openedTransaction, doctor);
 			}
-			else
-			{
-				item = Doctor;
-				item.SetState((DoctorState)State.SelectedItemPosition);
-			}
 
-			item.UpdatedAt = DateTimeOffset.Now;
-			item.IsSynced = false;
-			item.Name = View.FindViewById<EditText>(Resource.Id.dmifNameET).Text;
-			item.Specialty = View.FindViewById<AutoCompleteTextView>(Resource.Id.dmifSpecialtyACTV).Text;
-			item.Specialism = View.FindViewById<EditText>(Resource.Id.dmifSpecialismET).Text;
-			item.Position = View.FindViewById<AutoCompleteTextView>(Resource.Id.dmifPositionACTV).Text;
-			item.Phone = View.FindViewById<EditText>(Resource.Id.dmifPhoneET).Text;
-			item.Email = View.FindViewById<EditText>(Resource.Id.dmifEmailET).Text;
-			item.CanParticipateInActions = View.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInActionsCB).Checked;
-			item.CanParticipateInConference = View.FindViewById<CheckBox>(Resource.Id.dmifCanParticipateInConferenceCB).Checked;
-			item.Comment = View.FindViewById<EditText>(Resource.Id.dmifCommentET).Text;
-
-			if (!item.IsManaged) DBHelper.Save(DB, openedTransaction, item);
-
-			return item;
+			return isChanged;
 		}
 	}
 }

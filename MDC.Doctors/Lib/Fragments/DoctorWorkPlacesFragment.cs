@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Android.App;
 using Android.OS;
@@ -11,14 +12,13 @@ using V4App = Android.Support.V4.App;
 
 using MDC.Doctors.Lib.Adapters;
 using MDC.Doctors.Lib.Entities;
-using System.Linq;
 
 namespace MDC.Doctors.Lib.Fragments
 {
 	public class DoctorWorkPlacesFragment : V4App.Fragment
 	{
 		Realm DB;
-		//string DoctorUUID;
+		Doctor Doctor;
 		LinearLayout WPTable;
 		
 		public static DoctorWorkPlacesFragment Create(string doctorUUID)
@@ -55,6 +55,10 @@ namespace MDC.Doctors.Lib.Fragments
 			{
 				AddWorkPlace();
 				return mainView;
+			}
+			else 
+			{
+				Doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
 			}
 
 			var workPlaces = DBHelper.GetAll<WorkPlace>(DB).Where(wp => wp.Doctor == doctorUUID);
@@ -131,6 +135,7 @@ namespace MDC.Doctors.Lib.Fragments
 		public override void OnResume()
 		{
 			base.OnResume();
+			DBHelper.GetDB(ref DB);
 		}
 
 		public override void OnPause()
@@ -159,7 +164,7 @@ namespace MDC.Doctors.Lib.Fragments
 			}
 		}
 
-		public void Save(Transaction openedTransaction, Doctor doctor)
+		public bool Save(Transaction openedTransaction, Doctor doctor)
 		{
 			//if (string.IsNullOrEmpty(DoctorUUID) && string.IsNullOrEmpty(doctorUUID)) return;
 			if (openedTransaction == null)
@@ -169,12 +174,22 @@ namespace MDC.Doctors.Lib.Fragments
 
 			if (doctor == null)
 			{
-				throw new ArgumentNullException(nameof(doctor));
+				if (Doctor == null)
+				{
+					throw new Exception("`Doctor` field is NULL and `doctor` arguemnt is NULL");
+				}
+			}
+			else
+			{
+				if ((Doctor != null) && Doctor.UUID != doctor.UUID)
+				{
+					throw new Exception("`Doctor.UUID` not equal `doctor.UUID`");
+				}
 			}
 
+			bool wasChanges = false;
 			if (WPTable.ChildCount > 0)
 			{
-				var list = DBHelper.GetList<WorkPlace>(DB);
 				for(int c = 0; c < WPTable.ChildCount; c++)
 				{
 					var item = WPTable.GetChildAt(c);
@@ -186,12 +201,14 @@ namespace MDC.Doctors.Lib.Fragments
 						WorkPlace wp = null;
 						if (string.IsNullOrEmpty(workPlaceUUID))
 						{
+							wasChanges = true;
 							wp = DBHelper.Create<WorkPlace>(DB, openedTransaction);
 						}
 						else
 						{
-							bool isChanged = (bool)item.GetTag(Resource.String.IsChanged);
+							var isChanged = (bool)item.GetTag(Resource.String.IsChanged);
 							if (isChanged) {
+								wasChanges = true;
 								wp = DBHelper.Get<WorkPlace>(DB, workPlaceUUID);
 							}
 						}
@@ -212,7 +229,8 @@ namespace MDC.Doctors.Lib.Fragments
 					}
 				}
 			}
-			return;
+
+			return wasChanges;
 		}
 	}
 }

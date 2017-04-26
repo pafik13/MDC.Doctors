@@ -26,7 +26,7 @@ namespace MDC.Doctors
 	[Activity(Label = "AttendanceActivity", WindowSoftInputMode = SoftInput.StateHidden)]
 	public class AttendanceActivity : V4App.FragmentActivity, ViewPager.IOnPageChangeListener, ILocationListener
 	{
-		public const int C_NUM_PAGES = 1;
+		public const int C_NUM_PAGES = 3;
 		public const string C_TAG_FOR_DEBUG = "AttendanceActivity";
 		public const double C_MIN_DURATION = -1.0D;
 
@@ -510,6 +510,14 @@ namespace MDC.Doctors
 					case 0:
 						fragmentName = "InfoFragment";
 						result = InfoFragment.Create(DoctorUUID, AttendanceLastOrNewUUID);
+						break;
+					case 1:
+						fragmentName = "DoctorMainInfoFragment";
+						result = DoctorMainInfoFragment.Create(DoctorUUID);
+						break;
+					case 2:
+						fragmentName = "DoctorWorkPlacesFragment";
+						result = DoctorWorkPlacesFragment.Create(DoctorUUID);
 						break;
 				}
 				SD.Debug.WriteLine(string.Concat(C_TAG_FOR_DEBUG, "-", fragmentName, ":", Chrono.ElapsedMilliseconds));

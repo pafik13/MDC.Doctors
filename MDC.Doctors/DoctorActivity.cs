@@ -11,6 +11,7 @@ using Android.Support.V4.View;
 
 using Realms;
 
+using MDC.Doctors.Lib;
 using MDC.Doctors.Lib.Fragments;
 using MDC.Doctors.Lib.Entities;
 
@@ -22,7 +23,6 @@ namespace MDC.Doctors
 		public const int C_NUM_PAGES = 2;
 
 		Realm DB;
-
 
 		public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
 		{
@@ -87,13 +87,11 @@ namespace MDC.Doctors
 			Pager.AddOnPageChangeListener(this);
 			Pager.Adapter = new DoctorPagerAdapter(SupportFragmentManager, doctorUUID, this);
 
-			DB = Realm.GetInstance();
-
 			FindViewById<Button>(Resource.Id.daSaveB).Click += (s, e) =>
 			{
-				SaveData();
-
-				Finish();
+				if (SaveData()) {
+					Finish();
+				}
 			};
 
 			TabMainInfoView = FindViewById<View>(Resource.Id.daTabMainInfoV);
@@ -102,9 +100,11 @@ namespace MDC.Doctors
 			(TabWorkPlacesView.Parent as RelativeLayout).Click += (sender, e) => { Pager.CurrentItem = 1;/*SelectWorkPlaces();*/ };
 		}
 
-		void SaveData()
+		bool SaveData()
 		{
 			Doctor doctor = null;
+			bool isDoctorSaved = false;
+			DBHelper.GetDB(ref DB);
 			using (var transaction = DB.BeginWrite())
 			{
 				for (int f = 0; f < C_NUM_PAGES; f++)
@@ -112,12 +112,16 @@ namespace MDC.Doctors
 					var fragment = GetFragment(f);
 					if (fragment is DoctorMainInfoFragment)
 					{
-						doctor = (fragment as DoctorMainInfoFragment).Save(transaction);
+						isDoctorSaved = (fragment as DoctorMainInfoFragment).Save(transaction, out doctor);
 						break;
 					}
 				}
 
-				if (doctor == null) return;
+				if ((!isDoctorSaved) && (doctor == null))
+				{
+					transaction.Commit();
+					return false;
+				}
 
 				for (int f = 0; f < C_NUM_PAGES; f++)
 				{
@@ -128,8 +132,8 @@ namespace MDC.Doctors
 						break;
 					}
 				}
-
 				transaction.Commit();
+				return true;
 			}
 		}
 
