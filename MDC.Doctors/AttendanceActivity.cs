@@ -15,7 +15,7 @@ using MDC.Doctors.Lib;
 using MDC.Doctors.Lib.Entities;
 
 using V4App = Android.Support.V4.App;
-using Android.Support.V4.View;
+using V4View = Android.Support.V4.View;
 using Android.Views.InputMethods;
 
 using MDC.Doctors.Lib.Interfaces;
@@ -35,7 +35,10 @@ namespace MDC.Doctors
 		Attendance Attendance;
 		LocationManager LocMgr;
 		DateTimeOffset? AttendanceStart;
-
+		
+		bool WasDoctorChanged;
+		bool WasWorkPlaceChanged;
+		
 		public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
 		{
 			return;
@@ -48,7 +51,38 @@ namespace MDC.Doctors
 
 		public void OnPageSelected(int position)
 		{
-			return;
+			switch (position) {
+				case 0:
+					FragmentTitle.Text = "СОБИРАЕМАЯ ИНФОРМАЦИЯ";
+
+					var sw = new SD.Stopwatch();
+					sw.Start();
+					var doc = GetFragment(1);
+					if (doc is DoctorMainInfoFragment) {
+						WasDoctorChanged = (doc as DoctorMainInfoFragment).Save();
+					}
+					var wp = GetFragment(2);
+					if (wp is DoctorWorkPlacesFragment) {
+						WasWorkPlaceChanged = (wp as DoctorWorkPlacesFragment).Save();
+					}
+					var info = GetFragment(0);
+					if (info is InfoFragment) {
+						(info as InfoFragment).RefreshInfo(ref WasDoctorChanged, ref WasWorkPlaceChanged);
+					}
+					
+					sw.Stop();
+					SD.Debug.WriteLine("OnPageSelected: pos-{0}-{1}", position, sw.ElapsedMilliseconds);
+					break;
+				case 1:
+					FragmentTitle.Text = "ИНФОРМАЦИЯ О ВРАЧЕ";
+					break;
+				case 2:
+					FragmentTitle.Text = "МЕСТА РАБОТЫ";
+					break;
+				default:
+					FragmentTitle.Text = string.Concat("СТРАНИЦА ", (position + 1));
+					break;
+			}
 		}
 
 		ViewPager Pager;
@@ -517,7 +551,7 @@ namespace MDC.Doctors
 						break;
 					case 2:
 						fragmentName = "DoctorWorkPlacesFragment";
-						result = DoctorWorkPlacesFragment.Create(DoctorUUID);
+						result = DoctorWorkPlacesFragment.Create(DoctorUUID, true);
 						break;
 				}
 				SD.Debug.WriteLine(string.Concat(C_TAG_FOR_DEBUG, "-", fragmentName, ":", Chrono.ElapsedMilliseconds));

@@ -11,7 +11,7 @@ using MDC.Doctors.Lib;
 
 namespace MDC.Doctors
 {
-	public struct DoctorInfoHolder
+	public class DoctorInfoHolder: Java.Lang.Object
 	{
 		public Doctor Doctor;
 		public WorkPlace MainWorkPlace;

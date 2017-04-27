@@ -171,6 +171,49 @@ namespace MDC.Doctors
 			RouteDoctorExpTable.ChildClick += delegate (object sender, ExpandableListView.ChildClickEventArgs e)
 			{
 				Toast.MakeText(this, "child clicked", ToastLength.Short).Show();
+				
+				var lv = (ListView)sender;
+				var adapter = (ExpandableListAdapter)lv.Adapter;
+				var doctorInfo = adapter.GetChild(e.groupPosition, e.childPosition) as DoctorInfoHolder;
+
+				if (string.IsNullOrEmpty(doctorInfo.MainWorkPlace))
+				{
+					Toast.MakeText(this, "У данного врача не выбрано/не введено основное рабочее место.", ToastLength.Short).Show();
+					return;
+				}
+				
+				doctorInfo = adapter.ExcludeDoctor(e.groupPosition, e.childPosition);
+				
+				if (doctorInfo == null) return;
+				
+				var row = LayoutInflater.Inflate(Resource.Layout.RouteTableItem, RouteTable, false);
+				
+				using (var transaction = DB.BeginWrite())
+				{
+					var newRouteItem = DBHelper.Create<RouteItem>(DB, transaction);
+					newRouteItem.WorkPlace = doctorInfo.MainWorkPlace.UUID;
+					newRouteItem.Order = RouteTable.ChildCount;
+					newRouteItem.Date = SelectedDate;
+					if (!newRouteItem.IsManaged) DBHelper.Save(DB, transaction, newRouteItem);
+					transaction.Commit();
+					row.SetTag(Resource.String.RouteItemUUID, newRouteItem.UUID);
+				}
+
+				row.SetTag(Resource.String.DoctorUUID, doctorInfo.Doctor.UUID);
+				row.SetTag(Resource.String.WorkPlaceUUID, doctorInfo.MainWorkPlace.UUID);
+
+				row.FindViewById<TextView>(Resource.Id.rtiDoctorNameTV).Text = doctorInfo.Doctor.Name;
+				row.FindViewById<TextView>(Resource.Id.rtiHospitalNameTV).Text = doctorInfo.Hospital.GetName();
+				row.FindViewById<TextView>(Resource.Id.rtiHospitalAddressTV).Text = doctorInfo.Hospital.GetAddress();
+				row.SetTag(Resource.String.RouteItemOrder, RouteTable.ChildCount);
+				row.FindViewById<TextView>(Resource.Id.rtiOrderTV).Text = (RouteTable.ChildCount + 1).ToString();
+
+				row.FindViewById<ImageView>(Resource.Id.rtiDeleteIV).Click += RouteItemDelete_Click;
+				//row.LongClick += Row_LongClick;
+				//row.Drag += Row_Drag;
+
+				RouteTable.AddView(row);
+				
 			};
 
 			//Listening to group expand
@@ -191,6 +234,40 @@ namespace MDC.Doctors
 
 		}
 
+		
+		void RouteItemDelete_Click(object sender, EventArgs e)
+		{
+			var rowForDelete = (LinearLayout)((ImageView)sender).Parent;
+
+			var routeItemUUID = (string)rowForDelete.GetTag(Resource.String.RouteItemUUID);
+			var doctorUUID = (string)rowForDelete.GetTag(Resource.String.DoctorUUID);
+			var index = (int)rowForDelete.GetTag(Resource.String.RouteItemOrder);
+
+			var adapter = (ExpandableListAdapter)RouteDoctorTable.Adapter;
+			adapter.IncludeDoctor(doctorUUID);
+
+			RouteTable.RemoveView(rowForDelete);
+
+			using (var transaction = DB.BeginWrite()) {
+				var routeItem = DBHelper.Get<RouteItem>(DB, routeItemUUID);
+				//adapter.RemoveCurrentRouteItem(routeItem);
+				DBHelper.Delete(DB, transaction, routeItem);
+
+				for (int c = index; c < RouteTable.ChildCount; c++) {
+					var rowForUpdate = (LinearLayout)RouteTable.GetChildAt(c);
+					routeItemUUID = (string)rowForUpdate.GetTag(Resource.String.RouteItemUUID);
+					var updRouteItem = DBHelper.Get<RouteItem>(DB, routeItemUUID);
+					updRouteItem.Order = c;
+					updRouteItem.IsSynced = false;
+					updRouteItem.UpdatedAt = DateTimeOffset.Now;
+					rowForUpdate.SetTag(Resource.String.RouteItemOrder, c);
+					rowForUpdate.FindViewById<TextView>(Resource.Id.rtiOrderTV).Text = (c + 1).ToString();
+					if (!updRouteItem.IsManaged) DBHelper.Save(DB, transaction, updRouteItem);
+				}
+				transaction.Commit();
+			}
+		}
+		
 		void FnGetListData()
 		{
 			var headers = new string[] {

@@ -18,8 +18,10 @@ namespace MDC.Doctors.Lib.Fragments
 {
 	public class InfoFragment : V4App.Fragment, IAttendanceControl
 	{
-
+		#IFDEF DEBUG
 		SD.Stopwatch Chrono;
+		#ENDDEF
+		
 		Realm DB;
 		Doctor Doctor;
 
@@ -60,7 +62,36 @@ namespace MDC.Doctors.Lib.Fragments
 			// DB = Realm.GetInstance();
 			DBHelper.GetDB(ref DB);
 		}
-
+		
+		public void RefreshInfo(ref bool isWorkPlaceChanged, ref bool isDocotorChanged)
+		{
+			if (isWorkPlaceChanged) {
+				
+			}
+			
+			if (isDocotorChanged) {
+				Doctor = DBHelper.Get<Doctor>(DB, Doctor.UUID);
+				RefreshDoctorInfo();
+			}
+			
+			isWorkPlaceChanged = false;
+			isDocotorChanged = false;
+		}
+		
+		void RefreshDoctorInfo(View mainView = null)
+		{			
+			view = mainView == null ? View : mainView;
+			
+			var specialityText = string.Empty;
+			var speciality = DBHelper.Get<Specialty>(DB, Doctor.Specialty);
+			if (speciality != null) {
+				specialityText = speciality.name;
+			}
+			
+			view.FindViewById<TextView>(Resource.Id.ifDoctorTV).Text =
+				string.Concat(Doctor.Name, ", ", specialityText, ", ", Doctor.specialism);
+		}
+		
 		#region InfoDataViewHolder
 		class InfoDataViewHolder : Java.Lang.Object
 		{
@@ -72,14 +103,6 @@ namespace MDC.Doctors.Lib.Fragments
 			public EditText Comment { get; set; }
 		}
 		#endregion
-
-		#region CacheItem
-		struct CacheItem
-		{
-			public bool IsActive { get; set; }
-			public View View { get; set; }
-		}
-		#endregion
 		
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
@@ -89,10 +112,7 @@ namespace MDC.Doctors.Lib.Fragments
 
 			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID);
 			Doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
-			
-			var speciality = DBHelper.Get<Specialty>(DB, Doctor.Specialty);
-			mainView.FindViewById<TextView>(Resource.Id.ifDoctorTV).Text = 
-				speciality == null ? Doctor.Name : string.Concat(Doctor.Name, ", ", speciality.name);
+			RefreshDoctorInfo(mainView);
 			
 			var mainWorkPlace = DBHelper.Get<WorkPlace>(DB, Doctor.MainWorkPlace);
 			var hospital = DBHelper.GetHospital(DB, mainWorkPlace.Hospital);

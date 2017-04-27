@@ -19,13 +19,15 @@ namespace MDC.Doctors.Lib.Fragments
 	{
 		Realm DB;
 		Doctor Doctor;
+		IsLockMainWorkPlace;
 		LinearLayout WPTable;
 		
-		public static DoctorWorkPlacesFragment Create(string doctorUUID)
+		public static DoctorWorkPlacesFragment Create(string doctorUUID, bool isLockMainWorkPlace = false)
 		{
 			var fragment = new DoctorWorkPlacesFragment();
 			var arguments = new Bundle();
 			arguments.PutString(Consts.C_DOCTOR_UUID, doctorUUID);
+			arguments.PutString(Consts.C_IS_LOCK_MAIN_WORK_PLACE, isLockMainWorkPlace)
 			fragment.Arguments = arguments;
 			return fragment;
 		}
@@ -50,6 +52,8 @@ namespace MDC.Doctors.Lib.Fragments
 			{
 				AddWorkPlace();
 			};
+			
+			IsLockMainWorkPlace = Arguments.GetString(Consts.C_IS_LOCK_MAIN_WORK_PLACE);
 			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID);
 			if (string.IsNullOrEmpty(doctorUUID))
 			{
@@ -59,13 +63,13 @@ namespace MDC.Doctors.Lib.Fragments
 			else 
 			{
 				Doctor = DBHelper.Get<Doctor>(DB, doctorUUID);
+				var workPlaces = DBHelper.GetAll<WorkPlace>(DB).Where(wp => wp.Doctor == doctorUUID);
+				foreach (var place in workPlaces)
+				{
+					AddWorkPlace(place);
+				}
 			}
-
-			var workPlaces = DBHelper.GetAll<WorkPlace>(DB).Where(wp => wp.Doctor == doctorUUID);
-			foreach (var place in workPlaces)
-			{
-				AddWorkPlace(place);
-			}
+			
 			return mainView;
 		}
 		
@@ -76,16 +80,36 @@ namespace MDC.Doctors.Lib.Fragments
 			var cabinet = workPlaceItem.FindViewById<EditText>(Resource.Id.wpiCabinetET);
 			var timetable = workPlaceItem.FindViewById<EditText>(Resource.Id.wpiTimetableET);
 			var isMain = workPlaceItem.FindViewById<Switch>(Resource.Id.wpiIsMainS);
-
+			
 			if (workPlace != null) {
 				workPlaceItem.SetTag(Resource.String.WorkPlaceUUID, workPlace.UUID);
 				workPlaceItem.SetTag(Resource.String.IsChanged, false);
+				var hospital = DBHelper.GetHospital(DB, workPlace.Hospital);
 				hospital.SetTag(Resource.String.HospitalUUID, workPlace.Hospital);
+				hospital.Text = hospital.GetName();
 				cabinet.Text = workPlace.Cabinet;
 				timetable.Text = workPlace.Timetable;
 				isMain.Checked = workPlace.IsMain;
 			}
-
+			
+			if (IsLockMainWorkPlace) {
+				hospital.Enabled = false;
+				isMain.Enabled = false;
+			}
+			
+			hospital.Adapter = new HospitalSuggestionAdapter(Activity);
+			hospital.ItemClick += (sender, e) => {
+				var actv = ((AutoCompleteTextView)sender);
+				var hospitalHolder = (actv.Adapter as HospitalSuggestionAdapter)[e.Position];
+				actv.SetTag(Resource.String.HospitalUUID, hospitalHolder.UUID);
+				
+				var parent =  (GridLayout)actv.Parent;	
+				parent.SetTag(Resource.String.IsChanged, true);
+			};
+			
+			cabinet.AfterTextChanged += EditTextAfterTextChanged;
+			timetable.AfterTextChanged += EditTextAfterTextChanged;
+			
 			isMain.CheckedChange += (s, e) =>
 			{
 				if (e.IsChecked)
@@ -108,19 +132,7 @@ namespace MDC.Doctors.Lib.Fragments
 					}
 				}
 			};
-
-			hospital.Adapter = new HospitalSuggestionAdapter(Activity);
-			hospital.ItemClick += (sender, e) => {
-				var actv = ((AutoCompleteTextView)sender);
-				var hospitalHolder = (actv.Adapter as HospitalSuggestionAdapter)[e.Position];
-				actv.SetTag(Resource.String.HospitalUUID, hospitalHolder.UUID);
-				
-				var parent =  (GridLayout)actv.Parent;	
-				parent.SetTag(Resource.String.IsChanged, true);
-			};
-			cabinet.AfterTextChanged += EditTextAfterTextChanged;
-			timetable.AfterTextChanged += EditTextAfterTextChanged;
-
+			
 			WPTable.AddView(workPlaceItem);
 		}
 

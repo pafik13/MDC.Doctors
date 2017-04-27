@@ -15,7 +15,7 @@
         android:textColor="@android:color/black"
         android:background="@android:color/white" />
     <TextView
-        android:id="@+id/rdcDoctorPotentialTV"
+        android:id="@+id/rdcDoctorCategoryTextTV"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:textSize="14sp"
