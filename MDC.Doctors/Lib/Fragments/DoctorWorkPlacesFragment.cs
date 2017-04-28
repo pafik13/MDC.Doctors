@@ -19,7 +19,7 @@ namespace MDC.Doctors.Lib.Fragments
 	{
 		Realm DB;
 		Doctor Doctor;
-		IsLockMainWorkPlace;
+		bool IsLockMainWorkPlace;
 		LinearLayout WPTable;
 		
 		public static DoctorWorkPlacesFragment Create(string doctorUUID, bool isLockMainWorkPlace = false)
@@ -27,7 +27,7 @@ namespace MDC.Doctors.Lib.Fragments
 			var fragment = new DoctorWorkPlacesFragment();
 			var arguments = new Bundle();
 			arguments.PutString(Consts.C_DOCTOR_UUID, doctorUUID);
-			arguments.PutString(Consts.C_IS_LOCK_MAIN_WORK_PLACE, isLockMainWorkPlace)
+			arguments.PutBoolean(Consts.C_IS_LOCK_MAIN_WORK_PLACE, isLockMainWorkPlace);
 			fragment.Arguments = arguments;
 			return fragment;
 		}
@@ -53,7 +53,7 @@ namespace MDC.Doctors.Lib.Fragments
 				AddWorkPlace();
 			};
 			
-			IsLockMainWorkPlace = Arguments.GetString(Consts.C_IS_LOCK_MAIN_WORK_PLACE);
+			IsLockMainWorkPlace = Arguments.GetBoolean(Consts.C_IS_LOCK_MAIN_WORK_PLACE, false);
 			var doctorUUID = Arguments.GetString(Consts.C_DOCTOR_UUID);
 			if (string.IsNullOrEmpty(doctorUUID))
 			{
@@ -72,33 +72,48 @@ namespace MDC.Doctors.Lib.Fragments
 			
 			return mainView;
 		}
-		
+
+		#region WorkPlaceHolder
+		public class WorkPlaceHolder : Java.Lang.Object
+		{
+			public AutoCompleteTextView Hospital;
+			public EditText Cabinet;
+			public EditText Timetable;
+			public Switch IsMain;
+		}
+		#endregion
+
 		void AddWorkPlace(WorkPlace workPlace = null)
 		{
 			var workPlaceItem = Activity.LayoutInflater.Inflate(Resource.Layout.WorkPlaceItem, WPTable, false);
-			var hospital = workPlaceItem.FindViewById<AutoCompleteTextView>(Resource.Id.wpiHospitalACTV);
-			var cabinet = workPlaceItem.FindViewById<EditText>(Resource.Id.wpiCabinetET);
-			var timetable = workPlaceItem.FindViewById<EditText>(Resource.Id.wpiTimetableET);
-			var isMain = workPlaceItem.FindViewById<Switch>(Resource.Id.wpiIsMainS);
-			
+
+			var holder = new WorkPlaceHolder
+			{
+				Hospital = workPlaceItem.FindViewById<AutoCompleteTextView>(Resource.Id.wpiHospitalACTV),
+				Cabinet = workPlaceItem.FindViewById<EditText>(Resource.Id.wpiCabinetET),
+				Timetable = workPlaceItem.FindViewById<EditText>(Resource.Id.wpiTimetableET),
+				IsMain = workPlaceItem.FindViewById<Switch>(Resource.Id.wpiIsMainS)
+			};
+
+			workPlaceItem.SetTag(Resource.String.ViewHolder, holder);
+			workPlaceItem.SetTag(Resource.String.IsChanged, false);
+
 			if (workPlace != null) {
 				workPlaceItem.SetTag(Resource.String.WorkPlaceUUID, workPlace.UUID);
-				workPlaceItem.SetTag(Resource.String.IsChanged, false);
-				var hospital = DBHelper.GetHospital(DB, workPlace.Hospital);
-				hospital.SetTag(Resource.String.HospitalUUID, workPlace.Hospital);
-				hospital.Text = hospital.GetName();
-				cabinet.Text = workPlace.Cabinet;
-				timetable.Text = workPlace.Timetable;
-				isMain.Checked = workPlace.IsMain;
+				workPlaceItem.SetTag(Resource.String.HospitalUUID, workPlace.Hospital);
+				holder.Hospital.Text = DBHelper.GetHospital(DB, workPlace.Hospital).GetName();
+				holder.Cabinet.Text = workPlace.Cabinet;
+				holder.Timetable.Text = workPlace.Timetable;
+				holder.IsMain.Checked = workPlace.IsMain;
 			}
 			
 			if (IsLockMainWorkPlace) {
-				hospital.Enabled = false;
-				isMain.Enabled = false;
+				holder.Hospital.Enabled = false;
+				holder.IsMain.Enabled = false;
 			}
 			
-			hospital.Adapter = new HospitalSuggestionAdapter(Activity);
-			hospital.ItemClick += (sender, e) => {
+			holder.Hospital.Adapter = new HospitalSuggestionAdapter(Activity);
+			holder.Hospital.ItemClick += (sender, e) => {
 				var actv = ((AutoCompleteTextView)sender);
 				var hospitalHolder = (actv.Adapter as HospitalSuggestionAdapter)[e.Position];
 				actv.SetTag(Resource.String.HospitalUUID, hospitalHolder.UUID);
@@ -107,10 +122,10 @@ namespace MDC.Doctors.Lib.Fragments
 				parent.SetTag(Resource.String.IsChanged, true);
 			};
 			
-			cabinet.AfterTextChanged += EditTextAfterTextChanged;
-			timetable.AfterTextChanged += EditTextAfterTextChanged;
+			holder.Cabinet.AfterTextChanged += EditTextAfterTextChanged;
+			holder.Timetable.AfterTextChanged += EditTextAfterTextChanged;
 			
-			isMain.CheckedChange += (s, e) =>
+			holder.IsMain.CheckedChange += (s, e) =>
 			{
 				if (e.IsChecked)
 				{

@@ -13,11 +13,11 @@ namespace MDC.Doctors.Lib.Entities
 		[Indexed]
 		public string WorkPlace { get; set; }
 		
-		[Indexed]
-		public string Doctor { get; set; }
+		//[Indexed]
+		//public string Doctor { get; set; }
 
-		[Indexed]
-		public string Hospital { get; set; }
+		//[Indexed]
+		//public string Hospital { get; set; }
 		
 		public DateTimeOffset Date { get; set; }
 

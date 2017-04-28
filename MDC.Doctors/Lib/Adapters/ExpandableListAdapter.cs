@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Android.App;
 using Android.Views;
 
+using MDC.Doctors.Lib.Entities;
 using MDC.Doctors.Lib.Interfaces;
 
 namespace MDC.Doctors.Lib.Adapters
@@ -14,7 +15,7 @@ namespace MDC.Doctors.Lib.Adapters
 		readonly List<IHospital> Headers;
 		readonly Dictionary<string, List<DoctorInfoHolder>> Childs;
 		readonly string EmptyUUID;
-		readonly Dictionary<string, List<DoctorInfoHolder>> Excluded;
+		readonly Dictionary<string, DoctorInfoHolder> Excluded;
 
 		public ExpandableListAdapter(Activity context, List<IHospital> headers, Dictionary<string, List<DoctorInfoHolder>> childs, List<RouteItem> routeItems = null)
 		{
@@ -22,21 +23,35 @@ namespace MDC.Doctors.Lib.Adapters
 			Headers = headers;
 			Childs = childs;
 			EmptyUUID = Guid.Empty.ToString();
-			Excluded = new Dictionary<string, List<DoctorInfoHolder>>();
+			Excluded = new Dictionary<string, DoctorInfoHolder>();
 			if (routeItems == null) return;
 			
-			foreach (var ri in routeItems) {
-				var holders = Childs[ri.Hospital];
-				foreach (var holder in ri.Hospital) {
-					if (holder.Doctor.MainWorkPlace == ri.WorkPlace) {
-						if (holders.Remove(holder)) {
-							Excluded.Add(holder.Doctor.UUID, holder);
-						}
-					}
+			//foreach (var ri in routeItems) {
+			//	var holders = Childs[ri.Hospital];
+			//	foreach (var holder in holders) {
+			//		if (holder.Doctor.MainWorkPlace == ri.WorkPlace) {
+			//			if (holders.Remove(holder)) {
+			//				Excluded.Add(holder.Doctor.UUID, holder);
+			//			}
+			//		}
 
-				}
-			}
+			//	}
+			//}
 		}
+
+		//void AddToExclude(string doctorUUID, DoctorInfoHolder diHolder)
+		//{
+		//	if (Excluded.ContainsKey(doctorUUID))
+		//	{
+		//		Excluded[doctorUUID].Add(diHolder);
+		//	}
+		//	else
+		//	{
+		//		var list = new List<DoctorInfoHolder>();
+		//		list.Add(diHolder);
+		//		Excluded.Add(doctorUUID, list);
+		//	}
+		//}
 		
 		public DoctorInfoHolder ExcludeDoctor (int groupPosition, int childPosition)
 		{
@@ -56,10 +71,10 @@ namespace MDC.Doctors.Lib.Adapters
 			if (Excluded.ContainsKey(doctorUUID)){
 				var holder = Excluded[doctorUUID];
 				if (Excluded.Remove(doctorUUID)) {
-					if (holder.Doctor.Hospital == null) {
+					if (holder.MainWorkPlace == null) {
 						Childs[EmptyUUID].Add(holder);
 					} else {
-						Childs[holder.Doctor.Hospital].Add(holder);
+						Childs[holder.MainWorkPlace.Hospital].Add(holder);
 					}
 					NotifyDataSetChanged();
 				}
@@ -106,15 +121,15 @@ namespace MDC.Doctors.Lib.Adapters
 			
 			holder.DoctorName.Text = childInfo.Doctor.Name;
 			holder.DoctorCategoryText.Text = childInfo.Doctor.CategoryText;
-			if (childInfo.Doctor.LastAttendanceDate.HasValue()) {
+			if (childInfo.Doctor.LastAttendanceDate.HasValue) {
 				holder.DoctorLastAttendanceDate.Text = childInfo.Doctor.LastAttendanceDate.ToString();
 			}
 			
-			if (childInfo.WorkPlace != null) {
+			if (childInfo.MainWorkPlace != null) {
 				var text = string.Concat(
-					"Кабинет:", Environment.NewLine, childInfo.WorkPlace.Cabinet,
+					"Кабинет:", Environment.NewLine, childInfo.MainWorkPlace.Cabinet,
 					Environment.NewLine,
-					"Время работы:", Environment.NewLine, childInfo.WorkPlace.Timetable,
+					"Время работы:", Environment.NewLine, childInfo.MainWorkPlace.Timetable
 				);
 				
 				holder.CabinetAndTimetable.Text = text;

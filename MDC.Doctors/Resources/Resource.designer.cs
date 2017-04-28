@@ -2546,14 +2546,14 @@ namespace MDC.Doctors
 			// aapt resource value: 0x7f0c014b
 			public const int rdcCabinetAndTimetableTV = 2131493195;
 			
+			// aapt resource value: 0x7f0c0149
+			public const int rdcDoctorCategoryTextTV = 2131493193;
+			
 			// aapt resource value: 0x7f0c014a
 			public const int rdcDoctorLastAttendanceDateTV = 2131493194;
 			
 			// aapt resource value: 0x7f0c0148
 			public const int rdcDoctorNameTV = 2131493192;
-			
-			// aapt resource value: 0x7f0c0149
-			public const int rdcDoctorPotentialTV = 2131493193;
 			
 			// aapt resource value: 0x7f0c014d
 			public const int rdgHospitalAddress = 2131493197;

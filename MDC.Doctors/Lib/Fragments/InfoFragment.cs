@@ -18,9 +18,9 @@ namespace MDC.Doctors.Lib.Fragments
 {
 	public class InfoFragment : V4App.Fragment, IAttendanceControl
 	{
-		#IFDEF DEBUG
+		#if DEBUG
 		SD.Stopwatch Chrono;
-		#ENDDEF
+		#endif
 		
 		Realm DB;
 		Doctor Doctor;
@@ -80,7 +80,7 @@ namespace MDC.Doctors.Lib.Fragments
 		
 		void RefreshDoctorInfo(View mainView = null)
 		{			
-			view = mainView == null ? View : mainView;
+			var view = mainView == null ? View : mainView;
 			
 			var specialityText = string.Empty;
 			var speciality = DBHelper.Get<Specialty>(DB, Doctor.Specialty);
@@ -89,7 +89,7 @@ namespace MDC.Doctors.Lib.Fragments
 			}
 			
 			view.FindViewById<TextView>(Resource.Id.ifDoctorTV).Text =
-				string.Concat(Doctor.Name, ", ", specialityText, ", ", Doctor.specialism);
+				string.Concat(Doctor.Name, ", ", specialityText, ", ", Doctor.Specialism);
 		}
 		
 		#region InfoDataViewHolder

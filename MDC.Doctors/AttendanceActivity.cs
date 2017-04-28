@@ -24,7 +24,7 @@ using MDC.Doctors.Lib.Fragments;
 namespace MDC.Doctors
 {
 	[Activity(Label = "AttendanceActivity", WindowSoftInputMode = SoftInput.StateHidden)]
-	public class AttendanceActivity : V4App.FragmentActivity, ViewPager.IOnPageChangeListener, ILocationListener
+	public class AttendanceActivity : V4App.FragmentActivity, V4View.ViewPager.IOnPageChangeListener, ILocationListener
 	{
 		public const int C_NUM_PAGES = 3;
 		public const string C_TAG_FOR_DEBUG = "AttendanceActivity";
@@ -38,7 +38,9 @@ namespace MDC.Doctors
 		
 		bool WasDoctorChanged;
 		bool WasWorkPlaceChanged;
-		
+
+		TextView FragmentTitle;
+
 		public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
 		{
 			return;
@@ -59,11 +61,18 @@ namespace MDC.Doctors
 					sw.Start();
 					var doc = GetFragment(1);
 					if (doc is DoctorMainInfoFragment) {
-						WasDoctorChanged = (doc as DoctorMainInfoFragment).Save();
+						using (var transaction = DB.BeginWrite())
+						{
+							WasDoctorChanged = (doc as DoctorMainInfoFragment).Save(transaction, out Doctor);
+							transaction.Commit();
+						}
 					}
 					var wp = GetFragment(2);
 					if (wp is DoctorWorkPlacesFragment) {
-						WasWorkPlaceChanged = (wp as DoctorWorkPlacesFragment).Save();
+						using (var transaction = DB.BeginWrite())
+						{
+							WasWorkPlaceChanged = (wp as DoctorWorkPlacesFragment).Save(transaction, Doctor);
+						}
 					}
 					var info = GetFragment(0);
 					if (info is InfoFragment) {
@@ -85,7 +94,7 @@ namespace MDC.Doctors
 			}
 		}
 
-		ViewPager Pager;
+		V4View.ViewPager Pager;
 		Button Close;
 		Button StartOrStop;
 		Button ResumeOrPause;
@@ -102,6 +111,8 @@ namespace MDC.Doctors
 			// Create your application here
 			SetContentView(Resource.Layout.Attendance);
 
+			FragmentTitle = FindViewById<TextView>(Resource.Id.aaTitleTV);
+
 			Close = FindViewById<Button>(Resource.Id.aaCloseB);
 			Close.Click += (s, e) =>
 			{
@@ -117,7 +128,7 @@ namespace MDC.Doctors
 			               .OrderByDescending(att => att.When)
 			               .FirstOrDefault();
 
-			Pager = FindViewById<ViewPager>(Resource.Id.aaContainerVP);
+			Pager = FindViewById<V4View.ViewPager>(Resource.Id.aaContainerVP);
 			Pager.AddOnPageChangeListener(this);
 			if (Attendance == null)
 			{

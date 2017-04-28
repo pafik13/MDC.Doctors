@@ -30,10 +30,7 @@ namespace MDC.Doctors
 
 		DateTimeOffset SelectedDate;
 
-		//ListView RouteDoctorTable;
 		ExpandableListView RouteDoctorExpTable;
-		List<string> listDataHeader;
-		Dictionary<string, List<string>> listDataChild;
 		int previousGroup = -1;
 
 
@@ -171,18 +168,18 @@ namespace MDC.Doctors
 			RouteDoctorExpTable.ChildClick += delegate (object sender, ExpandableListView.ChildClickEventArgs e)
 			{
 				Toast.MakeText(this, "child clicked", ToastLength.Short).Show();
-				
-				var lv = (ListView)sender;
-				var adapter = (ExpandableListAdapter)lv.Adapter;
-				var doctorInfo = adapter.GetChild(e.groupPosition, e.childPosition) as DoctorInfoHolder;
 
-				if (string.IsNullOrEmpty(doctorInfo.MainWorkPlace))
+				//var adapter = (sender as ExpandableListView).Adapter as ExpandableListAdapter;
+				var adapter = RouteDoctorExpTable.ExpandableListAdapter as ExpandableListAdapter;
+				var doctorInfo = adapter.GetChild(e.GroupPosition, e.ChildPosition) as DoctorInfoHolder;
+
+				if (doctorInfo.MainWorkPlace == null)
 				{
 					Toast.MakeText(this, "У данного врача не выбрано/не введено основное рабочее место.", ToastLength.Short).Show();
 					return;
 				}
 				
-				doctorInfo = adapter.ExcludeDoctor(e.groupPosition, e.childPosition);
+				doctorInfo = adapter.ExcludeDoctor(e.GroupPosition, e.ChildPosition);
 				
 				if (doctorInfo == null) return;
 				
@@ -243,7 +240,7 @@ namespace MDC.Doctors
 			var doctorUUID = (string)rowForDelete.GetTag(Resource.String.DoctorUUID);
 			var index = (int)rowForDelete.GetTag(Resource.String.RouteItemOrder);
 
-			var adapter = (ExpandableListAdapter)RouteDoctorTable.Adapter;
+			var adapter = RouteDoctorExpTable.ExpandableListAdapter as ExpandableListAdapter;
 			adapter.IncludeDoctor(doctorUUID);
 
 			RouteTable.RemoveView(rowForDelete);
@@ -270,80 +267,59 @@ namespace MDC.Doctors
 		
 		void FnGetListData()
 		{
-			var headers = new string[] {
-				"Computer science",
-				"Electrocs & comm.",
-				"Mechanical"
+			var empty = new HospitalInputed
+			{
+				UUID = default(Guid).ToString(),
+				Key = "<Отсутствует>",
+				Name = "<Отсутствует>",
+				Address = "<Нет адреса>"
 			};
 
-			listDataHeader = new List<string>();
-			listDataChild = new Dictionary<string, List<string>>();
-			var emptyUUID = Guid.Empty.ToString();
+			var headers = new List<IHospital>();
+			var hospitals = new Dictionary<string, IHospital>();
 
-			var doctorsDict = DBSpec.GetDoctorsForRoute(DB, DateTimeOffset.Now);
-			var hospitals = doctorsDict.ContainsKey(emptyUUID) ? new IHospital[doctorsDict.Keys.Count - 1] : new IHospital[doctorsDict.Keys.Count];
-			var h = 0;
-			foreach (var hospital in doctorsDict.Keys)
+			var childs = new Dictionary<string, List<DoctorInfoHolder>>();
+			childs.Add(empty.UUID, new List<DoctorInfoHolder>());
+
+			foreach (var doctor in DBHelper.GetAll<Doctor>(DB))
 			{
-				//listDataHeader.Add(hospital)
-				listDataChild.Add(hospital, doctorsDict[hospital].Select(doc => doc.Doctor.Name).ToList());
-				if (emptyUUID != hospital)
+				var diHolder = new DoctorInfoHolder
 				{
-					hospitals[h] = doctorsDict[hospital][0].Hospital;
-					h++;
+					Doctor = doctor
+				};
+
+				if (doctor.MainWorkPlace == null)
+				{
+					childs[empty.UUID].Add(diHolder);
 				}
+				else
+				{
+					diHolder.MainWorkPlace = DBHelper.Get<WorkPlace>(DB, doctor.MainWorkPlace);
+					diHolder.Hospital = DBHelper.GetHospital(DB, diHolder.MainWorkPlace.Hospital);
+					if (childs.ContainsKey(diHolder.MainWorkPlace.Hospital))
+					{
+						childs[diHolder.MainWorkPlace.Hospital].Add(diHolder);
+					}
+					else
+					{
+						var list = new List<DoctorInfoHolder>();
+						list.Add(diHolder);
+						childs.Add(diHolder.MainWorkPlace.Hospital, list);
+						hospitals.Add(diHolder.MainWorkPlace.Hospital, diHolder.Hospital);
+					}
+
+					if (hospitals.ContainsKey(diHolder.MainWorkPlace.Hospital)) continue;
+
+					hospitals.Add(diHolder.MainWorkPlace.Hospital, diHolder.Hospital);
+				}	
 			}
 
-			listDataHeader = hospitals.OrderBy(
+			headers = hospitals.Values.OrderBy(
 				(IHospital arg) => arg, new MainActivity.HospitalComparer(System.ComponentModel.ListSortDirection.Ascending)
-			).Select((IHospital arg) => arg.GetUUID()).ToList();
+			).ToList();
+			headers.Add(empty);
 
-			listDataHeader.Add(emptyUUID);
-
-			RouteDoctorExpTable.SetAdapter(new ExpandableListAdapter(this, listDataHeader, listDataChild, doctorsDict));
-
-			// Adding child data
-			//listDataHeader.Add("Computer science");
-			//listDataHeader.Add("Electrocs & comm.");
-			//listDataHeader.Add("Mechanical");
-
-			//for (int i = 0; i < 50; i++)
-			//{
-			//	listDataHeader.Add(string.Format("{0} - #{1}", headers[0], i));
-			//	listDataHeader.Add(string.Format("{0} - #{1}", headers[1], i));
-			//	listDataHeader.Add(string.Format("{0} - #{1}", headers[2], i));
-
-			//	// Adding child data
-			//	var lstCS = new List<string>();
-			//	lstCS.Add("Data structure");
-			//	lstCS.Add("C# Programming");
-			//	lstCS.Add("Java programming");
-			//	lstCS.Add("ADA");
-			//	lstCS.Add("Operation reserach");
-			//	lstCS.Add("OOPS with C");
-			//	lstCS.Add("C++ Programming");
-
-			//	var lstEC = new List<string>();
-			//	lstEC.Add("Field Theory");
-			//	lstEC.Add("Logic Design");
-			//	lstEC.Add("Analog electronics");
-			//	lstEC.Add("Network analysis");
-			//	lstEC.Add("Micro controller");
-			//	lstEC.Add("Signals and system");
-
-			//	var lstMech = new List<string>();
-			//	lstMech.Add("Instrumentation technology");
-			//	lstMech.Add("Dynamics of machinnes");
-			//	lstMech.Add("Energy engineering");
-			//	lstMech.Add("Design of machine");
-			//	lstMech.Add("Turbo machine");
-			//	lstMech.Add("Energy conversion");
-
-			//	// Header, Child data
-			//	listDataChild.Add(string.Format("{0} - #{1}", headers[0], i), lstCS);
-			//	listDataChild.Add(string.Format("{0} - #{1}", headers[1], i), lstEC);
-			//	listDataChild.Add(string.Format("{0} - #{1}", headers[2], i), lstMech);
-			//}
+			RouteDoctorExpTable.SetAdapter(new ExpandableListAdapter(this, headers, childs));
 		}
 
 		void RouteDoctorTable_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
