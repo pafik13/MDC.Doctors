@@ -17,6 +17,9 @@ using System.Linq;
 using MDC.Doctors.Lib.Interfaces;
 using System.ComponentModel;
 
+using HockeyApp.Android;
+using HockeyApp.Android.Utils;
+
 namespace MDC.Doctors
 {
 	[Activity(Label = "MDC Doctors", Theme = "@style/MyTheme.Splash", MainLauncher = true, Icon = "@mipmap/icon")]
@@ -35,6 +38,14 @@ namespace MDC.Doctors
 
             RequestWindowFeature(WindowFeatures.NoTitle);
             Window.AddFlags(WindowManagerFlags.KeepScreenOn);
+
+			// Register the crash manager before Initializing the trace writer
+			CrashManager.Register(this, Secret.HockeyappAppId);
+
+			// Register to with the Update Manager
+			UpdateManager.Register(this, Secret.HockeyappAppId);
+			
+			HockeyLog.LogLevel = 2;
 
 			// Set our view from the "main" layout resource
 			SetContentView(Resource.Layout.Main);
@@ -213,20 +224,28 @@ namespace MDC.Doctors
 				});
 			}
 
+			#if DEBUG
 			SDiag.Debug.WriteLine(sw.ElapsedMilliseconds, DEBUG_CATEGORY);
+			#endif
+
 			sw.Reset();
 			var doctors = DBHelper.GetAll<Doctor>(DB)
 								  .OrderBy(doc => doc.LastAttendanceDate)
 								  .ThenBy(doc => doc.CategoryOrderSum)
 								  .ToList();
 			DoctorTable.Adapter = new DoctorAdapter(this, doctors);
+
+			#if DEBUG
 			SDiag.Debug.WriteLine(sw.ElapsedMilliseconds, DEBUG_CATEGORY);
+			#endif
+
 			sw.Stop();
 		}
 
         protected override void OnPause()
         {
-            base.OnPause();
+			UpdateManager.Unregister();
+			base.OnPause();
         }
 
 		protected override void OnStop()
@@ -234,6 +253,7 @@ namespace MDC.Doctors
 			base.OnStop();
 			DoctorTable.Adapter = null;
 			DB = null;
+			UpdateManager.Unregister();
 		}
 
 		protected override void OnDestroy()
@@ -243,6 +263,7 @@ namespace MDC.Doctors
 			{
 				DB.Dispose();
 			}
+			UpdateManager.Unregister();
 		}
 	}
 }

@@ -57,8 +57,12 @@ namespace MDC.Doctors.Lib.Fragments
 		public override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
+
+			#if DEBUG
 			Chrono = new SD.Stopwatch();
 			Chrono.Start();
+			#endif
+
 			// DB = Realm.GetInstance();
 			DBHelper.GetDB(ref DB);
 		}
@@ -92,7 +96,7 @@ namespace MDC.Doctors.Lib.Fragments
 				string.Concat(Doctor.Name, ", ", specialityText, ", ", Doctor.Specialism);
 		}
 		
-		#region InfoDataViewHolder
+#region InfoDataViewHolder
 		class InfoDataViewHolder : Java.Lang.Object
 		{
 			public TextView Brand { get; set; }
@@ -102,7 +106,7 @@ namespace MDC.Doctors.Lib.Fragments
 			public EditText Goal { get; set; }
 			public EditText Comment { get; set; }
 		}
-		#endregion
+#endregion
 		
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
@@ -172,13 +176,15 @@ namespace MDC.Doctors.Lib.Fragments
 			Locker = mainView.FindViewById<TextView>(Resource.Id.locker);
 			Arrow = mainView.FindViewById<ImageView>(Resource.Id.arrow);
 
+#if DEBUG
 			Chrono.Stop();
 			SD.Debug.WriteLine("InfoFragment: {0}", Chrono.ElapsedMilliseconds);
+#endif
 
 			return mainView;
 		}
 
-		#region PotentialViewHolder
+#region PotentialViewHolder
 		class PotentialViewHolder : Java.Lang.Object
 		{
 			public TextView Brand { get; set; }
@@ -188,7 +194,7 @@ namespace MDC.Doctors.Lib.Fragments
 			public TextView Proportion { get; set; }
 			public TextView Category { get; set; }
 		}
-		#endregion
+#endregion
 
 		void PotentialInfoChange(object sender, EventArgs e)
 		{
@@ -363,7 +369,7 @@ namespace MDC.Doctors.Lib.Fragments
 						.Show();
 		}
 		
-		#region InfoViewHolder
+#region InfoViewHolder
 		class InfoViewHolder : Java.Lang.Object
 		{
 			public TextView WorkTypes { get; set; }
@@ -371,7 +377,7 @@ namespace MDC.Doctors.Lib.Fragments
 			public EditText Resume { get; set; }
 			public EditText Goal { get; set; }
 		}
-		#endregion
+#endregion
 
 		void AddInfoItem(Attendance attendance)
 		{
